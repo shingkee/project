@@ -117,7 +117,7 @@ function one_page_express_contact_form($attrs = array())
     if ($contact_shortcode !== "") {
         echo do_shortcode($contact_shortcode);
     } else {
-        echo '<p style="text-align:center;color:#ababab">' . __('Contact form will be displayed here. To activate it you have to set the "contact form shortcode" parameter in Customizer.',
+        echo '<p style="text-align:center;color:#ababab">' . __('Contact form will be displayed here. To activate it you have to click this area and set the shortcode parameter in Customizer.',
                 'one_page_express-companion') . '</p>';
     }
 
@@ -631,3 +631,73 @@ function one_page_express_header_presets_pro_info($presets)
 
     return $presets;
 }
+
+
+
+// discount notice
+
+function one_page_express_discount_end_date() {
+    return "2017-12-02";
+}
+
+function one_page_express_discount_link(){
+    return esc_url("http://onepageexpress.com/#pricing");
+}
+
+function one_page_express_discount_notice_script()
+{
+    ?>
+    <script type="text/javascript" >
+        (function ($) {
+            jQuery(document).on( 'click', '.ope-discount-notice .notice-dismiss', function() {
+                jQuery.ajax({
+                    url: ajaxurl,
+                    data: {
+                        action: 'one_page_express_discount_notice_dismiss'
+                    }
+                });
+            })
+        })(jQuery);
+    </script>
+    <?php
+}
+
+add_action("wp_ajax_one_page_express_discount_notice_dismiss", function() {
+    update_option( 'one-page-express-'.one_page_express_discount_end_date().'-notice-dismissed', 1);
+});
+
+function one_page_express_discount_notice() {
+    if (get_option( 'one-page-express-'.one_page_express_discount_end_date().'-notice-dismissed', 0)) {
+        return;
+    }
+    ?>
+    <div class="ope-discount-notice notice notice-info is-dismissible" style="background-color: #fdffb3">
+        <p style="font-size: 20px;">
+            Black Friday Special Offer - <span style="color:red">40% discount</span> for One Page Express PRO
+           
+            <a class="button button-primary" style="margin-left:10px;float: right;" target="_blank" href="http://onepageexpress.com/#features-6">See PRO Features</a>
+            <a class="button" style="background-color: red;border-color: #d65600;color: #ffffff;float: right;" target="_blank" href="<?php echo one_page_express_discount_link(); ?>">Get the offer</a> 
+        </p>
+    </div>
+    <?php
+}
+
+    
+    
+add_action("admin_init", function() {
+    $show = apply_filters('ope_show_info_pro_messages', true);
+    if ($show && new DateTime() < new DateTime(one_page_express_discount_end_date())) {
+        add_action( 'admin_notices', 'one_page_express_discount_notice' );
+        add_action( 'admin_footer', 'one_page_express_discount_notice_script' );
+
+
+        add_action('cloudpress\customizer\global_scripts',
+        function ($customizer) {
+            $ver = $customizer->companion()->version;
+            wp_localize_script($customizer->companion()->getThemeSlug() . "_companion_theme_customizer", "ope_discount", array(
+                "buylink" => one_page_express_discount_link(),
+                "msg" => "Get PRO - 40% Black Friday Discount"
+            ));
+        });
+    }
+});

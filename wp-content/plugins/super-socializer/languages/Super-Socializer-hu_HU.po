@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Super Socializer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-15 15:08+0530\n"
-"PO-Revision-Date: 2017-11-15 15:08+0530\n"
-"Last-Translator: The Champ <lordofthechamps@gmail.com>\n"
+"POT-Creation-Date: 2018-01-29 20:17+0530\n"
+"PO-Revision-Date: 2018-01-29 20:18+0530\n"
+"Last-Translator: Team Heateor <hello@heateor.com>\n"
 "Language-Team: The Champ <lordofthechamps@gmail.com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../super_socializer.php:327
+#: ../super_socializer.php:332
 #, fuzzy
 msgid ""
 "cURL is not enabled at your website server. Please contact your website "
@@ -25,7 +25,7 @@ msgstr ""
 "Ellenőrizd, hogy a cURL be van kapcsolva a szervereden. Lehetséges, hogy "
 "ehhez fel kell keresned a szerver adminisztrátorát, a tárhelyszolgáltatódat"
 
-#: ../super_socializer.php:354
+#: ../super_socializer.php:359
 #, php-format
 msgid ""
 "Enter exactly the following url in <strong>Website</strong> and "
@@ -35,7 +35,7 @@ msgstr ""
 "<strong>Callback Url</strong> mezőbe a Twitter alkalmazásodban  lásd 3. "
 "lépés %s)"
 
-#: ../super_socializer.php:357
+#: ../super_socializer.php:362
 msgid ""
 "Make sure cURL is enabled at your website server. You may need to contact "
 "the server administrator of your website to verify this"
@@ -43,114 +43,114 @@ msgstr ""
 "Ellenőrizd, hogy a cURL be van kapcsolva a szervereden. Lehetséges, hogy "
 "ehhez fel kell keresned a szerver adminisztrátorát, a tárhelyszolgáltatódat"
 
-#: ../super_socializer.php:358
+#: ../super_socializer.php:363
 #, php-format
 msgid ""
 "Make sure that \"Enable Callback Locking\" option is disabled. See step 4 %s"
 msgstr ""
 
-#: ../super_socializer.php:624 ../helper.php:998
+#: ../super_socializer.php:629 ../helper.php:998
 msgid "Please verify your email address to login."
 msgstr "Kérjük, ellenőrizd e-mail címed a belépéshez."
 
-#: ../super_socializer.php:624
+#: ../super_socializer.php:629
 msgid "Your email has been verified. Now you can login to your account"
 msgstr "E-mail címed ellenőrzése sikeres. Most már beléphetsz fiókodba"
 
-#: ../super_socializer.php:628
+#: ../super_socializer.php:633
 msgid "Notification"
 msgstr "Értesítés"
 
-#: ../super_socializer.php:646 ../admin/social_login.php:622
+#: ../super_socializer.php:651 ../admin/social_login.php:625
 msgid "Email required"
 msgstr "E-mail cím szükséges"
 
-#: ../super_socializer.php:649
+#: ../super_socializer.php:654
 msgid "Please check your email inbox to complete the registration."
 msgstr "Kérjük, nézd meg e-mail címed a regisztráció befejezéséhez."
 
-#: ../super_socializer.php:656 ../helper.php:500
+#: ../super_socializer.php:661 ../helper.php:500
 msgid "Enter your LiveJournal username"
 msgstr ""
 
-#: ../super_socializer.php:668
+#: ../super_socializer.php:681
 msgid ""
 "Follow steps 11 and 12 at GooglePlus app configuration page, about to open"
 msgstr ""
 "Kövesd a 11-ik és 12-ik lépést GooglePlus alkalmazás beállítás oldalon, a "
 "megnyitáshoz"
 
-#: ../super_socializer.php:752
+#: ../super_socializer.php:765
 msgid "Leave a reply"
 msgstr "Válaszolj"
 
-#: ../super_socializer.php:764 ../inc/social_sharing.php:214
+#: ../super_socializer.php:777 ../inc/social_sharing.php:233
 msgid "Shares"
 msgstr ""
 
-#: ../super_socializer.php:764 ../inc/social_sharing.php:214
+#: ../super_socializer.php:777 ../inc/social_sharing.php:233
 msgid "Share"
 msgstr ""
 
-#: ../super_socializer.php:764
+#: ../super_socializer.php:777
 #, fuzzy
 msgid "Link copied."
 msgstr "LinkedIn"
 
-#: ../super_socializer.php:951
+#: ../super_socializer.php:972
 #, fuzzy
 msgid "Super Socializer - General Options"
 msgstr "Super Socializer - Belépés"
 
-#: ../super_socializer.php:951 ../admin/general_options.php:11
+#: ../super_socializer.php:972 ../admin/general_options.php:11
 #: ../admin/social_commenting.php:43
 #, fuzzy
 msgid "General Options"
 msgstr "Megosztási beállítások"
 
-#: ../super_socializer.php:1019 ../helper.php:920
+#: ../super_socializer.php:1040 ../helper.php:920
 #, fuzzy
 msgid "Social Avatar"
 msgstr "Kis Avatar URL"
 
-#: ../super_socializer.php:1022
+#: ../super_socializer.php:1043
 msgid "Small Avatar Url"
 msgstr "Kis Avatar URL"
 
-#: ../super_socializer.php:1026
+#: ../super_socializer.php:1047
 #, fuzzy
 msgid "Large Avatar Url"
 msgstr "Cél Url"
 
-#: ../super_socializer.php:1030 ../helper.php:923
+#: ../super_socializer.php:1051 ../helper.php:923
 msgid ""
 "Do not fetch and update social avatar from my profile, next time I Social "
 "Login"
 msgstr ""
 
-#: ../super_socializer.php:1034 ../helper.php:924
+#: ../super_socializer.php:1055 ../helper.php:924
 msgid "Update social avatar, next time I Social Login"
 msgstr ""
 
-#: ../super_socializer.php:1107 ../super_socializer.php:1360
+#: ../super_socializer.php:1128 ../super_socializer.php:1381
 msgid ""
 "Your browser is blocking some features of this website. Please follow the "
 "instructions at {support_url} to unblock these."
 msgstr ""
 
-#: ../super_socializer.php:1113
+#: ../super_socializer.php:1134
 msgid "Login with your Social ID"
 msgstr ""
 
-#: ../super_socializer.php:1114
+#: ../super_socializer.php:1135
 msgid "Email you entered is already registered or invalid"
 msgstr "A megadott e-mail már regisztrálva van, vagy hibás"
 
-#: ../super_socializer.php:1119
+#: ../super_socializer.php:1140
 msgid "Please enter a valid email address. You might be required to verify it"
 msgstr "Kérlek, érvényes e-mail címet adj meg. Ezt később ellenőrizhetjük"
 
-#: ../super_socializer.php:1322
+#: ../super_socializer.php:1343
 #, php-format
 msgid ""
 "Your website visitors will see a popup notification (only once) if their "
@@ -160,7 +160,7 @@ msgid ""
 "features\" option <a href=\"%s\">here</a>"
 msgstr ""
 
-#: ../super_socializer.php:1322
+#: ../super_socializer.php:1343
 msgid "Okay"
 msgstr ""
 
@@ -273,7 +273,7 @@ msgstr "Cél Url"
 
 #: ../helper.php:935 ../admin/general_options.php:128
 #: ../admin/social_sharing.php:1973 ../admin/social_commenting.php:487
-#: ../admin/social_login.php:938 ../admin/like_buttons.php:822
+#: ../admin/social_login.php:941 ../admin/like_buttons.php:822
 msgid "Save Changes"
 msgstr "Változások Mentése"
 
@@ -342,14 +342,14 @@ msgid "You can specify any additional CSS rules (without &lt;style&gt; tag)"
 msgstr ""
 
 #: ../admin/general_options.php:139 ../admin/social_sharing.php:1978
-#: ../admin/social_commenting.php:492 ../admin/social_login.php:943
+#: ../admin/social_commenting.php:492 ../admin/social_login.php:946
 #: ../admin/like_buttons.php:827
 #, fuzzy
 msgid "Instagram Shoutout"
 msgstr "Instagram"
 
 #: ../admin/general_options.php:141 ../admin/social_sharing.php:1980
-#: ../admin/social_commenting.php:494 ../admin/social_login.php:945
+#: ../admin/social_commenting.php:494 ../admin/social_login.php:948
 #: ../admin/like_buttons.php:829
 msgid ""
 "If you can send (to hello@heateor.com) how our plugin is helping your "
@@ -358,7 +358,7 @@ msgid ""
 msgstr ""
 
 #: ../admin/general_options.php:142 ../admin/social_sharing.php:1981
-#: ../admin/social_commenting.php:495 ../admin/social_login.php:946
+#: ../admin/social_commenting.php:495 ../admin/social_login.php:949
 #: ../admin/like_buttons.php:830
 msgid ""
 "<b>Example</b> - Blah-Blah Online Coaching teaches various programming "
@@ -369,7 +369,7 @@ msgid ""
 msgstr ""
 
 #: ../admin/general_options.php:143 ../admin/social_sharing.php:1982
-#: ../admin/social_commenting.php:496 ../admin/social_login.php:947
+#: ../admin/social_commenting.php:496 ../admin/social_login.php:950
 #: ../admin/like_buttons.php:831
 msgid ""
 "@blahblahonlinecoaching proudly use #SuperSocializer to enable social "
@@ -399,55 +399,51 @@ msgstr ""
 "szolgáltatás szívében. Szeretjük, amit csinálunk. További info csatlakozzon "
 "hozzánk"
 
-#: ../admin/help.php:18
-msgid "Donate"
-msgstr "Adakozás"
-
-#: ../admin/help.php:20
-msgid ""
-"You can help us continue the development of this free plugin by donating"
-msgstr ""
-
-#: ../admin/help.php:21
+#: ../admin/help.php:19
 #, fuzzy
 msgid "Donate Now"
 msgstr "Adakozás"
 
-#: ../admin/help.php:27
+#: ../admin/help.php:25
 msgid "Plugin Demo"
 msgstr "Plugin Demo"
 
-#: ../admin/help.php:33
+#: ../admin/help.php:31
 msgid "Translate Plugin"
 msgstr ""
 
-#: ../admin/help.php:39
+#: ../admin/help.php:37 ../admin/social_login.php:52
+#, fuzzy
+msgid "Customize Social Login Icons"
+msgstr "Social Login"
+
+#: ../admin/help.php:43
 msgid "Integrate with Google Analytics"
 msgstr ""
 
-#: ../admin/help.php:45
+#: ../admin/help.php:49
 msgid "Boost sharing by awarding points"
 msgstr "Növelje megosztása odaítélésével pont"
 
-#: ../admin/help.php:51
+#: ../admin/help.php:55
 msgid "Award points for Social Login"
 msgstr "Díjat pontokat Szociális Belépés"
 
-#: ../admin/help.php:57
+#: ../admin/help.php:61
 #, fuzzy
 msgid "Other Add-ons"
 msgstr "A kiegészítőket"
 
-#: ../admin/help.php:63
+#: ../admin/help.php:67
 #, fuzzy
 msgid "Support Forum"
 msgstr "Támogatás"
 
-#: ../admin/help.php:68
+#: ../admin/help.php:72
 msgid "Need Help?"
 msgstr "Kell Segítség?"
 
-#: ../admin/help.php:70
+#: ../admin/help.php:74
 #, fuzzy
 msgid ""
 "If you <strong>have any query</strong>, need help regarding <strong>plugin "
@@ -459,23 +455,23 @@ msgstr ""
 "nekem egy e-mailt (angolul) a <a href=\"mailto:support@heateor.com"
 "\">support@heateor.com</a> címre"
 
-#: ../admin/help.php:75
+#: ../admin/help.php:79
 msgid "Testimonial"
 msgstr ""
 
-#: ../admin/help.php:77
+#: ../admin/help.php:81
 msgid ""
 "You can send us testimonial at <a href=\"mailto:testimonials@heateor.com"
 "\">testimonials@heateor.com</a>"
 msgstr ""
 
-#: ../admin/help.php:82
+#: ../admin/help.php:86
 #, fuzzy
 msgid "Support Us"
 msgstr "Támogatás"
 
-#: ../admin/help.php:85 ../admin/help.php:88 ../admin/help.php:89
-#: ../admin/help.php:90 ../admin/help.php:91 ../admin/help.php:92
+#: ../admin/help.php:89 ../admin/help.php:92 ../admin/help.php:93
+#: ../admin/help.php:94 ../admin/help.php:95 ../admin/help.php:96
 msgid "Rate 5-star"
 msgstr "Osztályozz 5-ösre"
 
@@ -521,7 +517,7 @@ msgstr ""
 
 #: ../admin/social_sharing.php:52 ../admin/social_sharing.php:1905
 #: ../admin/social_sharing.php:1907 ../admin/social_login.php:40
-#: ../admin/social_login.php:908 ../admin/like_buttons.php:47
+#: ../admin/social_login.php:911 ../admin/like_buttons.php:47
 #: ../admin/like_buttons.php:793
 msgid "Shortcode & Widget"
 msgstr "Shortcode és Widget"
@@ -532,7 +528,7 @@ msgstr "Hibamegoldó"
 
 #: ../admin/social_sharing.php:54 ../admin/social_sharing.php:1938
 #: ../admin/social_commenting.php:36 ../admin/social_commenting.php:471
-#: ../admin/social_login.php:41 ../admin/social_login.php:922
+#: ../admin/social_login.php:41 ../admin/social_login.php:925
 #: ../admin/like_buttons.php:48 ../admin/like_buttons.php:806
 msgid "FAQ"
 msgstr "GYIK"
@@ -558,10 +554,12 @@ msgid "Shape"
 msgstr "alak"
 
 #: ../admin/social_sharing.php:150 ../admin/social_sharing.php:458
+#: ../inc/widget.php:906
 msgid "Round"
 msgstr "kerek"
 
 #: ../admin/social_sharing.php:152 ../admin/social_sharing.php:460
+#: ../inc/widget.php:907
 msgid "Square"
 msgstr "szögletes"
 
@@ -775,8 +773,8 @@ msgstr "Egyedi URL"
 msgid "Url to share"
 msgstr "Megosztás Url-je"
 
-#: ../admin/social_sharing.php:731 ../admin/social_login.php:385
-#: ../admin/like_buttons.php:105
+#: ../admin/social_sharing.php:731 ../admin/social_login.php:388
+#: ../admin/like_buttons.php:105 ../inc/widget.php:900
 msgid "Title"
 msgstr "Cím"
 
@@ -863,7 +861,7 @@ msgid "Placement"
 msgstr ""
 
 #: ../admin/social_sharing.php:968 ../admin/social_sharing.php:1431
-#: ../admin/social_login.php:703 ../admin/social_login.php:733
+#: ../admin/social_login.php:706 ../admin/social_login.php:736
 #: ../admin/like_buttons.php:222 ../admin/like_buttons.php:507
 msgid "Homepage"
 msgstr "Kezdő oldal"
@@ -939,7 +937,7 @@ msgstr "Megosztás számok mutatása"
 #: ../admin/social_sharing.php:1045 ../admin/social_sharing.php:1489
 msgid ""
 "Share counts are supported for Facebook, Twitter, Linkedin, Buffer, Reddit, "
-"Pinterest, Stumbleupon and Vkontakte"
+"Pinterest, Stumbleupon, Odnoklassniki and Vkontakte"
 msgstr ""
 
 #: ../admin/social_sharing.php:1062 ../admin/social_sharing.php:1497
@@ -1310,7 +1308,7 @@ msgstr ""
 "tökéletesen) a szöveges mezőben:"
 
 #: ../admin/social_sharing.php:1940 ../admin/social_commenting.php:473
-#: ../admin/social_login.php:924
+#: ../admin/social_login.php:927
 msgid ""
 "<strong>Note:</strong> Plugin will not work on local server. You should have "
 "an online website for the plugin to function properly."
@@ -1338,7 +1336,7 @@ msgid ""
 msgstr ""
 
 #: ../admin/social_sharing.php:1947 ../admin/social_commenting.php:476
-#: ../admin/social_login.php:927
+#: ../admin/social_login.php:930
 msgid "Why is my browser blocking some features of the plugin?"
 msgstr ""
 
@@ -1698,15 +1696,15 @@ msgstr "Alap Beállítások"
 msgid "Advanced Configuration"
 msgstr "Alap Beállítások"
 
-#: ../admin/social_login.php:38 ../admin/social_login.php:859
+#: ../admin/social_login.php:38 ../admin/social_login.php:862
 msgid "XProfile Integration"
 msgstr ""
 
-#: ../admin/social_login.php:55
+#: ../admin/social_login.php:58
 msgid "Disable user registration via Social Login"
 msgstr "Letilthatja a felhasználói regisztráció útján Szociális Belépés"
 
-#: ../admin/social_login.php:65
+#: ../admin/social_login.php:68
 msgid ""
 "After enabling this option, new users will not be able to login through "
 "social login. Only existing users will be able to social login."
@@ -1715,12 +1713,12 @@ msgstr ""
 "szociális bejelentkezést. Csak meglévő felhasználók képesek lesznek a "
 "társadalmi bejelentkezést."
 
-#: ../admin/social_login.php:74
+#: ../admin/social_login.php:77
 #, fuzzy
 msgid "Redirection url"
 msgstr "Átirányítás Belépés után"
 
-#: ../admin/social_login.php:84
+#: ../admin/social_login.php:87
 msgid ""
 "User will be redirected to this page after unsuccessful registration attempt "
 "via Social Login. You can specify the url of registration form or of a page "
@@ -1731,60 +1729,61 @@ msgstr ""
 "vagy egy oldal bemutatását üzenetet a regisztráció kikapcsolásra keresztül "
 "Szociális Belépés."
 
-#: ../admin/social_login.php:93
-msgid "Select providers"
-msgstr "Válassz szolgáltatókat"
+#: ../admin/social_login.php:96
+#, fuzzy
+msgid "Select Social Networks"
+msgstr "elsődleges szociális háló"
 
-#: ../admin/social_login.php:98
+#: ../admin/social_login.php:101
 msgid "Facebook"
 msgstr "Facebook"
 
-#: ../admin/social_login.php:102
+#: ../admin/social_login.php:105
 msgid "Twitter"
 msgstr "Twitter"
 
-#: ../admin/social_login.php:106
+#: ../admin/social_login.php:109
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
-#: ../admin/social_login.php:110
+#: ../admin/social_login.php:113
 msgid "Google+"
 msgstr "Google+"
 
-#: ../admin/social_login.php:114
+#: ../admin/social_login.php:117
 msgid "Vkontakte"
 msgstr "Vkontakte"
 
-#: ../admin/social_login.php:118
+#: ../admin/social_login.php:121
 msgid "Instagram"
 msgstr "Instagram"
 
-#: ../admin/social_login.php:122
+#: ../admin/social_login.php:125
 msgid "Xing"
 msgstr "Xing"
 
-#: ../admin/social_login.php:126
+#: ../admin/social_login.php:129
 msgid "Steam"
 msgstr ""
 
-#: ../admin/social_login.php:131
+#: ../admin/social_login.php:134
 #, fuzzy
 msgid "Twitch"
 msgstr "Twitter"
 
-#: ../admin/social_login.php:136
+#: ../admin/social_login.php:139
 msgid "LiveJournal"
 msgstr ""
 
-#: ../admin/social_login.php:144
+#: ../admin/social_login.php:147
 msgid "Select Social ID provider to enable in Social Login"
 msgstr "Válassz Közösségi ID szolgáltatót a Közösségi Belépéshez"
 
-#: ../admin/social_login.php:152
+#: ../admin/social_login.php:155
 msgid "Facebook App ID"
 msgstr "Facebook App ID"
 
-#: ../admin/social_login.php:162
+#: ../admin/social_login.php:165
 #, php-format
 msgid ""
 "Required for Facebook Social Login to work. Please follow the documentation "
@@ -1794,18 +1793,18 @@ msgstr ""
 "dokumentációt <a href=\"%s\" target=\"_blank\">ezen a linken</a> a Facebook "
 "App ID beszerzéshez"
 
-#: ../admin/social_login.php:164
+#: ../admin/social_login.php:167
 msgid ""
 "Paste following url in <strong>Site URL</strong> option at the link mentioned"
 msgstr ""
 "Illeszd be a következő url-t a <strong>Site URL</strong> mezőbe a fenti "
 "linken"
 
-#: ../admin/social_login.php:174
+#: ../admin/social_login.php:177
 msgid "Twitter API Key"
 msgstr "Twitter API Key"
 
-#: ../admin/social_login.php:184
+#: ../admin/social_login.php:187
 #, php-format
 msgid ""
 "Required for Twitter Social Login to work. Please follow the documentation "
@@ -1815,7 +1814,7 @@ msgstr ""
 "dokumentációt <a href=\"%s\" target=\"_blank\">ezen a linken</a> a Twitter "
 "API Key beszerzéshez"
 
-#: ../admin/social_login.php:186 ../admin/social_login.php:208
+#: ../admin/social_login.php:189 ../admin/social_login.php:211
 msgid ""
 "Paste following url in <strong>Website</strong> and <strong>Callback URL</"
 "strong> options at the link mentioned"
@@ -1823,11 +1822,11 @@ msgstr ""
 "Illeszd be a következő url-t a <strong>Website</strong> és a "
 "<strong>Callback URL</strong> mezőbe a fenti linken"
 
-#: ../admin/social_login.php:196
+#: ../admin/social_login.php:199
 msgid "Twitter API Secret"
 msgstr "Twitter API Secret"
 
-#: ../admin/social_login.php:206
+#: ../admin/social_login.php:209
 #, php-format
 msgid ""
 "Required for Twitter Social Login to work. Please follow the documentation "
@@ -1837,11 +1836,11 @@ msgstr ""
 "dokumentációt <a href=\"%s\" target=\"_blank\">ezen a linken</a> a Twitter "
 "API Secret beszerzéséhez"
 
-#: ../admin/social_login.php:218
+#: ../admin/social_login.php:221
 msgid "LinkedIn API Key"
 msgstr "LinkedIn API Key"
 
-#: ../admin/social_login.php:228
+#: ../admin/social_login.php:231
 #, php-format
 msgid ""
 "Required for LinkedIn Social Login to work. Please follow the documentation "
@@ -1851,7 +1850,7 @@ msgstr ""
 "dokumentációt <a href=\"%s\" target=\"_blank\">ezen a linken</a> a LinkedIn "
 "API Key beszerzéshez"
 
-#: ../admin/social_login.php:230 ../admin/social_login.php:296
+#: ../admin/social_login.php:233 ../admin/social_login.php:299
 msgid ""
 "Paste following url in <strong>Website URL</strong> option at the link "
 "mentioned"
@@ -1859,11 +1858,11 @@ msgstr ""
 "Illeszd be a következő url-t a <strong>Website URL</strong> mezőbe a fenti "
 "linken"
 
-#: ../admin/social_login.php:240
+#: ../admin/social_login.php:243
 msgid "Google+ Client ID"
 msgstr "Google+ Client ID"
 
-#: ../admin/social_login.php:250
+#: ../admin/social_login.php:253
 #, php-format
 msgid ""
 "Required for GooglePlus Social Login to work. Please follow the "
@@ -1874,7 +1873,7 @@ msgstr ""
 "dokumentációt <a href=\"%s\" target=\"_blank\">ezen a linken</a> a "
 "GooglePlus Client ID beszerzéshez"
 
-#: ../admin/social_login.php:252
+#: ../admin/social_login.php:255
 msgid ""
 "Paste following url in <strong>AUTHORIZED JAVASCRIPT ORIGINS</strong> and "
 "<strong>AUTHORIZED REDIRECT URI</strong> options at the link mentioned"
@@ -1882,11 +1881,11 @@ msgstr ""
 "Illeszd be a következő url-t a <strong>AUTHORIZED JAVASCRIPT ORIGINS</"
 "strong> és a <strong>AUTHORIZED REDIRECT URI</strong> mezőbe a fenti linken"
 
-#: ../admin/social_login.php:262
+#: ../admin/social_login.php:265
 msgid "Vkontakte Application ID"
 msgstr "Vkontakte Application ID"
 
-#: ../admin/social_login.php:272
+#: ../admin/social_login.php:275
 #, php-format
 msgid ""
 "Required for Vkontakte Social Login to work. Please follow the documentation "
@@ -1897,7 +1896,7 @@ msgstr ""
 "dokumentációt <a href=\"%s\" target=\"_blank\">ezen a linken</a> a Vkontakte "
 "Application ID beszerzéshez"
 
-#: ../admin/social_login.php:274
+#: ../admin/social_login.php:277
 msgid ""
 "Paste following url in <strong>Site address</strong> option at the link "
 "mentioned"
@@ -1905,11 +1904,11 @@ msgstr ""
 "Illeszd be a következő url-t a <strong>Site address</strong> mezőbe a fenti "
 "linken"
 
-#: ../admin/social_login.php:284
+#: ../admin/social_login.php:287
 msgid "Instagram Client ID"
 msgstr "Instagram Client ID"
 
-#: ../admin/social_login.php:294
+#: ../admin/social_login.php:297
 #, php-format
 msgid ""
 "Required for Instagram Social Login to work. Please follow the documentation "
@@ -1919,11 +1918,11 @@ msgstr ""
 "dokumentációt <a href=\"%s\" target=\"_blank\">ezen a linken</a> az "
 "Instagram Client ID beszerzéshez"
 
-#: ../admin/social_login.php:306
+#: ../admin/social_login.php:309
 msgid "Xing Consumer Key"
 msgstr "Xing Consumer Key"
 
-#: ../admin/social_login.php:316
+#: ../admin/social_login.php:319
 #, php-format
 msgid ""
 "Required for Xing Social Login to work. Please follow the documentation at "
@@ -1933,7 +1932,7 @@ msgstr ""
 "dokumentációt <a href=\"%s\" target=\"_blank\">ezen a linken</a> a Xing "
 "Consumer Key beszerzéshez"
 
-#: ../admin/social_login.php:318 ../admin/social_login.php:340
+#: ../admin/social_login.php:321 ../admin/social_login.php:343
 msgid ""
 "Paste following url in <strong>Callback domain</strong> option at the link "
 "mentioned"
@@ -1941,11 +1940,11 @@ msgstr ""
 "Illeszd be a következő url-t a <strong>Callback domain</strong> mezőbe a "
 "fenti linken"
 
-#: ../admin/social_login.php:328
+#: ../admin/social_login.php:331
 msgid "Xing Consumer Secret"
 msgstr "Xing Consumer Secret"
 
-#: ../admin/social_login.php:338
+#: ../admin/social_login.php:341
 #, php-format
 msgid ""
 "Required for Xing Social Login to work. Please follow the documentation at "
@@ -1955,12 +1954,12 @@ msgstr ""
 "dokumentációt <a href=\"%s\" target=\"_blank\">ezen a linken</a> a Xing "
 "Consumer Secret beszerzéséhez"
 
-#: ../admin/social_login.php:350
+#: ../admin/social_login.php:353
 #, fuzzy
 msgid "Twitch Client ID"
 msgstr "Instagram Client ID"
 
-#: ../admin/social_login.php:360
+#: ../admin/social_login.php:363
 #, fuzzy, php-format
 msgid ""
 "Required for Twitch Social Login to work. Please follow the documentation at "
@@ -1970,7 +1969,7 @@ msgstr ""
 "dokumentációt <a href=\"%s\" target=\"_blank\">ezen a linken</a> a Twitter "
 "API Key beszerzéshez"
 
-#: ../admin/social_login.php:362
+#: ../admin/social_login.php:365
 #, fuzzy
 msgid ""
 "Paste following url in <strong>Redirect URI</strong> option at the link "
@@ -1979,49 +1978,49 @@ msgstr ""
 "Illeszd be a következő url-t a <strong>Site URL</strong> mezőbe a fenti "
 "linken"
 
-#: ../admin/social_login.php:379
+#: ../admin/social_login.php:382
 #, fuzzy
 msgid "Social Login Options"
 msgstr "Social Login"
 
-#: ../admin/social_login.php:395
+#: ../admin/social_login.php:398
 msgid "Text to display above the Social Login interface"
 msgstr "Szöveg a Közösségi Belépés felett"
 
-#: ../admin/social_login.php:404
+#: ../admin/social_login.php:407
 msgid "Enable at login page"
 msgstr "Bekapcsolás a belépés oldalon"
 
-#: ../admin/social_login.php:414
+#: ../admin/social_login.php:417
 msgid ""
 "Social Login interface will get enabled at the login page of your website"
 msgstr "Közösségi Belépés megjelenítése a weboldal belépési oldalán"
 
-#: ../admin/social_login.php:422
+#: ../admin/social_login.php:425
 msgid "Enable at register page"
 msgstr "Bekapcsolás a regisztráció oldalon"
 
-#: ../admin/social_login.php:432
+#: ../admin/social_login.php:435
 msgid ""
 "Social Login interface will get enabled at the registration page of your "
 "website"
 msgstr "Közösségi Belépés megjelenítése a weboldal regisztrációs oldalán"
 
-#: ../admin/social_login.php:440
+#: ../admin/social_login.php:443
 msgid "Enable at comment form"
 msgstr "Bekapcsolás a hozászólásoknál"
 
-#: ../admin/social_login.php:450
+#: ../admin/social_login.php:453
 msgid "Social Login interface will get enabled at your Wordpress Comment form"
 msgstr "Közösségi Belépés megjelenítése a Wordpress hozzászólás küldésnél"
 
-#: ../admin/social_login.php:459
+#: ../admin/social_login.php:462
 #, fuzzy
 msgid ""
 "Link social account to already existing account, if email address matches"
 msgstr "Kapcsold össze közösségi fiókod, hogy belépj erre az oldalra"
 
-#: ../admin/social_login.php:469
+#: ../admin/social_login.php:472
 msgid ""
 "If email address of the user's Social Account matches with an already "
 "existing account at your website, that social account will be linked to "
@@ -2029,43 +2028,43 @@ msgid ""
 "Linking interface at their profile page."
 msgstr ""
 
-#: ../admin/social_login.php:483
+#: ../admin/social_login.php:486
 msgid "Enable before WooCommerce Customer Login Form"
 msgstr "Engedélyezze előtt WooCommerce Megrendelő Bejelentkezés"
 
-#: ../admin/social_login.php:493
+#: ../admin/social_login.php:496
 #, fuzzy
 msgid ""
 "Social Login Interface will get enabled before the customer login form at "
 "WooCommerce My Account page"
 msgstr "Közösségi Belépés megjelenítése a weboldal belépési oldalán"
 
-#: ../admin/social_login.php:501
+#: ../admin/social_login.php:504
 msgid "Enable after WooCommerce Customer Login Form"
 msgstr "Engedélyezze után WooCommerce Megrendelő Bejelentkezés"
 
-#: ../admin/social_login.php:511
+#: ../admin/social_login.php:514
 #, fuzzy
 msgid ""
 "Social Login Interface will get enabled after the customer login form at "
 "WooCommerce My Account page"
 msgstr "Közösségi Belépés megjelenítése a weboldal belépési oldalán"
 
-#: ../admin/social_login.php:519
+#: ../admin/social_login.php:522
 #, fuzzy
 msgid "Enable at WooCommerce checkout page"
 msgstr "Bekapcsolás a regisztráció oldalon"
 
-#: ../admin/social_login.php:529
+#: ../admin/social_login.php:532
 #, fuzzy
 msgid "Social Login Interface will get enabled at WooCommerce checkout page"
 msgstr "Közösségi Belépés megjelenítése a Wordpress hozzászólás küldésnél"
 
-#: ../admin/social_login.php:540
+#: ../admin/social_login.php:543
 msgid "Auto-approve comments made by Social Login users"
 msgstr "Közösségi Belépéses hozzászólások automatikus elfogadása"
 
-#: ../admin/social_login.php:550
+#: ../admin/social_login.php:553
 msgid ""
 "If this option is enabled, and WordPress comment is made by Social Login "
 "user, comment will get approved immediately without keeping in moderation."
@@ -2074,37 +2073,37 @@ msgstr ""
 "felhasználó Wordpress hozzászólást küld, ez azonnal, moderáció nélkül "
 "megjelenik az oldalon."
 
-#: ../admin/social_login.php:551
+#: ../admin/social_login.php:554
 msgid "Note: This is not related to Facebook comments"
 msgstr "Megjegyzés: Ez nem kapcsolódik a Facebook hozzászólásokhoz"
 
-#: ../admin/social_login.php:561
+#: ../admin/social_login.php:564
 msgid "Enable social avatar"
 msgstr "Közösségi avatar bekapcsolás"
 
-#: ../admin/social_login.php:571
+#: ../admin/social_login.php:574
 msgid ""
 "Social profile pictures of the logged in user will be displayed as profile "
 "avatar"
 msgstr "A közösségi profil képe lesz megjelenítve avatarként a weboldalon"
 
-#: ../admin/social_login.php:581
+#: ../admin/social_login.php:584
 msgid "Avatar quality"
 msgstr " Avatar képminőség"
 
-#: ../admin/social_login.php:584
+#: ../admin/social_login.php:587
 msgid "Average"
 msgstr "Átlagos"
 
-#: ../admin/social_login.php:585
+#: ../admin/social_login.php:588
 msgid "Best"
 msgstr "legjobb"
 
-#: ../admin/social_login.php:592
+#: ../admin/social_login.php:595
 msgid "Choose avatar quality"
 msgstr "Válassz Avatar képminőséget"
 
-#: ../admin/social_login.php:601
+#: ../admin/social_login.php:604
 #, fuzzy
 msgid ""
 "Show option for users to update social avatar at BuddyPress profile page"
@@ -2112,13 +2111,13 @@ msgstr ""
 "Engedélyezze ezt a lehetőséget, hogy a szociális számla összekötő interfész "
 "BuddyPress profil oldal"
 
-#: ../admin/social_login.php:611
+#: ../admin/social_login.php:614
 msgid ""
 "If enabled, users would be able to update their social avatar from \"Profile "
 "photo\" section in BuddyPress profile at front-end"
 msgstr ""
 
-#: ../admin/social_login.php:632
+#: ../admin/social_login.php:635
 msgid ""
 "If enabled and Social ID provider does not provide user's email address on "
 "login, user will be asked to provide his/her email address. Otherwise, a "
@@ -2128,11 +2127,11 @@ msgstr ""
 "a belépéskor, a felhasználótól elkérjük e-mail címét. Egyébként egy "
 "véletlenszerű e-mail címet generálunk"
 
-#: ../admin/social_login.php:641
+#: ../admin/social_login.php:644
 msgid "Send post-registration email to user to set account password"
 msgstr ""
 
-#: ../admin/social_login.php:651
+#: ../admin/social_login.php:654
 msgid ""
 "If enabled, an email will be sent to user after registration through Social "
 "Login, regarding his/her login credentials (username-password to be able to "
@@ -2143,12 +2142,12 @@ msgstr ""
 "Felhasználói név, Jelszó, melyek segítségével hagyományos módon is beléphet "
 "az oldalra."
 
-#: ../admin/social_login.php:659
+#: ../admin/social_login.php:662
 #, fuzzy
 msgid "Send new user registration notification email to admin"
 msgstr "Letilthatja a felhasználói regisztráció útján Szociális Belépés"
 
-#: ../admin/social_login.php:669
+#: ../admin/social_login.php:672
 #, fuzzy
 msgid ""
 "If enabled, an email will be sent to admin after new user registers through "
@@ -2159,12 +2158,12 @@ msgstr ""
 "Felhasználói név, Jelszó, melyek segítségével hagyományos módon is beléphet "
 "az oldalra."
 
-#: ../admin/social_login.php:678
+#: ../admin/social_login.php:681
 msgid "Enable social account linking at BuddyPress profile page"
 msgstr ""
 "Engedélyezze a szociális számla összekapcsolása a BuddyPress profil oldal"
 
-#: ../admin/social_login.php:688
+#: ../admin/social_login.php:691
 msgid ""
 "Enable this option to show social account linking interface at BuddyPress "
 "profile page"
@@ -2172,40 +2171,40 @@ msgstr ""
 "Engedélyezze ezt a lehetőséget, hogy a szociális számla összekötő interfész "
 "BuddyPress profil oldal"
 
-#: ../admin/social_login.php:697
+#: ../admin/social_login.php:700
 msgid "Login redirection"
 msgstr "Átirányítás Belépés után"
 
-#: ../admin/social_login.php:701
+#: ../admin/social_login.php:704
 msgid "Same page where user logged in"
 msgstr "Az az oldal, ahol a felhasználó belépett"
 
-#: ../admin/social_login.php:705 ../admin/social_login.php:735
+#: ../admin/social_login.php:708 ../admin/social_login.php:738
 msgid "Account dashboard"
 msgstr "Felhasználói Irányítópult"
 
-#: ../admin/social_login.php:708 ../admin/social_login.php:738
+#: ../admin/social_login.php:711 ../admin/social_login.php:741
 msgid "BuddyPress profile page"
 msgstr "BuddyPress profil oldal"
 
-#: ../admin/social_login.php:711 ../admin/social_login.php:741
+#: ../admin/social_login.php:714 ../admin/social_login.php:744
 msgid "Custom Url"
 msgstr "Egyedi URL"
 
-#: ../admin/social_login.php:719
+#: ../admin/social_login.php:722
 msgid "User will be redirected to the selected page after Social Login"
 msgstr ""
 "A felhasználót a kiválasztott oldalra irányítjuk a Közösségi Belépés után"
 
-#: ../admin/social_login.php:727
+#: ../admin/social_login.php:730
 msgid "Registration redirection"
 msgstr "Átirányítás Regisztráció után"
 
-#: ../admin/social_login.php:731
+#: ../admin/social_login.php:734
 msgid "Same page from where user registered"
 msgstr "Az az oldal, ahol a felhasználó regisztrált"
 
-#: ../admin/social_login.php:749
+#: ../admin/social_login.php:752
 msgid ""
 "User will be redirected to the selected page after registration (first "
 "Social Login) through Social Login"
@@ -2213,15 +2212,15 @@ msgstr ""
 "A felhasználó a kiválasztott oldalra lesz átirányítva a regisztráció (első "
 "Közösségi belépés) után"
 
-#: ../admin/social_login.php:757
+#: ../admin/social_login.php:760
 msgid "Email popup options"
 msgstr "Email felugró ablak beállítások"
 
-#: ../admin/social_login.php:763
+#: ../admin/social_login.php:766
 msgid "Text on 'Email required' popup"
 msgstr "Szöveg az  'E-mail cím szükséges' felugró ablakban"
 
-#: ../admin/social_login.php:773
+#: ../admin/social_login.php:776
 msgid ""
 "This text will be displayed on email required popup. Leave empty if not "
 "required."
@@ -2229,11 +2228,11 @@ msgstr ""
 "Ez a szöveg jelenik meg az e-mail cím bekérő felugró ablakban. Üresen "
 "hagyhatod, ha nem kéred be az e-mail címet."
 
-#: ../admin/social_login.php:782
+#: ../admin/social_login.php:785
 msgid "Error message for 'Email required' popup"
 msgstr "Hibaüzenet az 'E-mail cím szükséges' felugró ablakban"
 
-#: ../admin/social_login.php:792
+#: ../admin/social_login.php:795
 msgid ""
 "This message will be displayed to user if it provides invalid or already "
 "registered email"
@@ -2241,11 +2240,11 @@ msgstr ""
 "Ez az üzenet jelenik meg, ha a felhasználó helytelen, vagy már regisztrált e-"
 "mail címet ad meg "
 
-#: ../admin/social_login.php:801
+#: ../admin/social_login.php:804
 msgid "Email popup height"
 msgstr "Email felugró ablak magassága"
 
-#: ../admin/social_login.php:811
+#: ../admin/social_login.php:814
 msgid ""
 "If you are seeing vertical scrollbar in the \"Email required\" popup, you "
 "can increase the height of popup by specifying in this option. Leave empty "
@@ -2254,11 +2253,11 @@ msgstr ""
 "Ha függőleges görgetősávot látsz az \"E-mail bekérő\" felugró ablakban, itt "
 "megnövelheted az ablak magasságát. Egyébként üresen hagyható."
 
-#: ../admin/social_login.php:819
+#: ../admin/social_login.php:822
 msgid "Enable email verification"
 msgstr "E-mail ellenőrzés bekapcsolása"
 
-#: ../admin/social_login.php:829
+#: ../admin/social_login.php:832
 msgid ""
 "If enabled, email provided by the user will be verified by sending a "
 "confirmation link to that email. User would not be able to login without "
@@ -2268,27 +2267,27 @@ msgstr ""
 "üzenetet küldünk egy megerősítő linkkel. A felhasználó nem tud belépni, amíg "
 "nem erősítette meg e-mailcímét "
 
-#: ../admin/social_login.php:879 ../inc/widget.php:248 ../inc/widget.php:414
+#: ../admin/social_login.php:882 ../inc/widget.php:248 ../inc/widget.php:414
 #: ../inc/widget.php:578 ../inc/widget.php:726
 msgid "Select"
 msgstr "Válassz"
 
-#: ../admin/social_login.php:910
+#: ../admin/social_login.php:913
 #, fuzzy
 msgid "Social Login Shortcode & Widget"
 msgstr "Shortcode és Widget"
 
-#: ../admin/social_login.php:911
+#: ../admin/social_login.php:914
 msgid "Social Linking Shortcode"
 msgstr ""
 
-#: ../admin/social_login.php:925
+#: ../admin/social_login.php:928
 msgid ""
 "Why the user is not appearing logged in even after Social Login until the "
 "webpage is refreshed manually?"
 msgstr ""
 
-#: ../admin/social_login.php:926
+#: ../admin/social_login.php:929
 msgid "Why is Facebook login not working?"
 msgstr ""
 
@@ -2505,47 +2504,47 @@ msgstr ""
 "Győződjön meg arról, Szociális Login engedélyezve van az \"Super Socializer "
 "> Social Login\" oldalon."
 
-#: ../inc/social_sharing.php:23 ../inc/social_sharing.php:291
+#: ../inc/social_sharing.php:23 ../inc/social_sharing.php:311
 msgid "Search for"
 msgstr ""
 
 #: ../inc/social_sharing.php:28 ../inc/social_sharing.php:30
-#: ../inc/social_sharing.php:32 ../inc/social_sharing.php:296
-#: ../inc/social_sharing.php:298 ../inc/social_sharing.php:300
+#: ../inc/social_sharing.php:32 ../inc/social_sharing.php:316
+#: ../inc/social_sharing.php:318 ../inc/social_sharing.php:320
 #, fuzzy
 msgid "Archives"
 msgstr "Kategória Archívum"
 
-#: ../inc/social_sharing.php:842 ../inc/social_sharing.php:1046
+#: ../inc/social_sharing.php:861 ../inc/social_sharing.php:1098
 msgid "Invalid request"
 msgstr "Hibás kérés"
 
-#: ../inc/social_sharing.php:849
+#: ../inc/social_sharing.php:868
 msgid "Providers not selected"
 msgstr "Nincs kiválasztott szolgáltató"
 
-#: ../inc/social_login.php:720
+#: ../inc/social_login.php:763
 msgid "Email"
 msgstr "Email"
 
-#: ../inc/social_login.php:721
+#: ../inc/social_login.php:764
 msgid "Confirm email"
 msgstr ""
 
-#: ../inc/social_login.php:723
+#: ../inc/social_login.php:766
 msgid "Save"
 msgstr ""
 
-#: ../inc/social_login.php:724
+#: ../inc/social_login.php:767
 msgid "Cancel"
 msgstr ""
 
-#: ../inc/social_login.php:798
+#: ../inc/social_login.php:841
 #, fuzzy
 msgid "Email Verification"
 msgstr "E-mail ellenőrzés bekapcsolása"
 
-#: ../inc/social_login.php:800
+#: ../inc/social_login.php:843
 msgid ""
 "Please click on the following link or paste it in browser to verify your "
 "email"
@@ -2585,10 +2584,12 @@ msgid "Title (after login):"
 msgstr ""
 
 #: ../inc/widget.php:87 ../inc/widget.php:254 ../inc/widget.php:584
+#: ../inc/widget.php:898
 msgid "Before widget content:"
 msgstr "Widget tartalom előtt:"
 
 #: ../inc/widget.php:89 ../inc/widget.php:256 ../inc/widget.php:586
+#: ../inc/widget.php:960
 msgid "After widget content:"
 msgstr "Widget tartalom után:"
 
@@ -2704,6 +2705,106 @@ msgid ""
 msgstr ""
 "Győződjön meg arról, \"Vízszintes Like gombok\" engedélyezve az \"Super "
 "Socializer > Like gombok\" oldalon."
+
+#: ../inc/widget.php:767
+#, fuzzy
+msgid "Super Socializer - Follow Icons"
+msgstr "Super Socializer - Belépés"
+
+#: ../inc/widget.php:769
+msgid "These icons link to your Social Media accounts"
+msgstr ""
+
+#: ../inc/widget.php:902
+#, fuzzy
+msgid "Size of icons"
+msgstr "Megosztási ikonok mérete"
+
+#: ../inc/widget.php:904
+#, fuzzy
+msgid "Icon Shape"
+msgstr "alak"
+
+#: ../inc/widget.php:909
+#, fuzzy
+msgid "Facebook ID:"
+msgstr "Facebook App ID"
+
+#: ../inc/widget.php:912
+#, fuzzy
+msgid "Twitter ID:"
+msgstr "Twitter"
+
+#: ../inc/widget.php:915
+#, fuzzy
+msgid "Instagram ID:"
+msgstr "Instagram"
+
+#: ../inc/widget.php:918
+#, fuzzy
+msgid "Pinterest ID:"
+msgstr "Pinterest"
+
+#: ../inc/widget.php:921
+msgid "Behance ID:"
+msgstr ""
+
+#: ../inc/widget.php:924
+msgid "Flickr ID:"
+msgstr ""
+
+#: ../inc/widget.php:927
+msgid "Foursquare ID:"
+msgstr ""
+
+#: ../inc/widget.php:930
+msgid "Github ID:"
+msgstr ""
+
+#: ../inc/widget.php:933
+#, fuzzy
+msgid "Google+ ID:"
+msgstr "Google+"
+
+#: ../inc/widget.php:936
+#, fuzzy
+msgid "LinkedIn ID:"
+msgstr "LinkedIn"
+
+#: ../inc/widget.php:939
+msgid "LinkedIn Company ID:"
+msgstr ""
+
+#: ../inc/widget.php:942
+msgid "Snapchat ID:"
+msgstr ""
+
+#: ../inc/widget.php:945
+#, fuzzy
+msgid "Tumblr ID:"
+msgstr "Tumblr"
+
+#: ../inc/widget.php:948
+msgid "Vimeo ID:"
+msgstr ""
+
+#: ../inc/widget.php:951
+msgid "Youtube ID:"
+msgstr ""
+
+#: ../inc/widget.php:954
+msgid "Youtube Channel ID:"
+msgstr ""
+
+#: ../inc/widget.php:957
+msgid "RSS Feed URL:"
+msgstr ""
+
+#~ msgid "Donate"
+#~ msgstr "Adakozás"
+
+#~ msgid "Select providers"
+#~ msgstr "Válassz szolgáltatókat"
 
 #, fuzzy
 #~ msgid "Login with"
@@ -2825,12 +2926,6 @@ msgstr ""
 
 #~ msgid "Float it"
 #~ msgstr "Float it"
-
-#~ msgid "Tumblr"
-#~ msgstr "Tumblr"
-
-#~ msgid "Pinterest"
-#~ msgstr "Pinterest"
 
 #~ msgid "Whatsapp"
 #~ msgstr "Whatsapp"

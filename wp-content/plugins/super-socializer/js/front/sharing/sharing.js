@@ -710,7 +710,7 @@ function theChampFBShareJSONCall(targetUrl, loopCounter, targetUrlsLength, dataH
 					sharingCount += parseInt(jQuery(targetElement).attr('ss_st_count'));
 				}
 				if(sharingCount > 0){
-					if(jQuery(targetElement).text().trim() == '' || jQuery(targetElement).text().trim() == '&nbsp;'){
+					if(typeof jQuery(facebookBackground).attr('heateor-ss-fb-shares') == 'undefined'){
 						jQuery(targetElement).html(theChampCalculateApproxCount(sharingCount)).css({'visibility': 'visible', 'display': 'block'});
 						jQuery(facebookBackground).attr('heateor-ss-fb-shares', sharingCount);
 					}else if(typeof jQuery(facebookBackground).attr('heateor-ss-fb-shares') != 'undefined'){

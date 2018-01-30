@@ -49,9 +49,13 @@ function the_champ_prepare_sharing_html( $postUrl, $sharingType = 'horizontal', 
 
 	if ( isset( $theChampSharingOptions[$sharingType.'_re_providers'] ) ) {
 		
-		$sharingNetworks = fetch_sharing_networks();
+		if ( the_champ_is_amp_page() ) {
+			$sharingNetworks = heateor_ss_fetch_amp_sharing_networks();
+		} else {
+			$sharingNetworks = heateor_ss_fetch_sharing_networks();
+		}
 
-		$html = '<ul ' . ( $sharingType == 'horizontal' && $theChampSharingOptions['hor_sharing_alignment'] == "center" ? "style='list-style: none;position: relative;left: 50%;'" : "" ) .' class="the_champ_sharing_ul">';
+		$html = the_champ_is_amp_page() ? '' : '<ul ' . ( $sharingType == 'horizontal' && $theChampSharingOptions['hor_sharing_alignment'] == "center" ? "style='list-style: none;position: relative;left: 50%;'" : "" ) .' class="the_champ_sharing_ul">';
 		$iconHeight = $theChampSharingOptions[$sharingType . '_sharing_shape'] != 'rectangle' ? $theChampSharingOptions[$sharingType . '_sharing_size'] : $theChampSharingOptions[$sharingType . '_sharing_height'];
 		$style = 'style="width:' . ( $theChampSharingOptions[$sharingType . '_sharing_shape'] != 'rectangle' ? $theChampSharingOptions[$sharingType . '_sharing_size'] : $theChampSharingOptions[$sharingType . '_sharing_width'] ) . 'px;height:' . $iconHeight . 'px;';
 		$counterContainerInitHtml = '<ss class="the_champ_square_count';
@@ -77,7 +81,9 @@ function the_champ_prepare_sharing_html( $postUrl, $sharingType = 'horizontal', 
 		}
 
 		// share count
-		if ( false !== ( $cachedShareCount = heateor_ss_get_cached_share_count( $shareCountTransientId ) ) ) {
+		if ( $savedShareCount = heateor_ss_get_saved_share_counts( $shareCountTransientId, $postUrl ) ) {
+			$shareCounts = $savedShareCount;
+		} elseif ( false !== ( $cachedShareCount = heateor_ss_get_cached_share_count( $shareCountTransientId ) ) ) {
 		    $shareCounts = $cachedShareCount;
 		} else {
 			$shareCounts = '&nbsp;';
@@ -133,6 +139,18 @@ function the_champ_prepare_sharing_html( $postUrl, $sharingType = 'horizontal', 
 		$twitterUsername = $theChampSharingOptions['twitter_username'] != '' ? $theChampSharingOptions['twitter_username'] : '';
 		$totalShareCount = 0;
 
+		$toBeReplaced = array();
+		$replaceBy = array();
+		if(the_champ_is_amp_page()){
+			$iconWidth = $theChampSharingOptions[$sharingType . '_sharing_shape'] != 'rectangle' ? $theChampSharingOptions[$sharingType . '_sharing_size'] : $theChampSharingOptions[$sharingType . '_sharing_width'];
+
+			$toBeReplaced[] = '%width%';
+			$toBeReplaced[] = '%height%';
+
+			$replaceBy[] = $iconWidth;
+			$replaceBy[] = $iconHeight;
+		}
+
 		$wpseoPostTitle = $postTitle;
 		$decodedPostTitle = esc_html(str_replace(array('%23', '%27', '%22', '%21', '%3A'), array('#', "'", '"', '!', ':'), urlencode($originalPostTitle)));
 		if($wpseoTwitterTitle = heateor_ss_wpseo_twitter_title($post)){
@@ -145,6 +163,7 @@ function the_champ_prepare_sharing_html( $postUrl, $sharingType = 'horizontal', 
 			$shareCount[$provider] = $shareCounts == '&nbsp;' ? '' : ( isset( $shareCounts[$provider] ) ? $shareCounts[$provider] : '' );
 			$issetStartingShareCount = isset( $sharingMeta[$provider . '_' . $sharingType . '_count'] ) && $sharingMeta[$provider . '_' . $sharingType . '_count'] != '' ? true : false;
 			$totalShareCount += intval( $shareCount[$provider] ) + ($issetStartingShareCount ? $sharingMeta[$provider . '_' . $sharingType . '_count'] : 0) ;
+			$sharingNetworks[$provider] = str_replace( $toBeReplaced, $replaceBy, $sharingNetworks[$provider] );
 			$liItems .= str_replace(
 				array(
 					'%padding%',
@@ -190,7 +209,7 @@ function the_champ_prepare_sharing_html( $postUrl, $sharingType = 'horizontal', 
 			);
 		}
 		
-		if ( isset( $theChampSharingOptions[$sharingType . '_more'] ) ) {
+		if(isset($theChampSharingOptions[$sharingType . '_more']) && !the_champ_is_amp_page()){
 			$liItems .= '<li class="' . ( $liClass != '' ? $liClass : '' ) . '">';
 			if ( $displayCount) {
 				$liItems .= $counterContainerInitHtml . '">&nbsp;' . $counterContainerEndHtml;
@@ -199,7 +218,7 @@ function the_champ_prepare_sharing_html( $postUrl, $sharingType = 'horizontal', 
 		}
 		
 		$totalSharesHtml = '';
-		if ( $totalShares ) {
+		if ( $totalShares && ! the_champ_is_amp_page() ) {
 			$totalSharesHtml = '<li class="' . $liClass . '">';
 			if ( $displayCount) {
 				$totalSharesHtml .= $counterContainerInitHtml . '">&nbsp;' . $counterContainerEndHtml;
@@ -220,7 +239,8 @@ function the_champ_prepare_sharing_html( $postUrl, $sharingType = 'horizontal', 
 			$html .= $liItems . $totalSharesHtml;
 		}
 
-		$html .= '</ul><div style="clear:both"></div>';
+		$html .= the_champ_is_amp_page() ? '' : '</ul>';
+		$html .= '<div style="clear:both"></div>';
 	}
 	return $html;
 }
@@ -394,8 +414,7 @@ function the_champ_generate_counter_bitly_url($url, $postId = 0){
  * Check if current page is AMP page
  */
 function the_champ_is_amp_page(){
-	$currentPageUrl = html_entity_decode(esc_url(the_champ_get_http() . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]));
-	if(strpos($currentPageUrl, '/amp') !== false || strpos($currentPageUrl, '?amp=1') !== false){
+	if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
 		return true;
 	}
 	return false;
@@ -926,6 +945,9 @@ function the_champ_sharing_count(){
 					case 'vkontakte':
 						$url = 'https://vk.com/share.php?act=count&url='. $targetUrl;
 						break;
+					case 'Odnoklassniki':
+						$url = 'https://connect.ok.ru/dk?st.cmd=extLike&tp=json&ref='. $targetUrl;
+						break;
 					default:
 						$url = '';
 				}
@@ -998,6 +1020,13 @@ function the_champ_sharing_count(){
 								$shareCountTransient['vkontakte'] = 0;
 							}
 							break;
+						case 'Odnoklassniki':
+							if(!empty($body) && isset($body->count)){
+								$shareCountTransient['Odnoklassniki'] = $body->count;
+							}else{
+								$shareCountTransient['Odnoklassniki'] = 0;
+							}
+							break;
 					}
 				}else{
 					$shareCountTransient[$provider] = 0;
@@ -1019,6 +1048,8 @@ function the_champ_sharing_count(){
 		$responseData[$targetUrlsArray[0][$i]] = $finalShareCountTransient;
 		if ( $theChampSharingOptions['share_count_cache_refresh_count'] != '' ) {
 			set_transient('heateor_ss_share_count_' . heateor_ss_get_share_count_transient_id($targetUrlsArray[0][$i]), $finalShareCountTransient, $transientExpirationTime);
+			// update share counts saved in the database
+			heateor_ss_update_share_counts($targetUrlsArray[0][$i], $finalShareCountTransient);
 		}
 	}
 
@@ -1034,13 +1065,34 @@ add_action('wp_ajax_the_champ_sharing_count', 'the_champ_sharing_count');
 add_action('wp_ajax_nopriv_the_champ_sharing_count', 'the_champ_sharing_count');
 
 /**
+ * Save share counts in post-meta
+ */
+function heateor_ss_update_share_counts($targetUrl, $shareCounts){
+	$postId = heateor_ss_get_share_count_transient_id($targetUrl);
+
+	if(!isset($shareCounts['facebook'])){
+		$savedShareCounts = heateor_ss_get_saved_share_counts( $postId, $targetUrl );
+		$facebookShares = $savedShareCounts['facebook'];
+		$shareCounts['facebook'] = $facebookShares;
+	}
+
+	if($postId == 'custom'){
+		update_option('heateor_ss_custom_url_shares', maybe_serialize($shareCounts));
+	}elseif($targetUrl == home_url()){
+		update_option('heateor_ss_homepage_shares', maybe_serialize($shareCounts));
+	}elseif($postId > 0){
+		update_post_meta($postId, '_heateor_ss_shares_meta', $shareCounts);
+	}
+}
+
+/**
  * Save Facebook share counts in transient
  */
 function the_champ_save_facebook_shares(){
 	if(isset($_GET['share_counts']) && is_array($_GET['share_counts']) && count($_GET['share_counts']) > 0){
 		$targetUrls = $_GET['share_counts'];
 		foreach($targetUrls as $k => $v){
-			$targetUrls[$k] = intval($v);
+			$targetUrls[$k] = esc_attr(trim($v));
 		}
 	}else{
 		the_champ_ajax_response(array('status' => 0, 'message' => __('Invalid request')));
@@ -1078,16 +1130,35 @@ function the_champ_save_facebook_shares(){
 		$shareCountTransient = get_transient('heateor_ss_share_count_' . $transientId);
 		if($shareCountTransient !== false){
 			$shareCountTransient['facebook'] = $value;
-			if ( $theChampSharingOptions['share_count_cache_refresh_count'] != '' ) {
+			if($theChampSharingOptions['share_count_cache_refresh_count'] != '' ){
+				$savedShareCount = heateor_ss_get_saved_share_counts($transientId, $key);
+				$savedShareCount['facebook'] = $value;
 				set_transient('heateor_ss_share_count_' . $transientId, $shareCountTransient, $transientExpirationTime);
+				heateor_ss_update_share_counts($key, $savedShareCount);
 			}
 		}
 	}
 	die;
 }
-
 add_action('wp_ajax_the_champ_save_facebook_shares', 'the_champ_save_facebook_shares');
 add_action('wp_ajax_nopriv_the_champ_save_facebook_shares', 'the_champ_save_facebook_shares');
+
+/**
+ * Get saved share counts for given post ID
+ */
+function heateor_ss_get_saved_share_counts($postId, $postUrl){
+	$shareCounts = false;
+
+	if($postId == 'custom'){
+		$shareCounts = maybe_unserialize(get_option('heateor_ss_custom_url_shares'));
+	}elseif($postUrl == home_url()){
+		$shareCounts = maybe_unserialize(get_option('heateor_ss_homepage_shares'));
+	}elseif($postId > 0){
+		$shareCounts = get_post_meta($postId, '_heateor_ss_shares_meta', true);
+	}
+	
+	return $shareCounts;
+}
 
 /**
  * Get ID of the share count transient

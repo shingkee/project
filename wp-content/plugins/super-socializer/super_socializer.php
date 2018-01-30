@@ -3,7 +3,7 @@
 Plugin Name: Super Socializer
 Plugin URI: https://super-socializer-wordpress.heateor.com
 Description: A complete 360 degree solution to provide all the social features like Social Login, Social Commenting, Social Sharing and more.
-Version: 7.9.5
+Version: 7.10.3
 Author: Team Heateor
 Author URI: https://www.heateor.com
 Text Domain: Super-Socializer
@@ -11,7 +11,7 @@ Domain Path: /languages
 License: GPL2+
 */
 defined('ABSPATH') or die("Cheating........Uh!!");
-define('THE_CHAMP_SS_VERSION', '7.9.5');
+define('THE_CHAMP_SS_VERSION', '7.10.3');
 
 require 'helper.php';
 
@@ -55,6 +55,7 @@ require 'inc/shortcode.php';
  * Hook the plugin function on 'init' event.
  */
 function the_champ_init(){
+	global $theChampSharingOptions;
 	add_action('wp_enqueue_scripts', 'the_champ_load_event');
 	add_action('wp_enqueue_scripts', 'the_champ_frontend_scripts');
 	add_action('wp_enqueue_scripts', 'the_champ_frontend_styles');
@@ -65,6 +66,10 @@ function the_champ_init(){
 	load_plugin_textdomain('Super-Socializer', false, dirname(plugin_basename(__FILE__)).'/languages/');
 	if(heateor_ss_is_plugin_active('woocommerce/woocommerce.php')){
 		add_action('the_champ_user_successfully_created', 'the_champ_sync_woocom_profile', 10, 3);
+	}
+	if(isset($theChampSharingOptions['amp_enable'])){
+		// CSS for AMP pages
+		add_action('amp_post_template_css', 'the_champ_frontend_amp_css');
 	}
 }
 add_action('init', 'the_champ_init');
@@ -657,6 +662,14 @@ function the_champ_frontend_scripts(){
 		<?php
 		if(!$combinedScript){
 			wp_enqueue_script('the_champ_sl_common', plugins_url('js/front/social_login/common.js', __FILE__), array('jquery'), THE_CHAMP_SS_VERSION, $inFooter);
+			wp_localize_script(
+				'the_champ_sl_common',
+				'the_champ_sl_ajax_token',
+				array(
+					'ajax_url'  => admin_url('admin-ajax.php'),
+					'security'  => wp_create_nonce('the-champ-sl-ajax-token'),
+				)
+			);
 		}
 		wp_enqueue_script('thickbox');
 		wp_enqueue_style('thickbox');
@@ -781,6 +794,14 @@ function the_champ_frontend_scripts(){
 
 	if($combinedScript){
 		wp_enqueue_script('the_champ_combined_script', plugins_url('js/front/combined.js', __FILE__), array('jquery'), THE_CHAMP_SS_VERSION, $inFooter);
+		wp_localize_script(
+			'the_champ_combined_script',
+			'the_champ_sl_ajax_token',
+			array(
+				'ajax_url'  => admin_url('admin-ajax.php'),
+				'security'  => wp_create_nonce('the-champ-sl-ajax-token'),
+			)
+		);
 	}
 }
 
@@ -1541,4 +1562,22 @@ function the_champ_update_svg_css( $colorToBeReplaced, $cssFile ) {
 			}
 		}
 	}catch(Exception $e){}
+}
+
+/**
+ * CSS to load at front end for AMP
+ */
+function the_champ_frontend_amp_css(){
+	global $theChampSharingOptions;
+	// background color of amp icons
+	$css = 'a.heateor_ss_amp{padding:0 4px;}div.heateor_ss_horizontal_sharing a amp-img{display:inline-block;margin:0 4px;}.heateor_ss_amp_instagram img{background-color:#624E47}.heateor_ss_amp_yummly img{background-color:#E16120}.heateor_ss_amp_buffer img{background-color:#000}.heateor_ss_amp_delicious img{background-color:#53BEEE}.heateor_ss_amp_facebook img{background-color:#3C589A}.heateor_ss_amp_digg img{background-color:#006094}.heateor_ss_amp_email img{background-color:#649A3F}.heateor_ss_amp_float_it img{background-color:#53BEEE}.heateor_ss_amp_google img{background-color:#dd4b39}.heateor_ss_amp_google_plus img{background-color:#dd4b39}.heateor_ss_amp_linkedin img{background-color:#0077B5}.heateor_ss_amp_pinterest img{background-color:#CC2329}.heateor_ss_amp_print img{background-color:#FD6500}.heateor_ss_amp_reddit img{background-color:#247CED}.heateor_ss_amp_stocktwits img{background-color: #40576F}.heateor_ss_amp_stumbleupon img{background-color:#EA4823}.heateor_ss_amp_tumblr img{background-color:#29435D}.heateor_ss_amp_twitter img{background-color:#55acee}.heateor_ss_amp_vkontakte img{background-color:#5E84AC}.heateor_ss_amp_yahoo img{background-color:#8F03CC}.heateor_ss_amp_xing img{background-color:#00797D}.heateor_ss_amp_instagram img{background-color:#527FA4}.heateor_ss_amp_whatsapp img{background-color:#55EB4C}.heateor_ss_amp_aim img{background-color: #10ff00}.heateor_ss_amp_amazon_wish_list img{background-color: #ffe000}.heateor_ss_amp_aol_mail img{background-color: #2A2A2A}.heateor_ss_amp_app_net img{background-color: #5D5D5D}.heateor_ss_amp_baidu img{background-color: #2319DC}.heateor_ss_amp_balatarin img{background-color: #fff}.heateor_ss_amp_bibsonomy img{background-color: #000}.heateor_ss_amp_bitty_browser img{background-color: #EFEFEF}.heateor_ss_amp_blinklist img{background-color: #3D3C3B}.heateor_ss_amp_blogger_post img{background-color: #FDA352}.heateor_ss_amp_blogmarks img{background-color: #535353}.heateor_ss_amp_bookmarks_fr img{background-color: #E8EAD4}.heateor_ss_amp_box_net img{background-color: #1A74B0}.heateor_ss_amp_buddymarks img{background-color: #ffd400}.heateor_ss_amp_care2_news img{background-color: #6EB43F}.heateor_ss_amp_citeulike img{background-color: #2781CD}.heateor_ss_amp_comment img{background-color: #444}.heateor_ss_amp_diary_ru img{background-color: #E8D8C6}.heateor_ss_amp_diaspora img{background-color: #2E3436}.heateor_ss_amp_dihitt img{background-color: #FF6300}.heateor_ss_amp_diigo img{background-color: #4A8BCA}.heateor_ss_amp_douban img{background-color: #497700}.heateor_ss_amp_draugiem img{background-color: #ffad66}.heateor_ss_amp_dzone img{background-color: #fff088}.heateor_ss_amp_evernote img{background-color: #8BE056}.heateor_ss_amp_facebook_messenger img{background-color: #0084FF}.heateor_ss_amp_fark img{background-color: #555}.heateor_ss_amp_flipboard img{background-color: #CC0000}.heateor_ss_amp_folkd img{background-color: #0F70B2}.heateor_ss_amp_google_classroom img{background-color: #FFC112}.heateor_ss_amp_google_bookmarks img{background-color: #CB0909}.heateor_ss_amp_google_gmail img{background-color: #E5E5E5}.heateor_ss_amp_hacker_news img{background-color: #F60}.heateor_ss_amp_hatena img{background-color: #00A6DB}.heateor_ss_amp_instapaper img{background-color: #EDEDED}.heateor_ss_amp_jamespot img{background-color: #FF9E2C}.heateor_ss_amp_kakao img{background-color: #FCB700}.heateor_ss_amp_kik img{background-color: #2A2A2A}.heateor_ss_amp_kindle_it img{background-color: #2A2A2A}.heateor_ss_amp_known img{background-color: #fff101}.heateor_ss_amp_line img{background-color: #00C300}.heateor_ss_amp_livejournal img{background-color: #EDEDED}.heateor_ss_amp_mail_ru img{background-color: #356FAC}.heateor_ss_amp_mendeley img{background-color: #A70805}.heateor_ss_amp_meneame img{background-color: #FF7D12}.heateor_ss_amp_mixi img{background-color: #EDEDED}.heateor_ss_amp_myspace img{background-color: #2A2A2A}.heateor_ss_amp_netlog img{background-color: #2A2A2A}.heateor_ss_amp_netvouz img{background-color: #c0ff00}.heateor_ss_amp_newsvine img{background-color: #055D00}.heateor_ss_amp_nujij img{background-color: #D40000}.heateor_ss_amp_odnoklassniki img{background-color: #F2720C}.heateor_ss_amp_oknotizie img{background-color: #fdff88}.heateor_ss_amp_outlook_com img{background-color: #0072C6}.heateor_ss_amp_papaly img{background-color: #3AC0F6}.heateor_ss_amp_pinboard img{background-color: #1341DE}.heateor_ss_amp_plurk img{background-color: #CF682F}.heateor_ss_amp_pocket img{background-color: #f0f0f0}.heateor_ss_amp_polyvore img{background-color: #2A2A2A}.heateor_ss_amp_printfriendly img{background-color: #61D1D5}.heateor_ss_amp_protopage_bookmarks img{background-color: #413FFF}.heateor_ss_amp_pusha img{background-color: #0072B8}.heateor_ss_amp_qzone img{background-color: #2B82D9}.heateor_ss_amp_refind img{background-color: #1492ef}.heateor_ss_amp_rediff_mypage img{background-color: #D20000}.heateor_ss_amp_renren img{background-color: #005EAC}.heateor_ss_amp_segnalo img{background-color: #fdff88}.heateor_ss_amp_sina_weibo img{background-color: #ff0}.heateor_ss_amp_sitejot img{background-color: #ffc800}.heateor_ss_amp_skype img{background-color: #00AFF0}.heateor_ss_amp_sms img{background-color: #6ebe45}.heateor_ss_amp_slashdot img{background-color: #004242}.heateor_ss_amp_stumpedia img{background-color: #EDEDED}.heateor_ss_amp_svejo img{background-color: #fa7aa3}.heateor_ss_amp_symbaloo_feeds img{background-color: #6DA8F7}.heateor_ss_amp_telegram img{background-color: #3DA5f1}.heateor_ss_amp_trello img{background-color: #1189CE}.heateor_ss_amp_tuenti img{background-color: #0075C9}.heateor_ss_amp_twiddla img{background-color: #EDEDED}.heateor_ss_amp_typepad_post img{background-color: #2A2A2A}.heateor_ss_amp_viadeo img{background-color: #2A2A2A}.heateor_ss_amp_viber img{background-color: #8B628F}.heateor_ss_amp_wanelo img{background-color: #fff}.heateor_ss_amp_webnews img{background-color: #CC2512}.heateor_ss_amp_wordpress img{background-color: #464646}.heateor_ss_amp_wykop img{background-color: #367DA9}.heateor_ss_amp_yahoo_mail img{background-color: #400090}.heateor_ss_amp_yahoo_messenger img{background-color: #400090}.heateor_ss_amp_yoolink img{background-color: #A2C538}.heateor_ss_amp_youmob img{background-color: #3B599D}';
+
+	// css for horizontal sharing bar
+	if ( $theChampSharingOptions['horizontal_sharing_shape'] == 'round' ) {
+		$css .= '.heateor_ss_amp amp-img{border-radius:999px;}';
+	} elseif ( $theChampSharingOptions['horizontal_border_radius'] != '' ) {
+		$css .= '.heateor_ss_amp amp-img{border-radius:' . $this->options['horizontal_border_radius'] . 'px;}';
+	}
+
+	echo $css;
 }

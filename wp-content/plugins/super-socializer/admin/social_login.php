@@ -48,7 +48,10 @@
 					<h3 class="hndle"><label><?php _e('Basic Configuration', 'Super-Socializer');?></label></h3>
 					<div class="inside">
 					<table width="100%" border="0" cellspacing="0" cellpadding="0" class="form-table editcomment menu_content_table">
-
+						<tr>
+							<td colspan="2"><a href="https://www.heateor.com/social-login-buttons" target="_blank" style="text-decoration:none"><input style="width: auto;padding: 10px 42px;" type="button" value="<?php _e('Customize Social Login Icons', 'Super-Socializer'); ?>" class="ss_demo"></a></td>
+						</tr>
+						
 						<tr>
 							<th>
 							<img id="the_champ_sl_disable_reg_help" class="the_champ_help_bubble" src="<?php echo plugins_url('../images/info.png', __FILE__) ?>" />
@@ -90,7 +93,7 @@
 						<tr>
 							<th>
 							<img id="the_champ_sl_providers_help" class="the_champ_help_bubble" src="<?php echo plugins_url('../images/info.png', __FILE__) ?>" />
-							<label><?php _e("Select providers", 'Super-Socializer'); ?></label>
+							<label><?php _e("Select Social Networks", 'Super-Socializer'); ?></label>
 							</th>
 							<td>
 							<div class="theChampHorizontalSharingProviderContainer">

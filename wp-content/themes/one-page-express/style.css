@@ -4,7 +4,7 @@ Theme URI: http://onepageexpress.com
 Author: Horea Radu
 Author URI: 
 Description: One Page Express is a beautiful WordPress Theme that can be used to create a one page website in minutes by drag and drop. In comes with a predesigned home page and over 30 ready to use content sections that you can easily customize. It also has lots of customization options (video background, slideshow background, header content types, etc) that will help you create a beautiful, unique one page website in no time. One Page Express is responsive so it works on mobile devices out of the box. DEMO: http://onepageexpress.com/#demos
-Version: 1.0.11
+Version: 1.0.12
 License: GNU General Public License version 3
 License URI: http://www.opensource.org/licenses/gpl-license.php GPL v3.0 (or later)
 Tags: one-column, right-sidebar, custom-header, custom-menu, custom-logo, full-width-template, theme-options, translation-ready, blog, featured-images, threaded-comments
@@ -297,6 +297,142 @@ ol ol {
 body img {
     max-width: 100%;
     height: auto;
+}
+
+/* =Forms
+-------------------------------------------------------------- */
+
+fieldset {
+    border: none;
+    padding: 0 0 8px 0;
+    margin: 0;
+}
+
+input[type=text], input[type=tel], input[type=url], input[type=email], input[type=password], input[type=number] {
+    box-sizing: border-box;
+    min-height: 2.40741rem;
+    width: 100%;
+    padding: 0.61728rem;
+    margin-bottom: 0.61728rem;
+    font-family: inherit;
+    font-size: 16.2px;
+    vertical-align: middle;
+    border: 0.06173rem solid #ebe9eb;
+    border-radius: 0.18519rem;
+    outline: none;
+    background-color: white;
+}
+
+input[type=text]:focus, input[type=tel]:focus, input[type=url]:focus, input[type=email]:focus, input[type=password]:focus, input[type=number]:focus {
+    border-color: #03a9f5;
+}
+
+input[type=text]:disabled, input[type=tel]:disabled, input[type=url]:disabled, input[type=email]:disabled, input[type=password]:disabled, input[type=number]:disabled {
+    background-color: #eee;
+    cursor: not-allowed;
+}
+
+textarea {
+    box-sizing: border-box;
+    min-height: 2.40741rem;
+    width: 100%;
+    padding: 0.61728rem;
+    margin-bottom: 0.61728rem;
+    font-family: inherit;
+    font-size: 16.2px;
+    vertical-align: middle;
+    border: 0.06173rem solid #ebe9eb;
+    border-radius: 0.18519rem;
+    outline: none;
+    background-color: white;
+    display: block;
+    overflow: auto;
+}
+
+textarea:focus {
+    border-color: #03a9f5;
+}
+
+textarea:disabled {
+    background-color: #eee;
+    cursor: not-allowed;
+}
+
+input[type=search] {
+    box-sizing: border-box;
+    min-height: 2.40741rem;
+    width: 100%;
+    padding: 0.61728rem;
+    margin-bottom: 0.61728rem;
+    font-family: inherit;
+    font-size: 16.2px;
+    vertical-align: middle;
+    border: 0.06173rem solid #ebe9eb;
+    border-radius: 0.18519rem;
+    outline: none;
+    background-color: white;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 0 0.24691rem;
+}
+
+input[type=search]:focus {
+    border-color: #03a9f5;
+}
+
+input[type=search]:disabled {
+    background-color: #eee;
+    cursor: not-allowed;
+}
+
+form {
+    position: relative;
+    color: inherit;
+}
+
+form select {
+    height: 2.40741rem;
+    width: 100%;
+    padding-left: 0.61728rem;
+    margin-bottom: 0.61728rem;
+    font-family: inherit;
+    font-size: 16.2px;
+    border: 0.06173rem solid #ebe9eb;
+    border-radius: 0.18519rem;
+    outline: none;
+    background-color: white;
+}
+
+form select:focus {
+    border-color: #03a9f5;
+}
+
+form select:disabled {
+    background-color: #eee;
+    cursor: not-allowed;
+}
+
+select[multiple] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 100%;
+    padding: 0 0.61728rem;
+    margin-bottom: 0.61728rem;
+    font-family: inherit;
+    font-size: 16.2px;
+    border: 0.06173rem solid #ebe9eb;
+    border-radius: 0.18519rem;
+    outline: none;
+    background-color: white;
+}
+
+select[multiple]:focus {
+    border-color: #03a9f5;
+}
+
+select[multiple]:disabled {
+    background-color: #eee;
+    cursor: not-allowed;
 }
 
 /* =WordPress Core
@@ -2113,9 +2249,6 @@ p.logged-in-as {
     margin: 0px;
 }
 
-
-
-
 a#fm2_drop_mainmenu_mobile_button span.caption {
     min-height: 20px;
     display: inline-block;
@@ -2134,7 +2267,6 @@ a#fm2_drop_mainmenu_mobile_button span.caption {
     padding: 5px 0px 0px 0px !important;
 }
 
-
 a#fm2_drop_mainmenu_mobile_button span.caption:before {
     content: "\f0c9";
     height: 30px;
@@ -2145,12 +2277,9 @@ a#fm2_drop_mainmenu_mobile_button span.caption:before {
     text-align: center;
 }
 
-
-
 .header-top.coloured-nav {
     background: #ffffff;
 }
-
 
 .header-top.fixto-fixed {
     background-color: #FFFFFF;
@@ -2159,8 +2288,6 @@ a#fm2_drop_mainmenu_mobile_button span.caption:before {
     -webkit-box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.33);
     min-height: 80px;
 }
-
-
 
 .header-top.fixto-fixed #drop_mainmenu > li > a,
 .header-top.coloured-nav #drop_mainmenu > li > a,
@@ -2242,11 +2369,9 @@ a#fm2_drop_mainmenu_mobile_button span.caption:before {
         line-height: 130%;
     }
 
-        
     h1.heading8 {
         font-size: 3.3em;
     }
-
 
     .gridContainer {
         width: 90%;
@@ -2272,7 +2397,6 @@ a#fm2_drop_mainmenu_mobile_button span.caption:before {
         position: fixed;
         transition: all .3s linear;
     }
-
 
     .featured-items {
         display: flex;

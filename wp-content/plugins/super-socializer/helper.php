@@ -798,7 +798,7 @@ function the_champ_sharing_meta_setup(){
 		<?php
 		if(the_champ_social_sharing_enabled()){
 			global $theChampSharingOptions;
-			$validNetworks = array('facebook', 'twitter', 'linkedin', 'buffer', 'reddit', 'pinterest', 'stumbleupon', 'vkontakte');
+			$validNetworks = array('facebook', 'twitter', 'linkedin', 'buffer', 'reddit', 'pinterest', 'stumbleupon', 'vkontakte', 'Odnoklassniki');
 			if(isset($theChampSharingOptions['hor_enable']) && isset($theChampSharingOptions['horizontal_counts']) && isset($theChampSharingOptions['horizontal_re_providers']) && count($theChampSharingOptions['horizontal_re_providers']) > 0){
 				?>
 				<p>
@@ -864,7 +864,7 @@ function the_champ_save_sharing_meta($postId){
     if ( isset( $_POST['_the_champ_meta'] ) ) {
 		$newData = $_POST['_the_champ_meta'];
 		foreach($newData as $k => $v){
-			$newData[$k] = intval($v);
+			$newData[$k] = $v;
 		}
 	}else{
 		$newData = array( 'sharing' => 0, 'vertical_sharing' => 0, 'counter' => 0, 'vertical_counter' => 0, 'fb_comments' => 0 );

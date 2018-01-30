@@ -5,7 +5,7 @@ function one_page_express_setup()
     global $content_width;
 
     if ( ! isset($content_width)) {
-        $content_width = 640;
+        $content_width = 3840;
     }
 
     load_theme_textdomain('one-page-express', get_template_directory() . '/languages');
@@ -14,7 +14,8 @@ function one_page_express_setup()
     add_theme_support('title-tag');
     add_theme_support('post-thumbnails');
 
-    set_post_thumbnail_size(890, 510, true);
+
+    set_post_thumbnail_size(1024, 0, false);
 
     register_default_headers(array(
         'homepage-image' => array(
@@ -39,6 +40,9 @@ function one_page_express_setup()
         'width'       => 150,
         'height'      => 70,
     ));
+
+    add_image_size( 'one-page-express-full-hd', 1920, 1080 );
+
 
     add_theme_support('customize-selective-refresh-widgets');
     register_nav_menus(array(
@@ -90,6 +94,15 @@ function one_page_express_setup()
     ));
 
     add_action('admin_menu', 'one_page_express_register_theme_page');
+}
+
+
+add_filter( 'image_size_names_choose', 'one_page_express_full_hd_image_size_label' );
+
+function one_page_express_full_hd_image_size_label( $sizes ) {
+    return array_merge( $sizes, array(
+        'one-page-express-full-hd' => __( 'Full HD' , 'one-page-express' ),
+    ) );
 }
 
 function one_page_express_register_theme_page()

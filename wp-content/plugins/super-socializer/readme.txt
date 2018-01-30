@@ -3,8 +3,8 @@ Contributors: Heateor, the_champ, Hungarian Translator: László Tavaszi http://
 Donate link: https://www.heateor.com/donate?action=Super+Socializer
 Tags: social login, social share, social commenting, social comments, social plugin, profile data, social analytics, online identity, social profile storage, single sign-on, social media, facebook login
 Requires at least: 2.5.0
-Tested up to: 4.9
-Stable tag: 7.9.5
+Tested up to: 4.9.2
+Stable tag: 7.10.3
 License: GPLv2 or later
 
 The unique Social Plugin to let you integrate Social Login, Social Share and Social Comments at your website
@@ -18,7 +18,8 @@ Integrate Social Login, Social Share and Social Comments at your website easiest
 
 = Feature list =
 * Social Share from around 100 social networks
-* Share counts are supported for Facebook, Linkedin, Twitter, Buffer, Reddit, Pinterest, Stumbleupon and Vkontakte
+* Social Media follow icons 
+* Share counts are supported for Facebook, Linkedin, Twitter, Buffer, Reddit, Pinterest, Stumbleupon, Odnoklassniki and Vkontakte
 * FREE icon customization options
 * Options to specify sharing icon shape - Square, Round and Rectangular
 * Options to specify sharing icon size - minimum 16 pixels, no upper limit
@@ -34,6 +35,7 @@ Integrate Social Login, Social Share and Social Comments at your website easiest
 * Enable/Disable sharing on individual pages/posts
 * Enable/Disable total/individual share count(s)
 * Mobile responsive sharing interface
+* Compatible with AMP
 * Enable/Disable vertical/floating sharing interface on mobile device
 * Social Login from 9 Social Networks - Facebook, Google, Linkedin, Twitter, Vkontakte, Instagram, Xing, Twitch, Steam and LiveJournal
 * Enable Social Login interface at WordPress Login, Register pages and comment form
@@ -102,7 +104,9 @@ Detailed Overview:
 3. **Enhances Marketing Efforts**: Social data can integrate with third-party platforms such as email marketing platforms, ad servers, recommendation engines, and more, to target the right users with the right messages which increases ROI (Return on Investment).
 
 
-= Single sign-on = Enable single sign-on in your WordPress multisite network. 
+= Social Media Follow Icons = Redirect website visitors to your Social Media pages
+
+= Single sign-on = Enable single sign-on in your WordPress multisite network 
 
 = What makes this plugin different and why should I choose this plugin when there are many other social plugins? =
 1. **Free**: Yea, right. It is a free plugin. You need not pay single penny to use the features of this plugin.
@@ -197,13 +201,37 @@ Yes, we can help you with it. Just drop an email at support[ at ]heateor[ dot ]c
 1. **Social Login**: Social Login interface at Wordpress login form
 2. **Social Sharing**: A wide variety of sharing icons
 3. **Social Sharing**: Options to chosse size (minimum 16px, no upper limit) and shape (round and square) of sharing icons
-4. **Social Sharing**: Around 90 social networks in Social Sharing
+4. **Social Sharing**: Around 100 social networks in Social Sharing
 5. **Social Commenting**: WordPress Commenting selected
 6. **Social Commenting**: Facebook Commenting selected
 7. **Social Commenting**: GooglePlus Commenting selected
 8. **Social Commenting**: Disqus Commenting selected
 
 == Changelog ==
+= 7.10.3 =
+* [Bugfix] Some share icons were appearing broken on AMP
+
+= 7.10.2 =
+* [New] Added Odnoklassniki share counter
+* [Improvement] Compatible with AMP
+* [Improvement] Share count functionality is smoother
+* [Bugfix] Comment icon at homepage was not redirecting to the comment form of individual post
+
+= 7.10.1 =
+* [Improvement] New changes made in version 7.10 were causing problem at websites running on PHP version less than 5.0
+
+= 7.10 =
+* [Security] Social Login is more secure (props to <a href="https://github.com/calvinhughes" target="_blank">Calvin Hughes</a>)
+* [Improvement] Social avatar functionality was not working when "get_avatar_url" function was being used to show avatar
+
+= 7.9.7 =
+* [New] Included "Super Socializer - Follow Icons" widget to integrate Social Media follow icons with your website
+* [Improvement] Users using Social Login were being logged out from website after closing the browser
+* [Bugfix] Social share icons in "more share icons popup" were coming out of it in a few cases 
+
+= 7.9.6 =
+* [Bugfix] "create_function() is deprecated" error was being generated with PHP version 7.2
+
 = 7.9.5 =
 * [Bugfix] Pinterest save button was misaligned
 * [Bugfix] Viber logo was not appearing in Viber share icon, in a few cases
@@ -1321,3 +1349,27 @@ Yes, we can help you with it. Just drop an email at support[ at ]heateor[ dot ]c
 * [Bugfix] Plugin was overriding user avatars even when social login was not enabled, in a few cases
 * [Bugfix] Social Login was causing PHP warning "Missing argument 2 for wc_maybe_store_user_agent()" with WooCommerce
 * [Improvement] Improved Vkontakte login functionality
+
+= 7.9.6 =
+* [Bugfix] "create_function() is deprecated" error was being generated with PHP version 7.2
+
+= 7.9.7 =
+* [New] Included "Super Socializer - Follow Icons" widget to integrate Social Media follow icons with your website
+* [Improvement] Users using Social Login were being logged out from website after closing the browser
+* [Bugfix] Social share icons in "more share icons popup" were coming out of it in a few cases 
+
+= 7.10 =
+* [Security] Social Login is more secure (props to <a href="https://github.com/calvinhughes" target="_blank">Calvin Hughes</a>)
+* [Improvement] Social avatar functionality was not working when "get_avatar_url" function was being used to show avatar
+
+= 7.10.1 =
+* [Improvement] New changes made in version 7.10 were causing problem at websites running on PHP version less than 5.0
+
+= 7.10.2 =
+* [New] Added Odnoklassniki share counter
+* [Improvement] Compatible with AMP
+* [Improvement] Share count functionality is smoother
+* [Bugfix] Comment icon at homepage was not redirecting to the comment form of individual post
+
+= 7.10.3 =
+* [Bugfix] Some share icons were appearing broken on AMP

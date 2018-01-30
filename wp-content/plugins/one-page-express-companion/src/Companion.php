@@ -65,11 +65,12 @@ class Companion
         });
     }
 
-
     public function initCompanion()
     {
         // array($this,'checkIfCompatibleChildTheme'));
         $this->checkIfCompatibleChildTheme();
+        $this->checkNotifications();
+
         $this->_customizer = new \OnePageExpress\Customizer\Customizer($this);
         \OnePageExpress\Customizer\Template::load($this);
         \OnePageExpress\Customizer\ThemeSupport::load();
@@ -98,14 +99,27 @@ class Companion
     }
 
 
+    public function checkNotifications()
+    {
+        $notifications = $this->themeDataPath("/notifications.php");
+        if (file_exists($notifications)) {
+            $notifications = require_once $notifications;
+        } else {
+            $notifications = array();
+        }
+
+        \OnePageExpress\Notify\NotificationsManager::load($notifications);
+    }
+
+
     public function checkIfCompatibleChildTheme()
     {
         $theme = wp_get_theme();
-       
-        if($theme && $theme->get('Template')){
+
+        if ($theme && $theme->get('Template')) {
             $template = $theme->get('Template');
-            
-            if(in_array($template, $this->getCustomizerData('themes'))){
+
+            if (in_array($template, $this->getCustomizerData('themes'))) {
                 add_filter('cloudpress\customizer\supports', "__return_true");
             }
 
@@ -283,17 +297,16 @@ class Companion
 
     public function isProtectedMeta($protected, $meta_key, $meta_type)
     {
-        $protected = array(
+        $is_protected = array(
             'is_' . $this->themeSlug . '_front_page',
             'is_' . $this->themeSlug . '_maintainable_page',
         );
-        if (in_array($meta_key, $protected)) {
+        if (in_array($meta_key, $is_protected)) {
             return true;
         }
 
         return $protected;
     }
-
 
     public function isMultipage()
     {
@@ -321,20 +334,30 @@ class Companion
         $result = false;
         global $post;
 
-
         if (function_exists('pll_get_post') && function_exists('pll_default_language')) {
             $slug      = pll_default_language('slug');
             $defaultID = pll_get_post($post_id, $slug);
+            $sourceID  = isset($_REQUEST['from_post']) ? $_REQUEST['from_post'] : null;
+            $defaultID = $defaultID ? $defaultID : $sourceID;
 
             if ($defaultID && ($defaultID !== $post_id)) {
                 $result = call_user_func($callback, $defaultID);
             }
         }
-
         global $sitepress;
         if ($sitepress) {
             $defaultLanguage = $sitepress->get_default_language();
-            $defaultID       = icl_object_id($post_id, 'post_' . $post->post_type, true, $defaultLanguage);
+            global $wpdb;
+
+            $sourceTRID = isset($_REQUEST['trid']) ? $_REQUEST['trid'] : null;
+            $trid       = $sitepress->get_element_trid($post_id);
+            $trid       = $trid ? $trid : $sourceTRID;
+            $defaultID  = $wpdb->get_var(
+                $wpdb->prepare(
+                    "SELECT element_id FROM {$wpdb->prefix}icl_translations WHERE trid=%d AND language_code=%s",
+                    $trid,
+                    $defaultLanguage));
+
 
             if ($defaultID && ($defaultID !== $post_id)) {
                 $result = call_user_func($callback, $defaultID);
@@ -451,7 +474,6 @@ class Companion
         return $slug;
     }
 
-
     public function __createFrontPage()
     {
         $page = $this->getFrontPage();
@@ -512,7 +534,6 @@ class Companion
         $this->__createFrontPage();
     }
 
-
     public function restoreFrontPage()
     {
         if ($this->getFrontPage()) {
@@ -520,7 +541,6 @@ class Companion
             update_option('page_on_front', get_option($this->themeSlug . '_companion_old_page_on_front'));
         }
     }
-
 
     public function addEditInCustomizer($actions, $post)
     {
@@ -549,7 +569,7 @@ class Companion
     {
         if ($this->isMultipage()) {
             global $post;
-            $title_placeholder = apply_filters('enter_title_here', __('Enter title here', 'cloudpress-companion'),$post);
+            $title_placeholder = apply_filters('enter_title_here', __('Enter title here', 'cloudpress-companion'), $post);
 
             ?>
             <style>
@@ -646,7 +666,6 @@ class Companion
         }
     }
 
-
     public function openPageInCustomizer()
     {
         $post_id = intval($_REQUEST['page']);
@@ -681,12 +700,30 @@ class Companion
 
         }
 
+        $url = $this->get_page_link($post_id);
 
         ?>
-        <?php echo admin_url('customize.php') ?>?url=<?php echo esc_url(get_page_link($post_id)) ?>
+        <?php echo admin_url('customize.php') ?>?url=<?php echo esc_url($url) ?>
         <?php
 
         exit;
+    }
+
+    public function get_page_link($post_id)
+    {
+        global $sitepress;
+        if ($sitepress) {
+            $url = get_page_link($post_id);
+            $args = array('element_id' => $post_id, 'element_type' => 'page' );
+            $language_code = apply_filters( 'wpml_element_language_code', null, $args );
+            $url = apply_filters( 'wpml_permalink', $url, $language_code );
+        }
+
+        if (!$url) {
+            $url = get_page_link($post_id);
+        }
+
+        return $url;
     }
 
     public function shortcodeRefresh()
@@ -712,7 +749,6 @@ class Companion
         global $wp_query;
         $wp_query = new \WP_Query($query);
 
-
         echo do_shortcode($shortcode);
         die();
 
@@ -736,9 +772,7 @@ class Companion
             return $urls;
         }, 10, 2);
 
-
     }
-
 
     // SINGLETON
 

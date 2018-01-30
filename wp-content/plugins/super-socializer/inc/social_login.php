@@ -122,12 +122,12 @@ function the_champ_login_user($userId, $profileData = array(), $socialId = '', $
 	do_action('the_champ_login_user', $userId, $profileData, $socialId, $update);
 	
 	wp_set_current_user($userId, $user -> user_login);
-	wp_set_auth_cookie($userId);
+	wp_set_auth_cookie($userId, true);
 	do_action('wp_login', $user -> user_login, $user);
 }
 
 /**
- * Create username.
+ * Create username
  */
 function the_champ_create_username($profileData){
 	$username = "";
@@ -322,6 +322,43 @@ function the_champ_social_avatar($avatar, $avuser, $size, $default, $alt = ''){
 }
 add_filter('get_avatar', 'the_champ_social_avatar', 100000, 5);
 add_filter('bp_core_fetch_avatar', 'the_champ_buddypress_avatar', 10, 2);
+
+/**
+ * Replace default avatar url with the url of social avatar
+ */
+function heateor_ss_social_avatar_url($url, $idOrEmail, $args){
+	global $theChampLoginOptions;
+	if(isset($theChampLoginOptions['enable']) && isset($theChampLoginOptions['avatar'])){
+		if(isset($theChampLoginOptions['avatar_quality']) && $theChampLoginOptions['avatar_quality'] == 'better'){
+			$avatarType = 'thechamp_large_avatar';
+		}else{
+			$avatarType = 'thechamp_avatar';
+		}
+		$userId = 0;
+		if(is_numeric($idOrEmail)){
+			$user = get_userdata($idOrEmail);
+			if($idOrEmail > 0){
+				$userId = $idOrEmail;
+			}
+		}elseif(is_object($idOrEmail)){
+			if(property_exists($idOrEmail, 'user_id') AND is_numeric($idOrEmail->user_id)){
+				$userId = $idOrEmail->user_id;
+			}
+		}elseif(is_email($idOrEmail)){
+			$user = get_user_by('email', $idOrEmail);
+			$userId = isset($user->ID) ? $user->ID : 0;
+		}
+
+		if($avatarType == 'thechamp_large_avatar' && get_user_meta($userId, $avatarType, true) == ''){
+			$avatarType = 'thechamp_avatar';
+		}
+		if(!empty($userId) && ($userAvatar = get_user_meta($userId, $avatarType, true)) !== false && strlen(trim($userAvatar)) > 0){
+			return $userAvatar;
+		}
+	}
+	return $url;
+}
+add_filter('get_avatar_url', 'heateor_ss_social_avatar_url', 10, 3);
 
 /**
  * Enable social avatar in Buddypress
@@ -685,9 +722,15 @@ function the_champ_link_account($socialId, $provider, $userId){
 }
 
 /**
- * User authentication ajax after Social login.
+ * User authentication ajax after Social login
  */
 function the_champ_user_auth_ajax(){
+	if(!isset($_POST['security'])){
+		the_champ_ajax_response(array('status' => 0, 'message' => 'Invalid request'));
+	}
+	if(!check_ajax_referer('the-champ-sl-ajax-token', 'security')){
+        the_champ_ajax_response(array('status' => 0, 'message' => 'Invalid request'));
+    }
 	if(isset($_POST['error'])){
 		the_champ_log_error(sanitize_text_field($_POST['error']));
 	}

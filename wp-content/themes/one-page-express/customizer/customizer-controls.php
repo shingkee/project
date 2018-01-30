@@ -432,14 +432,15 @@ class Info_PRO_Control extends Info_Control
 
     protected  function  render() {
         if(!$this->active_callback()){
-            return ;
+            echo "" ;
+            return;
         }
         parent::render();
     }
 
 
     public function active_callback() {
-        $active =  apply_filters('ope_show_info_pro_messages',true);
+       $active =  apply_filters('ope_show_info_pro_messages',true);
 
        if($active && defined('OPE_PRO_THEME_REQUIRED_PHP_VERSION')){
             $active = false;
@@ -457,7 +458,8 @@ class Info_PRO_Section extends \WP_Customize_Section
     protected function render()
     {
         if(!$this->active_callback()){
-            return "";
+           echo "" ;
+           return ;
         }
 
     	$classes = 'try-pro accordion-section control-section control-section-' . $this->type;

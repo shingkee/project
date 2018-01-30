@@ -95,7 +95,7 @@ class TheChampLoginWidget extends WP_Widget {
 <?php 
   } 
 } 
-add_action( 'widgets_init', create_function( '', 'return register_widget( "TheChampLoginWidget" );' )); 
+add_action( 'widgets_init', function() { return register_widget( "TheChampLoginWidget" ); } ); 
 
 /**
  * Widget for Social Sharing (Standard widget)
@@ -261,7 +261,7 @@ class TheChampSharingWidget extends WP_Widget {
 	<?php 
     } 
 } 
-add_action( 'widgets_init', create_function( '', 'return register_widget( "TheChampSharingWidget" );' ));
+add_action( 'widgets_init', function() { return register_widget( "TheChampSharingWidget" ); } );
 
 /**
  * Widget for Social Sharing (Floating widget)
@@ -442,7 +442,7 @@ class TheChampVerticalSharingWidget extends WP_Widget {
 	<?php 
     } 
 }
-add_action( 'widgets_init', create_function( '', 'return register_widget( "TheChampVerticalSharingWidget" );' ));
+add_action( 'widgets_init', function() { return register_widget( "TheChampVerticalSharingWidget" ); } );
 
 /**
  * Widget for Social Counter (Standard widget)
@@ -591,7 +591,7 @@ class TheChampCounterWidget extends WP_Widget {
 	<?php 
     } 
 } 
-add_action( 'widgets_init', create_function( '', 'return register_widget( "TheChampCounterWidget" );' ));
+add_action( 'widgets_init', function() { return register_widget( "TheChampCounterWidget" ); } );
 
 /**
  * Widget for Social Counter (Floating widget)
@@ -754,4 +754,213 @@ class TheChampVerticalCounterWidget extends WP_Widget {
 	<?php 
     } 
 } 
-add_action( 'widgets_init', create_function( '', 'return register_widget( "TheChampVerticalCounterWidget" );' ));
+add_action( 'widgets_init', function() { return register_widget( "TheChampVerticalCounterWidget" ); } );
+
+/**
+ * Widget for Social Media follow icons
+ */
+class TheChampFollowWidget extends WP_Widget { 
+	/** constructor */ 
+	public function __construct() { 
+		parent::__construct( 
+			'TheChampFollow', //unique id 
+			__('Super Socializer - Follow Icons', 'Super-Socializer'), //title displayed at admin panel
+			array(  
+				'description' => __( 'These icons link to your Social Media accounts', 'Super-Socializer' )) 
+			); 
+	}
+	
+	/** This is rendered widget content */ 
+	public function widget( $args, $instance ) {
+		extract( $args ); 
+		echo $before_widget;
+		if( !empty( $instance['before_widget_content'] ) ){ 
+			echo '<div>' . $instance['before_widget_content'] . '</div>';
+		}
+		echo '<div class="heateor_ss_follow_icons_container">';
+		if( !empty( $instance['title'] ) ){ 
+			$title = apply_filters( 'widget_title', $instance[ 'title' ] ); 
+			echo $before_title . $title . $after_title;
+		}
+		echo $this->follow_icons( $instance );
+		echo '<div style="clear:both"></div>';
+		echo '</div>';
+		if( !empty( $instance['after_widget_content'] ) ){ 
+			echo '<div>' . $instance['after_widget_content'] . '</div>';
+		}
+		echo $after_widget; 
+	}  
+
+	/** Render follow icons */
+	private function follow_icons( $instance ) {
+		$html = '';
+		$iconStyle = 'width:'. $instance['size'] .'px;height:'. $instance['size'] .'px;'. ( $instance['icon_shape'] == 'round' ? 'border-radius:999px;' : '' );
+		$html .= '<ul class="heateor_ss_follow_ul">';
+		if ( $instance['facebook'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Facebook" title="Facebook" class="theChampSharing theChampFacebookBackground"><a target="_blank" href="'. $instance['facebook'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampFacebookSvg"></ss></a></i></li>';
+		}
+		if ( $instance['twitter'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Twitter" title="Twitter" class="theChampSharing theChampTwitterBackground"><a target="_blank" href="'. $instance['twitter'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampTwitterSvg"></ss></a></i></li>';
+		}
+		if ( $instance['instagram'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Instagram" title="Instagram" class="theChampSharing theChampInstagramBackground"><a target="_blank" href="'. $instance['instagram'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampInstagramSvg"></ss></a></i></li>';
+		}
+		if ( $instance['pinterest'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Pinterest" title="Pinterest" class="theChampSharing theChampPinterestBackground"><a target="_blank" href="'. $instance['pinterest'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampPinterestSvg"></ss></a></i></li>';
+		}
+		if ( $instance['behance'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Behance" title="Behance" class="theChampSharing theChampBehanceBackground"><a target="_blank" href="'. $instance['behance'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampBehanceSvg"></ss></a></i></li>';
+		}
+		if ( $instance['flickr'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Flickr" title="Flickr" class="theChampSharing theChampFlickrBackground"><a target="_blank" href="'. $instance['flickr'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampFlickrSvg"></ss></a></i></li>';
+		}
+		if ( $instance['foursquare'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Foursquare" title="Foursquare" class="theChampSharing theChampFoursquareBackground"><a target="_blank" href="'. $instance['foursquare'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampFoursquareSvg"></ss></a></i></li>';
+		}
+		if ( $instance['github'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Github" title="Github" class="theChampSharing theChampGithubBackground"><a target="_blank" href="'. $instance['github'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampGithubSvg"></ss></a></i></li>';
+		}
+		if ( $instance['google'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Google+" title="Google+" class="theChampSharing theChampGoogleplusBackground"><a target="_blank" href="'. $instance['google'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampGoogleplusSvg"></ss></a></i></li>';
+		}
+		if ( $instance['linkedin'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Linkedin" title="Linkedin" class="theChampSharing theChampLinkedinBackground"><a target="_blank" href="'. $instance['linkedin'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampLinkedinSvg"></ss></a></i></li>';
+		}
+		if ( $instance['linkedin_company'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Linkedin Company" title="Linkedin Company" class="theChampSharing theChampLinkedinBackground"><a target="_blank" href="'. $instance['linkedin_company'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampLinkedinSvg"></ss></a></i></li>';
+		}
+		if ( $instance['snapchat'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Snapchat" title="Snapchat" class="theChampSharing theChampSnapchatBackground"><a target="_blank" href="'. $instance['snapchat'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampSnapchatSvg"></ss></a></i></li>';
+		}
+		if ( $instance['tumblr'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Tumblr" title="Tumblr" class="theChampSharing theChampTumblrBackground"><a target="_blank" href="'. $instance['tumblr'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampTumblrSvg"></ss></a></i></li>';
+		}
+		if ( $instance['vimeo'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Vimeo" title="Vimeo" class="theChampSharing theChampVimeoBackground"><a target="_blank" href="'. $instance['vimeo'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampVimeoSvg"></ss></a></i></li>';
+		}
+		if ( $instance['youtube'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Youtube" title="Youtube" class="theChampSharing theChampYoutubeBackground"><a target="_blank" href="'. $instance['youtube'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampYoutubeSvg"></ss></a></i></li>';
+		}
+		if ( $instance['youtube_channel'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="Youtube Channel" title="Youtube Channel" class="theChampSharing theChampYoutubeBackground"><a target="_blank" href="'. $instance['youtube_channel'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampYoutubeSvg"></ss></a></i></li>';
+		}
+		if ( $instance['rss_feed'] ) {
+			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="RSS Feed" title="RSS Feed" class="theChampSharing theChampRSSBackground"><a target="_blank" href="'. $instance['rss_feed'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampRSSSvg"></ss></a></i></li>';
+		}
+		$html .= '<ul>';
+
+		return $html;
+	}
+
+	/** Everything which should happen when user edit widget at admin panel */ 
+	public function update( $new_instance, $old_instance ) { 
+		$instance = $old_instance; 
+		$instance['title'] = strip_tags( $new_instance['title'] );
+		$instance['size'] = intval( $new_instance['size'] );
+		$instance['icon_shape'] = $new_instance['icon_shape'];
+		$instance['facebook'] = $new_instance['facebook'];
+		$instance['twitter'] = $new_instance['twitter'];
+		$instance['instagram'] = $new_instance['instagram'];
+		$instance['pinterest'] = $new_instance['pinterest'];
+		$instance['behance'] = $new_instance['behance'];
+		$instance['flickr'] = $new_instance['flickr'];
+		$instance['foursquare'] = $new_instance['foursquare'];
+		$instance['github'] = $new_instance['github'];
+		$instance['google'] = $new_instance['google'];
+		$instance['linkedin'] = $new_instance['linkedin'];
+		$instance['linkedin_company'] = $new_instance['linkedin_company'];
+		$instance['snapchat'] = $new_instance['snapchat'];
+		$instance['tumblr'] = $new_instance['tumblr'];
+		$instance['vimeo'] = $new_instance['vimeo'];
+		$instance['youtube'] = $new_instance['youtube'];
+		$instance['youtube_channel'] = $new_instance['youtube_channel'];
+		$instance['rss_feed'] = $new_instance['rss_feed'];
+		$instance['before_widget_content'] = $new_instance['before_widget_content']; 
+		$instance['after_widget_content'] = $new_instance['after_widget_content'];
+
+		return $instance; 
+	}  
+
+	/** Widget options in admin panel */ 
+	public function form( $instance ) { 
+		/* Set up default widget settings. */ 
+		$defaults = array( 'title' => '', 'size' => '32', 'icon_shape' => 'round', 'facebook' => '', 'twitter' => '', 'instagram' => '', 'pinterest' => '', 'behance' => '', 'flickr' => '', 'foursquare' => '', 'github' => '', 'google' => '', 'linkedin' => '', 'linkedin_company' => '', 'snapchat' => '', 'tumblr' => '', 'vimeo' => '', 'youtube' => '', 'youtube_channel' => '', 'rss_feed' => '', 'before_widget_content' => '', 'after_widget_content' => '' );  
+
+		foreach( $instance as $key => $value ) {  
+			if ( is_string( $value ) ) {
+				$instance[ $key ] = esc_attr( $value );  
+			}
+		}
+
+		$instance = wp_parse_args( (array)$instance, $defaults ); 
+		?> 
+		<p>
+			<label for="<?php echo $this->get_field_id( 'before_widget_content' ); ?>"><?php _e( 'Before widget content:', 'Super-Socializer' ); ?></label> 
+			<input class="widefat" id="<?php echo $this->get_field_id( 'before_widget_content' ); ?>" name="<?php echo $this->get_field_name( 'before_widget_content' ); ?>" type="text" value="<?php echo $instance['before_widget_content']; ?>" /><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $instance['title']; ?>" /><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'size' ); ?>"><?php _e( 'Size of icons', 'Super-Socializer' ); ?></label> 
+			<input style="width: 82%" class="widefat" id="<?php echo $this->get_field_id( 'size' ); ?>" name="<?php echo $this->get_field_name( 'size' ); ?>" type="text" value="<?php echo $instance['size']; ?>" />pixels<br/><br/>
+			<label for="<?php echo $this->get_field_id( 'icon_shape' ); ?>"><?php _e( 'Icon Shape', 'Super-Socializer' ); ?></label> 
+			<select style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'icon_shape' ); ?>" name="<?php echo $this->get_field_name( 'icon_shape' ); ?>">
+				<option value="round" <?php echo !isset($instance['icon_shape']) || $instance['icon_shape'] == 'round' ? 'selected' : '' ; ?>><?php _e( 'Round', 'Super-Socializer' ); ?></option>
+				<option value="square" <?php echo isset($instance['icon_shape']) && $instance['icon_shape'] == 'square' ? 'selected' : '' ; ?>><?php _e( 'Square', 'Super-Socializer' ); ?></option>
+			</select><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'facebook' ); ?>"><?php _e( 'Facebook ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'facebook' ); ?>" name="<?php echo $this->get_field_name( 'facebook' ); ?>" type="text" value="<?php echo $instance['facebook']; ?>" /><br/>
+			<span>https://www.facebook.com/ID</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'twitter' ); ?>"><?php _e( 'Twitter ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'twitter' ); ?>" name="<?php echo $this->get_field_name( 'twitter' ); ?>" type="text" value="<?php echo $instance['twitter']; ?>" /><br/>
+			<span>https://twitter.com/ID</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'instagram' ); ?>"><?php _e( 'Instagram ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'instagram' ); ?>" name="<?php echo $this->get_field_name( 'instagram' ); ?>" type="text" value="<?php echo $instance['instagram']; ?>" /><br/>
+			<span>https://www.instagram.com/ID</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'pinterest' ); ?>"><?php _e( 'Pinterest ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'pinterest' ); ?>" name="<?php echo $this->get_field_name( 'pinterest' ); ?>" type="text" value="<?php echo $instance['pinterest']; ?>" /><br/>
+			<span>https://www.pinterest.com/ID</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'behance' ); ?>"><?php _e( 'Behance ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'behance' ); ?>" name="<?php echo $this->get_field_name( 'behance' ); ?>" type="text" value="<?php echo $instance['behance']; ?>" /><br/>
+			<span>https://www.behance.net/ID</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'flickr' ); ?>"><?php _e( 'Flickr ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'flickr' ); ?>" name="<?php echo $this->get_field_name( 'flickr' ); ?>" type="text" value="<?php echo $instance['flickr']; ?>" /><br/>
+			<span>https://www.flickr.com/photos/ID</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'foursquare' ); ?>"><?php _e( 'Foursquare ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'foursquare' ); ?>" name="<?php echo $this->get_field_name( 'foursquare' ); ?>" type="text" value="<?php echo $instance['foursquare']; ?>" /><br/>
+			<span>https://foursquare.com/ID</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'github' ); ?>"><?php _e( 'Github ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'github' ); ?>" name="<?php echo $this->get_field_name( 'github' ); ?>" type="text" value="<?php echo $instance['github']; ?>" /><br/>
+			<span>https://github.com/ID</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'google' ); ?>"><?php _e( 'Google+ ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'google' ); ?>" name="<?php echo $this->get_field_name( 'google' ); ?>" type="text" value="<?php echo $instance['google']; ?>" /><br/>
+			<span>https://plus.google.com/ID</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'linkedin' ); ?>"><?php _e( 'LinkedIn ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'linkedin' ); ?>" name="<?php echo $this->get_field_name( 'linkedin' ); ?>" type="text" value="<?php echo $instance['linkedin']; ?>" /><br/>
+			<span>https://www.linkedin.com/in/ID</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'linkedin_company' ); ?>"><?php _e( 'LinkedIn Company ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'linkedin_company' ); ?>" name="<?php echo $this->get_field_name( 'linkedin_company' ); ?>" type="text" value="<?php echo $instance['linkedin_company']; ?>" /><br/>
+			<span>https://www.linkedin.com/company/ID</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'snapchat' ); ?>"><?php _e( 'Snapchat ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'snapchat' ); ?>" name="<?php echo $this->get_field_name( 'snapchat' ); ?>" type="text" value="<?php echo $instance['snapchat']; ?>" /><br/>
+			<span>https://www.snapchat.com/add/ID</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'tumblr' ); ?>"><?php _e( 'Tumblr ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'tumblr' ); ?>" name="<?php echo $this->get_field_name( 'tumblr' ); ?>" type="text" value="<?php echo $instance['tumblr']; ?>" /><br/>
+			<span>https://ID.tumblr.com</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'vimeo' ); ?>"><?php _e( 'Vimeo ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'vimeo' ); ?>" name="<?php echo $this->get_field_name( 'vimeo' ); ?>" type="text" value="<?php echo $instance['vimeo']; ?>" /><br/>
+			<span>https://vimeo.com/ID</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'youtube' ); ?>"><?php _e( 'Youtube ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'youtube' ); ?>" name="<?php echo $this->get_field_name( 'youtube' ); ?>" type="text" value="<?php echo $instance['youtube']; ?>" /><br/>
+			<span>https://www.youtube.com/user/ID</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'youtube_channel' ); ?>"><?php _e( 'Youtube Channel ID:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'youtube_channel' ); ?>" name="<?php echo $this->get_field_name( 'youtube_channel' ); ?>" type="text" value="<?php echo $instance['youtube_channel']; ?>" /><br/>
+			<span>https://www.youtube.com/channel/ID</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'rss_feed' ); ?>"><?php _e( 'RSS Feed URL:', 'Super-Socializer' ); ?></label> 
+			<input style="width: 95%" class="widefat" id="<?php echo $this->get_field_id( 'rss_feed' ); ?>" name="<?php echo $this->get_field_name( 'rss_feed' ); ?>" type="text" value="<?php echo $instance['rss_feed']; ?>" /><br/>
+			<span>http://www.example.com/feed/</span><br/><br/>
+			<label for="<?php echo $this->get_field_id( 'after_widget_content' ); ?>"><?php _e( 'After widget content:', 'Super-Socializer' ); ?></label> 
+			<input class="widefat" id="<?php echo $this->get_field_id( 'after_widget_content' ); ?>" name="<?php echo $this->get_field_name( 'after_widget_content' ); ?>" type="text" value="<?php echo $instance['after_widget_content']; ?>" /> 
+		</p> 
+<?php 
+  } 
+} 
+add_action( 'widgets_init', function() { return register_widget( "TheChampFollowWidget" ); } ); 

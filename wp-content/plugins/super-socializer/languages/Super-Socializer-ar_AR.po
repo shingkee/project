@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Super Socializer\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-11-15 15:08+0530\n"
-"PO-Revision-Date: 2017-11-15 15:08+0530\n"
-"Last-Translator: The Champ <lordofthechamps@gmail.com>\n"
+"POT-Creation-Date: 2018-01-29 20:18+0530\n"
+"PO-Revision-Date: 2018-01-29 20:18+0530\n"
+"Last-Translator: Team Heateor <hello@heateor.com>\n"
 "Language-Team: Heateor <support@heateor.com>\n"
 "Language: ar\n"
 "MIME-Version: 1.0\n"
@@ -15,7 +15,7 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../super_socializer.php:327
+#: ../super_socializer.php:332
 #, fuzzy
 msgid ""
 "cURL is not enabled at your website server. Please contact your website "
@@ -24,7 +24,7 @@ msgstr ""
 "يتم تمكين جعل الضفيرة متأكدا في الخادم موقع الويب الخاص بك. قد تحتاج إلى "
 "الاتصال بمسؤول الملقم من موقع الويب الخاص بك للتحقق من ذلك"
 
-#: ../super_socializer.php:354
+#: ../super_socializer.php:359
 #, php-format
 msgid ""
 "Enter exactly the following url in <strong>Website</strong> and "
@@ -33,7 +33,7 @@ msgstr ""
 "أدخل بالضبط العنوان التالي في <strong>الموقع واستدعاء رابط</strong> الخيارات "
 "في تويتر التطبيق الخاص بك (راجع الخطوة 3 %s )"
 
-#: ../super_socializer.php:357
+#: ../super_socializer.php:362
 msgid ""
 "Make sure cURL is enabled at your website server. You may need to contact "
 "the server administrator of your website to verify this"
@@ -41,112 +41,112 @@ msgstr ""
 "يتم تمكين جعل الضفيرة متأكدا في الخادم موقع الويب الخاص بك. قد تحتاج إلى "
 "الاتصال بمسؤول الملقم من موقع الويب الخاص بك للتحقق من ذلك"
 
-#: ../super_socializer.php:358
+#: ../super_socializer.php:363
 #, php-format
 msgid ""
 "Make sure that \"Enable Callback Locking\" option is disabled. See step 4 %s"
 msgstr ""
 
-#: ../super_socializer.php:624 ../helper.php:998
+#: ../super_socializer.php:629 ../helper.php:998
 msgid "Please verify your email address to login."
 msgstr "يرجى التحقق من عنوان البريد الإلكتروني الخاص بك للدخول."
 
-#: ../super_socializer.php:624
+#: ../super_socializer.php:629
 msgid "Your email has been verified. Now you can login to your account"
 msgstr "تم التحقق من بريدك الإلكتروني. الآن يمكنك تسجيل الدخول إلى حسابك"
 
-#: ../super_socializer.php:628
+#: ../super_socializer.php:633
 msgid "Notification"
 msgstr "تنبيهات"
 
-#: ../super_socializer.php:646 ../admin/social_login.php:622
+#: ../super_socializer.php:651 ../admin/social_login.php:625
 msgid "Email required"
 msgstr "البريد الإلكتروني - إدخال القيمة إجباري"
 
-#: ../super_socializer.php:649
+#: ../super_socializer.php:654
 msgid "Please check your email inbox to complete the registration."
 msgstr "يرجى التحقق من بريدك الالكتروني لإكمال التسجيل."
 
-#: ../super_socializer.php:656 ../helper.php:500
+#: ../super_socializer.php:661 ../helper.php:500
 msgid "Enter your LiveJournal username"
 msgstr ""
 
-#: ../super_socializer.php:668
+#: ../super_socializer.php:681
 msgid ""
 "Follow steps 11 and 12 at GooglePlus app configuration page, about to open"
 msgstr "اتبع الخطوات 11 و 12 في GooglePlus صفحة تكوين التطبيق، على وشك فتح"
 
-#: ../super_socializer.php:752
+#: ../super_socializer.php:765
 msgid "Leave a reply"
 msgstr "اترك رد"
 
-#: ../super_socializer.php:764 ../inc/social_sharing.php:214
+#: ../super_socializer.php:777 ../inc/social_sharing.php:233
 msgid "Shares"
 msgstr ""
 
-#: ../super_socializer.php:764 ../inc/social_sharing.php:214
+#: ../super_socializer.php:777 ../inc/social_sharing.php:233
 msgid "Share"
 msgstr ""
 
-#: ../super_socializer.php:764
+#: ../super_socializer.php:777
 #, fuzzy
 msgid "Link copied."
 msgstr "شارك الأخرين عبر لنكيدان"
 
-#: ../super_socializer.php:951
+#: ../super_socializer.php:972
 #, fuzzy
 msgid "Super Socializer - General Options"
 msgstr "آخر تسجيل دخول  |  Last Login"
 
-#: ../super_socializer.php:951 ../admin/general_options.php:11
+#: ../super_socializer.php:972 ../admin/general_options.php:11
 #: ../admin/social_commenting.php:43
 #, fuzzy
 msgid "General Options"
 msgstr "المشاركات الأفقي"
 
-#: ../super_socializer.php:1019 ../helper.php:920
+#: ../super_socializer.php:1040 ../helper.php:920
 #, fuzzy
 msgid "Social Avatar"
 msgstr "صغير الرمزية رابط"
 
-#: ../super_socializer.php:1022
+#: ../super_socializer.php:1043
 msgid "Small Avatar Url"
 msgstr "صغير الرمزية رابط"
 
-#: ../super_socializer.php:1026
+#: ../super_socializer.php:1047
 #, fuzzy
 msgid "Large Avatar Url"
 msgstr "الرابط المصدر و الرابط الهدف لا يمكن أن يكونا متطابقين."
 
-#: ../super_socializer.php:1030 ../helper.php:923
+#: ../super_socializer.php:1051 ../helper.php:923
 msgid ""
 "Do not fetch and update social avatar from my profile, next time I Social "
 "Login"
 msgstr ""
 
-#: ../super_socializer.php:1034 ../helper.php:924
+#: ../super_socializer.php:1055 ../helper.php:924
 msgid "Update social avatar, next time I Social Login"
 msgstr ""
 
-#: ../super_socializer.php:1107 ../super_socializer.php:1360
+#: ../super_socializer.php:1128 ../super_socializer.php:1381
 msgid ""
 "Your browser is blocking some features of this website. Please follow the "
 "instructions at {support_url} to unblock these."
 msgstr ""
 
-#: ../super_socializer.php:1113
+#: ../super_socializer.php:1134
 msgid "Login with your Social ID"
 msgstr ""
 
-#: ../super_socializer.php:1114
+#: ../super_socializer.php:1135
 msgid "Email you entered is already registered or invalid"
 msgstr "البريد الإلكتروني الذي أدخلته غير مسجل من قبل أو غير صالحة"
 
-#: ../super_socializer.php:1119
+#: ../super_socializer.php:1140
 msgid "Please enter a valid email address. You might be required to verify it"
 msgstr "يرجى إدخال عنوان بريد إلكتروني صالح. قد تكون هناك حاجة للتحقق من ذلك"
 
-#: ../super_socializer.php:1322
+#: ../super_socializer.php:1343
 #, php-format
 msgid ""
 "Your website visitors will see a popup notification (only once) if their "
@@ -156,7 +156,7 @@ msgid ""
 "features\" option <a href=\"%s\">here</a>"
 msgstr ""
 
-#: ../super_socializer.php:1322
+#: ../super_socializer.php:1343
 msgid "Okay"
 msgstr ""
 
@@ -271,7 +271,7 @@ msgstr "الرابط المصدر و الرابط الهدف لا يمكن أن 
 
 #: ../helper.php:935 ../admin/general_options.php:128
 #: ../admin/social_sharing.php:1973 ../admin/social_commenting.php:487
-#: ../admin/social_login.php:938 ../admin/like_buttons.php:822
+#: ../admin/social_login.php:941 ../admin/like_buttons.php:822
 #, fuzzy
 msgid "Save Changes"
 msgstr "حفظ"
@@ -345,14 +345,14 @@ msgid "You can specify any additional CSS rules (without &lt;style&gt; tag)"
 msgstr ""
 
 #: ../admin/general_options.php:139 ../admin/social_sharing.php:1978
-#: ../admin/social_commenting.php:492 ../admin/social_login.php:943
+#: ../admin/social_commenting.php:492 ../admin/social_login.php:946
 #: ../admin/like_buttons.php:827
 #, fuzzy
 msgid "Instagram Shoutout"
 msgstr "إنستاجرام"
 
 #: ../admin/general_options.php:141 ../admin/social_sharing.php:1980
-#: ../admin/social_commenting.php:494 ../admin/social_login.php:945
+#: ../admin/social_commenting.php:494 ../admin/social_login.php:948
 #: ../admin/like_buttons.php:829
 msgid ""
 "If you can send (to hello@heateor.com) how our plugin is helping your "
@@ -361,7 +361,7 @@ msgid ""
 msgstr ""
 
 #: ../admin/general_options.php:142 ../admin/social_sharing.php:1981
-#: ../admin/social_commenting.php:495 ../admin/social_login.php:946
+#: ../admin/social_commenting.php:495 ../admin/social_login.php:949
 #: ../admin/like_buttons.php:830
 msgid ""
 "<b>Example</b> - Blah-Blah Online Coaching teaches various programming "
@@ -372,7 +372,7 @@ msgid ""
 msgstr ""
 
 #: ../admin/general_options.php:143 ../admin/social_sharing.php:1982
-#: ../admin/social_commenting.php:496 ../admin/social_login.php:947
+#: ../admin/social_commenting.php:496 ../admin/social_login.php:950
 #: ../admin/like_buttons.php:831
 msgid ""
 "@blahblahonlinecoaching proudly use #SuperSocializer to enable social "
@@ -405,55 +405,54 @@ msgstr ""
 "نحن فريق إبداعية مع أفكار فريدة من نوعها في العقل والخدمة في القلب. نحن نحب "
 "ما نقوم به. لمزيد من المعلومات انضم إلينا في"
 
-#: ../admin/help.php:18
-msgid "Donate"
-msgstr ""
-
-#: ../admin/help.php:20
-msgid ""
-"You can help us continue the development of this free plugin by donating"
-msgstr ""
-
-#: ../admin/help.php:21
+#: ../admin/help.php:19
 msgid "Donate Now"
 msgstr ""
 
-#: ../admin/help.php:27
+#: ../admin/help.php:25
 #, fuzzy
 msgid "Plugin Demo"
 msgstr "دعم البرنامج المساعد  |  Plugin Support"
 
-#: ../admin/help.php:33
+#: ../admin/help.php:31
 msgid "Translate Plugin"
 msgstr ""
 
-#: ../admin/help.php:39
+#: ../admin/help.php:37 ../admin/social_login.php:52
+#, fuzzy
+msgid "Customize Social Login Icons"
+msgstr ""
+"إذا تم تمكين هذا الخيار،التعليق القادمة من مستخدم الوردبريس الذي تم تسجيل "
+"دخوله  بالنظام عن طريق برامج التواصل الاجتماعي، سيتم الموافقة على التعليق "
+"فورا دون موافقة المشرف على النظام."
+
+#: ../admin/help.php:43
 msgid "Integrate with Google Analytics"
 msgstr ""
 
-#: ../admin/help.php:45
+#: ../admin/help.php:49
 msgid "Boost sharing by awarding points"
 msgstr "تعزيز تقاسم بمنح نقاط"
 
-#: ../admin/help.php:51
+#: ../admin/help.php:55
 msgid "Award points for Social Login"
 msgstr "نقاط الجائزة لتسجيل الدخول الاجتماعي"
 
-#: ../admin/help.php:57
+#: ../admin/help.php:61
 #, fuzzy
 msgid "Other Add-ons"
 msgstr "إضافات"
 
-#: ../admin/help.php:63
+#: ../admin/help.php:67
 #, fuzzy
 msgid "Support Forum"
 msgstr "الدعم  |  Support"
 
-#: ../admin/help.php:68
+#: ../admin/help.php:72
 msgid "Need Help?"
 msgstr "احتاج مساعدة؟"
 
-#: ../admin/help.php:70
+#: ../admin/help.php:74
 #, fuzzy
 msgid ""
 "If you <strong>have any query</strong>, need help regarding <strong>plugin "
@@ -464,23 +463,23 @@ msgstr ""
 "إذا كنت تريد ميزات مخصصة في البرنامج المساعد، مجرد قطره رسالة بالبريد "
 "إلكتروني في <a href=\"mailto:support@heateor.com\">support@heateor.com</a>"
 
-#: ../admin/help.php:75
+#: ../admin/help.php:79
 msgid "Testimonial"
 msgstr ""
 
-#: ../admin/help.php:77
+#: ../admin/help.php:81
 msgid ""
 "You can send us testimonial at <a href=\"mailto:testimonials@heateor.com"
 "\">testimonials@heateor.com</a>"
 msgstr ""
 
-#: ../admin/help.php:82
+#: ../admin/help.php:86
 #, fuzzy
 msgid "Support Us"
 msgstr "الدعم  |  Support"
 
-#: ../admin/help.php:85 ../admin/help.php:88 ../admin/help.php:89
-#: ../admin/help.php:90 ../admin/help.php:91 ../admin/help.php:92
+#: ../admin/help.php:89 ../admin/help.php:92 ../admin/help.php:93
+#: ../admin/help.php:94 ../admin/help.php:95 ../admin/help.php:96
 #, fuzzy
 msgid "Rate 5-star"
 msgstr "يرجى تقييم البرنامج المساعد"
@@ -528,7 +527,7 @@ msgstr ""
 
 #: ../admin/social_sharing.php:52 ../admin/social_sharing.php:1905
 #: ../admin/social_sharing.php:1907 ../admin/social_login.php:40
-#: ../admin/social_login.php:908 ../admin/like_buttons.php:47
+#: ../admin/social_login.php:911 ../admin/like_buttons.php:47
 #: ../admin/like_buttons.php:793
 #, fuzzy
 msgid "Shortcode & Widget"
@@ -541,7 +540,7 @@ msgstr "مستكشف أخطاء مشاركة في ألفيس بوك"
 
 #: ../admin/social_sharing.php:54 ../admin/social_sharing.php:1938
 #: ../admin/social_commenting.php:36 ../admin/social_commenting.php:471
-#: ../admin/social_login.php:41 ../admin/social_login.php:922
+#: ../admin/social_login.php:41 ../admin/social_login.php:925
 #: ../admin/like_buttons.php:48 ../admin/like_buttons.php:806
 #, fuzzy
 msgid "FAQ"
@@ -569,11 +568,13 @@ msgid "Shape"
 msgstr "شكل"
 
 #: ../admin/social_sharing.php:150 ../admin/social_sharing.php:458
+#: ../inc/widget.php:906
 #, fuzzy
 msgid "Round"
 msgstr "مستدير"
 
 #: ../admin/social_sharing.php:152 ../admin/social_sharing.php:460
+#: ../inc/widget.php:907
 #, fuzzy
 msgid "Square"
 msgstr "مربع"
@@ -799,8 +800,8 @@ msgstr "رابط (URL) مخصّص"
 msgid "Url to share"
 msgstr " شارك الآخرين بهذة الفقرة"
 
-#: ../admin/social_sharing.php:731 ../admin/social_login.php:385
-#: ../admin/like_buttons.php:105
+#: ../admin/social_sharing.php:731 ../admin/social_login.php:388
+#: ../admin/like_buttons.php:105 ../inc/widget.php:900
 #, fuzzy
 msgid "Title"
 msgstr "العنوان"
@@ -897,7 +898,7 @@ msgid "Placement"
 msgstr ""
 
 #: ../admin/social_sharing.php:968 ../admin/social_sharing.php:1431
-#: ../admin/social_login.php:703 ../admin/social_login.php:733
+#: ../admin/social_login.php:706 ../admin/social_login.php:736
 #: ../admin/like_buttons.php:222 ../admin/like_buttons.php:507
 #, fuzzy
 msgid "Homepage"
@@ -983,7 +984,7 @@ msgstr "عرض عدد المقالات"
 #: ../admin/social_sharing.php:1045 ../admin/social_sharing.php:1489
 msgid ""
 "Share counts are supported for Facebook, Twitter, Linkedin, Buffer, Reddit, "
-"Pinterest, Stumbleupon and Vkontakte"
+"Pinterest, Stumbleupon, Odnoklassniki and Vkontakte"
 msgstr ""
 
 #: ../admin/social_sharing.php:1062 ../admin/social_sharing.php:1497
@@ -1367,7 +1368,7 @@ msgstr ""
 "إشكالية (حيث تقاسم بوك لا يعمل بشكل صحيح) من موقع الويب الخاص بك في حقل النص:"
 
 #: ../admin/social_sharing.php:1940 ../admin/social_commenting.php:473
-#: ../admin/social_login.php:924
+#: ../admin/social_login.php:927
 msgid ""
 "<strong>Note:</strong> Plugin will not work on local server. You should have "
 "an online website for the plugin to function properly."
@@ -1395,7 +1396,7 @@ msgid ""
 msgstr ""
 
 #: ../admin/social_sharing.php:1947 ../admin/social_commenting.php:476
-#: ../admin/social_login.php:927
+#: ../admin/social_login.php:930
 msgid "Why is my browser blocking some features of the plugin?"
 msgstr ""
 
@@ -1787,15 +1788,15 @@ msgstr "إنشاء ملف الإعدادات"
 msgid "Advanced Configuration"
 msgstr "إنشاء ملف الإعدادات"
 
-#: ../admin/social_login.php:38 ../admin/social_login.php:859
+#: ../admin/social_login.php:38 ../admin/social_login.php:862
 msgid "XProfile Integration"
 msgstr ""
 
-#: ../admin/social_login.php:55
+#: ../admin/social_login.php:58
 msgid "Disable user registration via Social Login"
 msgstr "تسجيل المستخدم تعطيل عن طريق تسجيل الدخول الاجتماعي"
 
-#: ../admin/social_login.php:65
+#: ../admin/social_login.php:68
 msgid ""
 "After enabling this option, new users will not be able to login through "
 "social login. Only existing users will be able to social login."
@@ -1804,12 +1805,12 @@ msgstr ""
 "الدخول من خلال الدخول الاجتماعي. لن يؤدي إلا إلى المستخدمين الحاليين تكون "
 "قادرة على الدخول الاجتماعي."
 
-#: ../admin/social_login.php:74
+#: ../admin/social_login.php:77
 #, fuzzy
 msgid "Redirection url"
 msgstr "تسجيل الدخول"
 
-#: ../admin/social_login.php:84
+#: ../admin/social_login.php:87
 msgid ""
 "User will be redirected to this page after unsuccessful registration attempt "
 "via Social Login. You can specify the url of registration form or of a page "
@@ -1819,69 +1820,69 @@ msgstr ""
 "الدخول الاجتماعي. يمكنك تحديد عنوان الموقع من استمارة التسجيل أو رسالة صفحة "
 "تعرض فيما يتعلق بتسجيل المعاقين من خلال الدخول الاجتماعي."
 
-#: ../admin/social_login.php:93
+#: ../admin/social_login.php:96
 #, fuzzy
-msgid "Select providers"
-msgstr "أختر ..."
+msgid "Select Social Networks"
+msgstr "حددت كشبكة الإجتماعية اللأساسية"
 
-#: ../admin/social_login.php:98
+#: ../admin/social_login.php:101
 msgid "Facebook"
 msgstr "الفيسبوك"
 
-#: ../admin/social_login.php:102
+#: ../admin/social_login.php:105
 #, fuzzy
 msgid "Twitter"
 msgstr "شارك الأخرين عبر تويتر"
 
-#: ../admin/social_login.php:106
+#: ../admin/social_login.php:109
 #, fuzzy
 msgid "LinkedIn"
 msgstr "شارك الأخرين عبر لنكيدان"
 
-#: ../admin/social_login.php:110
+#: ../admin/social_login.php:113
 #, fuzzy
 msgid "Google+"
 msgstr "الصفحة لمؤلف البرنامج المساعد على جوجل "
 
-#: ../admin/social_login.php:114
+#: ../admin/social_login.php:117
 #, fuzzy
 msgid "Vkontakte"
 msgstr "انشر عبر VKontakte"
 
-#: ../admin/social_login.php:118
+#: ../admin/social_login.php:121
 #, fuzzy
 msgid "Instagram"
 msgstr "إنستاجرام"
 
-#: ../admin/social_login.php:122
+#: ../admin/social_login.php:125
 #, fuzzy
 msgid "Xing"
 msgstr "شينغ"
 
-#: ../admin/social_login.php:126
+#: ../admin/social_login.php:129
 msgid "Steam"
 msgstr ""
 
-#: ../admin/social_login.php:131
+#: ../admin/social_login.php:134
 #, fuzzy
 msgid "Twitch"
 msgstr "شارك الأخرين عبر تويتر"
 
-#: ../admin/social_login.php:136
+#: ../admin/social_login.php:139
 msgid "LiveJournal"
 msgstr ""
 
-#: ../admin/social_login.php:144
+#: ../admin/social_login.php:147
 #, fuzzy
 msgid "Select Social ID provider to enable in Social Login"
 msgstr "حدد موفر \"معرف الاجتماعية\" لتمكين \"تسجيل الدخول الاجتماعي\""
 
-#: ../admin/social_login.php:152
+#: ../admin/social_login.php:155
 #, fuzzy
 msgid "Facebook App ID"
 msgstr "رقم التعريف الخالص بك |  ID"
 
-#: ../admin/social_login.php:162
+#: ../admin/social_login.php:165
 #, fuzzy, php-format
 msgid ""
 "Required for Facebook Social Login to work. Please follow the documentation "
@@ -1891,7 +1892,7 @@ msgstr ""
 "في <a href=\"%s\" target=\"_blank\">هذا الارتباط</a> للحصول على معرف التطبيق "
 "فيسبوك"
 
-#: ../admin/social_login.php:164
+#: ../admin/social_login.php:167
 #, fuzzy
 msgid ""
 "Paste following url in <strong>Site URL</strong> option at the link mentioned"
@@ -1899,12 +1900,12 @@ msgstr ""
 "لصق التالية url في الخيار <strong>محدد موقع معلومات الموقع</strong> في "
 "الوصلة المذكورة"
 
-#: ../admin/social_login.php:174
+#: ../admin/social_login.php:177
 #, fuzzy
 msgid "Twitter API Key"
 msgstr "مفتاح API الخاص  |  API Private Key"
 
-#: ../admin/social_login.php:184
+#: ../admin/social_login.php:187
 #, fuzzy, php-format
 msgid ""
 "Required for Twitter Social Login to work. Please follow the documentation "
@@ -1914,7 +1915,7 @@ msgstr ""
 "الموجودة في <a href=\"%s\" target=\"_blank\">هذا الارتباط</a> للحصول على "
 "\"مفتاح API التغريد\""
 
-#: ../admin/social_login.php:186 ../admin/social_login.php:208
+#: ../admin/social_login.php:189 ../admin/social_login.php:211
 #, fuzzy
 msgid ""
 "Paste following url in <strong>Website</strong> and <strong>Callback URL</"
@@ -1923,12 +1924,12 @@ msgstr ""
 "لصق التالية url في خيارات <strong>الموقع</strong> و <strong>رد عنوان URL</"
 "strong> في الارتباط المشار إليها"
 
-#: ../admin/social_login.php:196
+#: ../admin/social_login.php:199
 #, fuzzy
 msgid "Twitter API Secret"
 msgstr "شارك الأخرين عبر تويتر"
 
-#: ../admin/social_login.php:206
+#: ../admin/social_login.php:209
 #, fuzzy, php-format
 msgid ""
 "Required for Twitter Social Login to work. Please follow the documentation "
@@ -1938,12 +1939,12 @@ msgstr ""
 "الموجودة في <a href=\"%s\" target=\"_blank\">هذا الارتباط</a> للحصول على "
 "\"سر API التغريد\""
 
-#: ../admin/social_login.php:218
+#: ../admin/social_login.php:221
 #, fuzzy
 msgid "LinkedIn API Key"
 msgstr "مفتاح API الخاص  |  API Private Key"
 
-#: ../admin/social_login.php:228
+#: ../admin/social_login.php:231
 #, fuzzy, php-format
 msgid ""
 "Required for LinkedIn Social Login to work. Please follow the documentation "
@@ -1952,19 +1953,19 @@ msgstr ""
 "المطلوبة للدخول الاجتماعي LinkedIn للعمل. الرجاء تتبع الوثائق الموجودة في <a "
 "href=\"%s\" target=\"_blank\">هذا الارتباط</a> للحصول على مفتاح API LinkedIn"
 
-#: ../admin/social_login.php:230 ../admin/social_login.php:296
+#: ../admin/social_login.php:233 ../admin/social_login.php:299
 #, fuzzy
 msgid ""
 "Paste following url in <strong>Website URL</strong> option at the link "
 "mentioned"
 msgstr "لصق التالية url في خيار <strong>URL الموقع</strong> في الوصلة المذكورة"
 
-#: ../admin/social_login.php:240
+#: ../admin/social_login.php:243
 #, fuzzy
 msgid "Google+ Client ID"
 msgstr "شارك الأخرين عبر جوجل"
 
-#: ../admin/social_login.php:250
+#: ../admin/social_login.php:253
 #, fuzzy, php-format
 msgid ""
 "Required for GooglePlus Social Login to work. Please follow the "
@@ -1975,7 +1976,7 @@ msgstr ""
 "<a href=\"%s\" target=\"_blank\">هذا الارتباط</a> للحصول على معرف العميل "
 "GooglePlus"
 
-#: ../admin/social_login.php:252
+#: ../admin/social_login.php:255
 #, fuzzy
 msgid ""
 "Paste following url in <strong>AUTHORIZED JAVASCRIPT ORIGINS</strong> and "
@@ -1984,12 +1985,12 @@ msgstr ""
 "لصق التالية url في <strong>أصول سكريبت إذن</strong> و <strong>إذن URI توجيه</"
 "strong> خيارات في الوصلة المذكورة"
 
-#: ../admin/social_login.php:262
+#: ../admin/social_login.php:265
 #, fuzzy
 msgid "Vkontakte Application ID"
 msgstr "انشر عبر VKontakte"
 
-#: ../admin/social_login.php:272
+#: ../admin/social_login.php:275
 #, fuzzy, php-format
 msgid ""
 "Required for Vkontakte Social Login to work. Please follow the documentation "
@@ -2000,7 +2001,7 @@ msgstr ""
 "<a href=\"%s\" target=\"_blank\">هذا الارتباط</a> للحصول على معرف التطبيق "
 "Vkontakte"
 
-#: ../admin/social_login.php:274
+#: ../admin/social_login.php:277
 #, fuzzy
 msgid ""
 "Paste following url in <strong>Site address</strong> option at the link "
@@ -2008,12 +2009,12 @@ msgid ""
 msgstr ""
 "لصق التالية url في خيار <strong>عنوان الموقع</strong> في الوصلة المذكورة"
 
-#: ../admin/social_login.php:284
+#: ../admin/social_login.php:287
 #, fuzzy
 msgid "Instagram Client ID"
 msgstr "مفتاح التشفيرمن جانب العميل  |  Client-Side Encryption Key"
 
-#: ../admin/social_login.php:294
+#: ../admin/social_login.php:297
 #, fuzzy, php-format
 msgid ""
 "Required for Instagram Social Login to work. Please follow the documentation "
@@ -2023,12 +2024,12 @@ msgstr ""
 "<a href=\"%s\" target=\"_blank\">هذا الارتباط</a> للحصول على معرف العميل "
 "Instagram"
 
-#: ../admin/social_login.php:306
+#: ../admin/social_login.php:309
 #, fuzzy
 msgid "Xing Consumer Key"
 msgstr "مفتاح التفعيل:"
 
-#: ../admin/social_login.php:316
+#: ../admin/social_login.php:319
 #, fuzzy, php-format
 msgid ""
 "Required for Xing Social Login to work. Please follow the documentation at "
@@ -2038,7 +2039,7 @@ msgstr ""
 "href=\"%s\" target=\"_blank\">هذا الارتباط</a> للحصول على \"مفتاح المستهلك "
 "شينغ\""
 
-#: ../admin/social_login.php:318 ../admin/social_login.php:340
+#: ../admin/social_login.php:321 ../admin/social_login.php:343
 #, fuzzy
 msgid ""
 "Paste following url in <strong>Callback domain</strong> option at the link "
@@ -2047,12 +2048,12 @@ msgstr ""
 "لصق التالية url في الخيار <strong>المجال رد الاتصال</strong> في الوصلة "
 "المذكورة"
 
-#: ../admin/social_login.php:328
+#: ../admin/social_login.php:331
 #, fuzzy
 msgid "Xing Consumer Secret"
 msgstr "كلمة السر  |  Secret Word"
 
-#: ../admin/social_login.php:338
+#: ../admin/social_login.php:341
 #, fuzzy, php-format
 msgid ""
 "Required for Xing Social Login to work. Please follow the documentation at "
@@ -2062,12 +2063,12 @@ msgstr ""
 "href=\"%s\" target=\"_blank\">هذا الارتباط</a> للحصول على \"سر المستهلك شينغ"
 "\""
 
-#: ../admin/social_login.php:350
+#: ../admin/social_login.php:353
 #, fuzzy
 msgid "Twitch Client ID"
 msgstr "مفتاح التشفيرمن جانب العميل  |  Client-Side Encryption Key"
 
-#: ../admin/social_login.php:360
+#: ../admin/social_login.php:363
 #, fuzzy, php-format
 msgid ""
 "Required for Twitch Social Login to work. Please follow the documentation at "
@@ -2077,7 +2078,7 @@ msgstr ""
 "الموجودة في <a href=\"%s\" target=\"_blank\">هذا الارتباط</a> للحصول على "
 "\"مفتاح API التغريد\""
 
-#: ../admin/social_login.php:362
+#: ../admin/social_login.php:365
 #, fuzzy
 msgid ""
 "Paste following url in <strong>Redirect URI</strong> option at the link "
@@ -2086,7 +2087,7 @@ msgstr ""
 "لصق التالية url في الخيار <strong>محدد موقع معلومات الموقع</strong> في "
 "الوصلة المذكورة"
 
-#: ../admin/social_login.php:379
+#: ../admin/social_login.php:382
 #, fuzzy
 msgid "Social Login Options"
 msgstr ""
@@ -2094,17 +2095,17 @@ msgstr ""
 "دخوله  بالنظام عن طريق برامج التواصل الاجتماعي، سيتم الموافقة على التعليق "
 "فورا دون موافقة المشرف على النظام."
 
-#: ../admin/social_login.php:395
+#: ../admin/social_login.php:398
 #, fuzzy
 msgid "Text to display above the Social Login interface"
 msgstr "نص للعرض أعلاه واجهة \"تسجيل الدخول الاجتماعي\""
 
-#: ../admin/social_login.php:404
+#: ../admin/social_login.php:407
 #, fuzzy
 msgid "Enable at login page"
 msgstr "صفحة"
 
-#: ../admin/social_login.php:414
+#: ../admin/social_login.php:417
 #, fuzzy
 msgid ""
 "Social Login interface will get enabled at the login page of your website"
@@ -2112,12 +2113,12 @@ msgstr ""
 "سوف تحصل على تمكين واجهة تسجيل الدخول الاجتماعي في النموذج الخاص بك وورد "
 "التعليق"
 
-#: ../admin/social_login.php:422
+#: ../admin/social_login.php:425
 #, fuzzy
 msgid "Enable at register page"
 msgstr "التسجيل العام"
 
-#: ../admin/social_login.php:432
+#: ../admin/social_login.php:435
 #, fuzzy
 msgid ""
 "Social Login interface will get enabled at the registration page of your "
@@ -2126,17 +2127,17 @@ msgstr ""
 "سوف تحصل على تمكين واجهة تسجيل الدخول الاجتماعي في صفحة التسجيل لموقع الويب "
 "الخاص بك"
 
-#: ../admin/social_login.php:440
+#: ../admin/social_login.php:443
 msgid "Enable at comment form"
 msgstr "تمكين هذا الشكل من تعليق"
 
-#: ../admin/social_login.php:450
+#: ../admin/social_login.php:453
 msgid "Social Login interface will get enabled at your Wordpress Comment form"
 msgstr ""
 "سوف تحصل على تمكين واجهة تسجيل الدخول الاجتماعي في النموذج الخاص بك وورد "
 "التعليق"
 
-#: ../admin/social_login.php:459
+#: ../admin/social_login.php:462
 #, fuzzy
 msgid ""
 "Link social account to already existing account, if email address matches"
@@ -2144,7 +2145,7 @@ msgstr ""
 "الرجاء القيام بربط الحساب الإجتماعي الخاص بك للتمكن من تسجيل الدخول العام "
 "الى حسابك في هذا الموقع"
 
-#: ../admin/social_login.php:469
+#: ../admin/social_login.php:472
 msgid ""
 "If email address of the user's Social Account matches with an already "
 "existing account at your website, that social account will be linked to "
@@ -2152,11 +2153,11 @@ msgid ""
 "Linking interface at their profile page."
 msgstr ""
 
-#: ../admin/social_login.php:483
+#: ../admin/social_login.php:486
 msgid "Enable before WooCommerce Customer Login Form"
 msgstr "تمكين قبل WooCommerce نموذج تسجيل دخول العملاء"
 
-#: ../admin/social_login.php:493
+#: ../admin/social_login.php:496
 #, fuzzy
 msgid ""
 "Social Login Interface will get enabled before the customer login form at "
@@ -2165,11 +2166,11 @@ msgstr ""
 "سوف تحصل على تمكين واجهة تسجيل الدخول الاجتماعي في النموذج الخاص بك وورد "
 "التعليق"
 
-#: ../admin/social_login.php:501
+#: ../admin/social_login.php:504
 msgid "Enable after WooCommerce Customer Login Form"
 msgstr "تمكن بعد WooCommerce نموذج تسجيل دخول العملاء"
 
-#: ../admin/social_login.php:511
+#: ../admin/social_login.php:514
 #, fuzzy
 msgid ""
 "Social Login Interface will get enabled after the customer login form at "
@@ -2178,26 +2179,26 @@ msgstr ""
 "سوف تحصل على تمكين واجهة تسجيل الدخول الاجتماعي في النموذج الخاص بك وورد "
 "التعليق"
 
-#: ../admin/social_login.php:519
+#: ../admin/social_login.php:522
 #, fuzzy
 msgid "Enable at WooCommerce checkout page"
 msgstr "التسجيل العام"
 
-#: ../admin/social_login.php:529
+#: ../admin/social_login.php:532
 #, fuzzy
 msgid "Social Login Interface will get enabled at WooCommerce checkout page"
 msgstr ""
 "سوف تحصل على تمكين واجهة تسجيل الدخول الاجتماعي في النموذج الخاص بك وورد "
 "التعليق"
 
-#: ../admin/social_login.php:540
+#: ../admin/social_login.php:543
 #, fuzzy
 msgid "Auto-approve comments made by Social Login users"
 msgstr ""
 "السيارات--الموافقة على التعليقات التي أدلى بها المستخدمين \"تسجيل الدخول "
 "الاجتماعي\""
 
-#: ../admin/social_login.php:550
+#: ../admin/social_login.php:553
 msgid ""
 "If this option is enabled, and WordPress comment is made by Social Login "
 "user, comment will get approved immediately without keeping in moderation."
@@ -2206,17 +2207,17 @@ msgstr ""
 "دخوله  بالنظام عن طريق برامج التواصل الاجتماعي، سيتم الموافقة على التعليق "
 "فورا دون موافقة المشرف على النظام."
 
-#: ../admin/social_login.php:551
+#: ../admin/social_login.php:554
 #, fuzzy
 msgid "Note: This is not related to Facebook comments"
 msgstr "ملاحظة: هذا لا تتعلق بتعليقات ألفيس بوك"
 
-#: ../admin/social_login.php:561
+#: ../admin/social_login.php:564
 #, fuzzy
 msgid "Enable social avatar"
 msgstr "خدمة الشبكة الاجتماعية"
 
-#: ../admin/social_login.php:571
+#: ../admin/social_login.php:574
 #, fuzzy
 msgid ""
 "Social profile pictures of the logged in user will be displayed as profile "
@@ -2225,39 +2226,39 @@ msgstr ""
 "سيتم عرض الصور الشخصية الاجتماعية لمستخدم تم تسجيل دخوله كالصورة الرمزية "
 "الشخصية"
 
-#: ../admin/social_login.php:581
+#: ../admin/social_login.php:584
 #, fuzzy
 msgid "Avatar quality"
 msgstr "نوعية الصورة الرمزية"
 
-#: ../admin/social_login.php:584
+#: ../admin/social_login.php:587
 #, fuzzy
 msgid "Average"
 msgstr "المعدل"
 
-#: ../admin/social_login.php:585
+#: ../admin/social_login.php:588
 msgid "Best"
 msgstr "أفضل"
 
-#: ../admin/social_login.php:592
+#: ../admin/social_login.php:595
 #, fuzzy
 msgid "Choose avatar quality"
 msgstr "إختيار ملف"
 
-#: ../admin/social_login.php:601
+#: ../admin/social_login.php:604
 #, fuzzy
 msgid ""
 "Show option for users to update social avatar at BuddyPress profile page"
 msgstr ""
 "تمكين هذا الخيار لإظهار حساب الاجتماعية ربط واجهة الصفحة الشخصية BuddyPress"
 
-#: ../admin/social_login.php:611
+#: ../admin/social_login.php:614
 msgid ""
 "If enabled, users would be able to update their social avatar from \"Profile "
 "photo\" section in BuddyPress profile at front-end"
 msgstr ""
 
-#: ../admin/social_login.php:632
+#: ../admin/social_login.php:635
 #, fuzzy
 msgid ""
 "If enabled and Social ID provider does not provide user's email address on "
@@ -2268,11 +2269,11 @@ msgstr ""
 "تسجيل الدخول، سيتم مطالبة المستخدم بتوفير عنوانه الإلكتروني. وإلا، سيتم "
 "إنشاء بريد إلكتروني وهمية"
 
-#: ../admin/social_login.php:641
+#: ../admin/social_login.php:644
 msgid "Send post-registration email to user to set account password"
 msgstr ""
 
-#: ../admin/social_login.php:651
+#: ../admin/social_login.php:654
 #, fuzzy
 msgid ""
 "If enabled, an email will be sent to user after registration through Social "
@@ -2284,12 +2285,12 @@ msgstr ""
 "الدخول (اسم المستخدم-كلمة المرور لتكون قادراً على تسجيل الدخول عن طريق نموذج "
 "تسجيل الدخول التقليدية)"
 
-#: ../admin/social_login.php:659
+#: ../admin/social_login.php:662
 #, fuzzy
 msgid "Send new user registration notification email to admin"
 msgstr "تسجيل المستخدم تعطيل عن طريق تسجيل الدخول الاجتماعي"
 
-#: ../admin/social_login.php:669
+#: ../admin/social_login.php:672
 #, fuzzy
 msgid ""
 "If enabled, an email will be sent to admin after new user registers through "
@@ -2300,12 +2301,12 @@ msgstr ""
 "الدخول (اسم المستخدم-كلمة المرور لتكون قادراً على تسجيل الدخول عن طريق نموذج "
 "تسجيل الدخول التقليدية)"
 
-#: ../admin/social_login.php:678
+#: ../admin/social_login.php:681
 #, fuzzy
 msgid "Enable social account linking at BuddyPress profile page"
 msgstr "تمكين حساب الاجتماعية ربط الصفحة الشخصية BuddyPress"
 
-#: ../admin/social_login.php:688
+#: ../admin/social_login.php:691
 #, fuzzy
 msgid ""
 "Enable this option to show social account linking interface at BuddyPress "
@@ -2313,47 +2314,47 @@ msgid ""
 msgstr ""
 "تمكين هذا الخيار لإظهار حساب الاجتماعية ربط واجهة الصفحة الشخصية BuddyPress"
 
-#: ../admin/social_login.php:697
+#: ../admin/social_login.php:700
 #, fuzzy
 msgid "Login redirection"
 msgstr "تسجيل الدخول"
 
-#: ../admin/social_login.php:701
+#: ../admin/social_login.php:704
 #, fuzzy
 msgid "Same page where user logged in"
 msgstr "حيث يتم تسجيل المستخدم في الصفحة نفسها"
 
-#: ../admin/social_login.php:705 ../admin/social_login.php:735
+#: ../admin/social_login.php:708 ../admin/social_login.php:738
 #, fuzzy
 msgid "Account dashboard"
 msgstr "  لوحتك الخاصة بالتحكم"
 
-#: ../admin/social_login.php:708 ../admin/social_login.php:738
+#: ../admin/social_login.php:711 ../admin/social_login.php:741
 #, fuzzy
 msgid "BuddyPress profile page"
 msgstr "تحرير ملفي الشخصي"
 
-#: ../admin/social_login.php:711 ../admin/social_login.php:741
+#: ../admin/social_login.php:714 ../admin/social_login.php:744
 #, fuzzy
 msgid "Custom Url"
 msgstr "رابط (URL) مخصّص"
 
-#: ../admin/social_login.php:719
+#: ../admin/social_login.php:722
 #, fuzzy
 msgid "User will be redirected to the selected page after Social Login"
 msgstr "ستتم إعادة توجيه المستخدم إلى الصفحة المحددة بعد \"الدخول الاجتماعي\""
 
-#: ../admin/social_login.php:727
+#: ../admin/social_login.php:730
 #, fuzzy
 msgid "Registration redirection"
 msgstr "نموذج التسجيل"
 
-#: ../admin/social_login.php:731
+#: ../admin/social_login.php:734
 #, fuzzy
 msgid "Same page from where user registered"
 msgstr "الصفحة نفسها من حيث تسجيل المستخدم"
 
-#: ../admin/social_login.php:749
+#: ../admin/social_login.php:752
 #, fuzzy
 msgid ""
 "User will be redirected to the selected page after registration (first "
@@ -2362,17 +2363,17 @@ msgstr ""
 "ستتم إعادة توجيه المستخدم إلى الصفحة المحددة بعد التسجيل (تسجيل الدخول "
 "الاجتماعي الأول) من خلال \"تسجيل الدخول الاجتماعي\""
 
-#: ../admin/social_login.php:757
+#: ../admin/social_login.php:760
 #, fuzzy
 msgid "Email popup options"
 msgstr "الخيارات"
 
-#: ../admin/social_login.php:763
+#: ../admin/social_login.php:766
 #, fuzzy
 msgid "Text on 'Email required' popup"
 msgstr "البريد الإلكتروني (Email) - الإدخال إجباري"
 
-#: ../admin/social_login.php:773
+#: ../admin/social_login.php:776
 #, fuzzy
 msgid ""
 "This text will be displayed on email required popup. Leave empty if not "
@@ -2381,12 +2382,12 @@ msgstr ""
 "سيتم عرض هذا النص على البريد الإلكتروني المطلوب المنبثقة. ترك فارغاً إذا كان "
 "غير مطلوب."
 
-#: ../admin/social_login.php:782
+#: ../admin/social_login.php:785
 #, fuzzy
 msgid "Error message for 'Email required' popup"
 msgstr "رسالة الإعلام بالخطأ لانبثاق 'البريد الإلكتروني مطلوب'"
 
-#: ../admin/social_login.php:792
+#: ../admin/social_login.php:795
 #, fuzzy
 msgid ""
 "This message will be displayed to user if it provides invalid or already "
@@ -2395,12 +2396,12 @@ msgstr ""
 "سيتم عرض هذه الرسالة إلى المستخدم إذا كان يوفر البريد الإلكتروني غير صالح أو "
 "المسجلة مسبقاً"
 
-#: ../admin/social_login.php:801
+#: ../admin/social_login.php:804
 #, fuzzy
 msgid "Email popup height"
 msgstr "ارتفاع"
 
-#: ../admin/social_login.php:811
+#: ../admin/social_login.php:814
 #, fuzzy
 msgid ""
 "If you are seeing vertical scrollbar in the \"Email required\" popup, you "
@@ -2410,12 +2411,12 @@ msgstr ""
 "إذا كنت ترى شريط التمرير العمودي في منبثق \"البريد الإلكتروني المطلوبة\"، "
 "يمكنك زيادة ارتفاع المنبثقة عن طريق تحديد هذا الخيار. ترك فارغاً للافتراضي."
 
-#: ../admin/social_login.php:819
+#: ../admin/social_login.php:822
 #, fuzzy
 msgid "Enable email verification"
 msgstr "تمكين ايقونات المشاركة عبر البريد الإلكتروني "
 
-#: ../admin/social_login.php:829
+#: ../admin/social_login.php:832
 #, fuzzy
 msgid ""
 "If enabled, email provided by the user will be verified by sending a "
@@ -2426,28 +2427,28 @@ msgstr ""
 "وصلة تأكيد لهذا البريد الإلكتروني. أن لا يكون المستخدم قادراً على تسجيل "
 "الدخول دون التحقق من البريد الإلكتروني صفحته/صفحتها"
 
-#: ../admin/social_login.php:879 ../inc/widget.php:248 ../inc/widget.php:414
+#: ../admin/social_login.php:882 ../inc/widget.php:248 ../inc/widget.php:414
 #: ../inc/widget.php:578 ../inc/widget.php:726
 #, fuzzy
 msgid "Select"
 msgstr "أختر ..."
 
-#: ../admin/social_login.php:910
+#: ../admin/social_login.php:913
 #, fuzzy
 msgid "Social Login Shortcode & Widget"
 msgstr "استخدم كود مختصر  |  Include the shortcode"
 
-#: ../admin/social_login.php:911
+#: ../admin/social_login.php:914
 msgid "Social Linking Shortcode"
 msgstr "الربط الاجتماعي رمز قصير"
 
-#: ../admin/social_login.php:925
+#: ../admin/social_login.php:928
 msgid ""
 "Why the user is not appearing logged in even after Social Login until the "
 "webpage is refreshed manually?"
 msgstr ""
 
-#: ../admin/social_login.php:926
+#: ../admin/social_login.php:929
 msgid "Why is Facebook login not working?"
 msgstr ""
 
@@ -2682,50 +2683,50 @@ msgstr ""
 "تأكد من أن يتم تمكين \"تسجيل الدخول الاجتماعي\" من \"سوبر سسليزر > "
 "الاجتماعية صفحة تسجيل الدخول\"."
 
-#: ../inc/social_sharing.php:23 ../inc/social_sharing.php:291
+#: ../inc/social_sharing.php:23 ../inc/social_sharing.php:311
 msgid "Search for"
 msgstr ""
 
 #: ../inc/social_sharing.php:28 ../inc/social_sharing.php:30
-#: ../inc/social_sharing.php:32 ../inc/social_sharing.php:296
-#: ../inc/social_sharing.php:298 ../inc/social_sharing.php:300
+#: ../inc/social_sharing.php:32 ../inc/social_sharing.php:316
+#: ../inc/social_sharing.php:318 ../inc/social_sharing.php:320
 #, fuzzy
 msgid "Archives"
 msgstr "الأرشيف"
 
-#: ../inc/social_sharing.php:842 ../inc/social_sharing.php:1046
+#: ../inc/social_sharing.php:861 ../inc/social_sharing.php:1098
 #, fuzzy
 msgid "Invalid request"
 msgstr "طلب غير صحيح"
 
-#: ../inc/social_sharing.php:849
+#: ../inc/social_sharing.php:868
 #, fuzzy
 msgid "Providers not selected"
 msgstr "محدد  |   selected"
 
-#: ../inc/social_login.php:720
+#: ../inc/social_login.php:763
 #, fuzzy
 msgid "Email"
 msgstr "البريد الإلكتروني"
 
-#: ../inc/social_login.php:721
+#: ../inc/social_login.php:764
 msgid "Confirm email"
 msgstr ""
 
-#: ../inc/social_login.php:723
+#: ../inc/social_login.php:766
 msgid "Save"
 msgstr ""
 
-#: ../inc/social_login.php:724
+#: ../inc/social_login.php:767
 msgid "Cancel"
 msgstr ""
 
-#: ../inc/social_login.php:798
+#: ../inc/social_login.php:841
 #, fuzzy
 msgid "Email Verification"
 msgstr "تمكين ايقونات المشاركة عبر البريد الإلكتروني "
 
-#: ../inc/social_login.php:800
+#: ../inc/social_login.php:843
 msgid ""
 "Please click on the following link or paste it in browser to verify your "
 "email"
@@ -2767,11 +2768,13 @@ msgid "Title (after login):"
 msgstr ""
 
 #: ../inc/widget.php:87 ../inc/widget.php:254 ../inc/widget.php:584
+#: ../inc/widget.php:898
 #, fuzzy
 msgid "Before widget content:"
 msgstr "المحتوى "
 
 #: ../inc/widget.php:89 ../inc/widget.php:256 ../inc/widget.php:586
+#: ../inc/widget.php:960
 #, fuzzy
 msgid "After widget content:"
 msgstr "أضف ودجت"
@@ -2893,6 +2896,104 @@ msgid ""
 "Like Buttons\" page."
 msgstr ""
 "تأكد من تمكين \"الأفقية مثل أزرار\" من صفحة \"> سوبر سسليزر مثل أزرار\"."
+
+#: ../inc/widget.php:767
+#, fuzzy
+msgid "Super Socializer - Follow Icons"
+msgstr "آخر تسجيل دخول  |  Last Login"
+
+#: ../inc/widget.php:769
+msgid "These icons link to your Social Media accounts"
+msgstr ""
+
+#: ../inc/widget.php:902
+#, fuzzy
+msgid "Size of icons"
+msgstr "المشاركات الأفقي"
+
+#: ../inc/widget.php:904
+#, fuzzy
+msgid "Icon Shape"
+msgstr "شكل"
+
+#: ../inc/widget.php:909
+#, fuzzy
+msgid "Facebook ID:"
+msgstr "رقم التعريف الخالص بك |  ID"
+
+#: ../inc/widget.php:912
+#, fuzzy
+msgid "Twitter ID:"
+msgstr "شارك الأخرين عبر تويتر"
+
+#: ../inc/widget.php:915
+#, fuzzy
+msgid "Instagram ID:"
+msgstr "إنستاجرام"
+
+#: ../inc/widget.php:918
+#, fuzzy
+msgid "Pinterest ID:"
+msgstr "شارك الأخرين عبر بينتريست"
+
+#: ../inc/widget.php:921
+msgid "Behance ID:"
+msgstr ""
+
+#: ../inc/widget.php:924
+msgid "Flickr ID:"
+msgstr ""
+
+#: ../inc/widget.php:927
+msgid "Foursquare ID:"
+msgstr ""
+
+#: ../inc/widget.php:930
+msgid "Github ID:"
+msgstr ""
+
+#: ../inc/widget.php:933
+#, fuzzy
+msgid "Google+ ID:"
+msgstr "الصفحة لمؤلف البرنامج المساعد على جوجل "
+
+#: ../inc/widget.php:936
+#, fuzzy
+msgid "LinkedIn ID:"
+msgstr "شارك الأخرين عبر لنكيدان"
+
+#: ../inc/widget.php:939
+msgid "LinkedIn Company ID:"
+msgstr ""
+
+#: ../inc/widget.php:942
+msgid "Snapchat ID:"
+msgstr ""
+
+#: ../inc/widget.php:945
+#, fuzzy
+msgid "Tumblr ID:"
+msgstr "شارك الأخرين عبر تمبلير"
+
+#: ../inc/widget.php:948
+msgid "Vimeo ID:"
+msgstr ""
+
+#: ../inc/widget.php:951
+msgid "Youtube ID:"
+msgstr ""
+
+#: ../inc/widget.php:954
+msgid "Youtube Channel ID:"
+msgstr ""
+
+#: ../inc/widget.php:957
+msgid "RSS Feed URL:"
+msgstr ""
+
+#, fuzzy
+#~ msgid "Select providers"
+#~ msgstr "أختر ..."
 
 #, fuzzy
 #~ msgid "Login with"
@@ -3037,14 +3138,6 @@ msgstr ""
 #, fuzzy
 #~ msgid "Float it"
 #~ msgstr "تطفو عليه"
-
-#, fuzzy
-#~ msgid "Tumblr"
-#~ msgstr "شارك الأخرين عبر تمبلير"
-
-#, fuzzy
-#~ msgid "Pinterest"
-#~ msgstr "شارك الأخرين عبر بينتريست"
 
 #, fuzzy
 #~ msgid "Whatsapp"

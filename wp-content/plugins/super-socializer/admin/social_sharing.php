@@ -1042,7 +1042,7 @@
 							<td>
 							<input id="the_champ_counts" name="the_champ_sharing[horizontal_counts]" type="checkbox" <?php echo isset( $theChampSharingOptions['horizontal_counts'] ) ? 'checked = "checked"' : '';?> value="1" />
 							<br/>
-							<span style="font-size:12px"><?php _e( 'Share counts are supported for Facebook, Twitter, Linkedin, Buffer, Reddit, Pinterest, Stumbleupon and Vkontakte', 'Super-Socializer' ) ?></span>
+							<span style="font-size:12px"><?php _e( 'Share counts are supported for Facebook, Twitter, Linkedin, Buffer, Reddit, Pinterest, Stumbleupon, Odnoklassniki and Vkontakte', 'Super-Socializer' ) ?></span>
 							</td>
 						</tr>
 						
@@ -1486,7 +1486,7 @@
 							<td>
 							<input id="the_champ_vertical_counts" name="the_champ_sharing[vertical_counts]" type="checkbox" <?php echo isset( $theChampSharingOptions['vertical_counts'] ) ? 'checked = "checked"' : '';?> value="1" />
 							<br/>
-							<span style="font-size:12px"><?php _e( 'Share counts are supported for Facebook, Twitter, Linkedin, Buffer, Reddit, Pinterest, Stumbleupon and Vkontakte', 'Super-Socializer' ) ?></span>
+							<span style="font-size:12px"><?php _e( 'Share counts are supported for Facebook, Twitter, Linkedin, Buffer, Reddit, Pinterest, Stumbleupon, Odnoklassniki and Vkontakte', 'Super-Socializer' ) ?></span>
 							</td>
 						</tr>
 						

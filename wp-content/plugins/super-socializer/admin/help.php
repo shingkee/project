@@ -13,15 +13,13 @@
 		</div>
 		</div>
 	</div>
-
-	<div class="stuffbox">
-		<h3><label><?php _e('Donate', 'Super-Socializer');?></label></h3>
-		<div class="inside">
-		<p><?php _e('You can help us continue the development of this free plugin by donating', 'Super-Socializer') ?></p>
-		<a href="https://www.heateor.com/donate/?action=Super+Socializer" style="text-decoration:none" target="_blank"><input type="button" style="width:52%;background-color:#D51F1F" class="ss_demo" value="<?php _e( 'Donate Now', 'Super-Socializer' ) ?>" /></a>
+	
+	<div style="margin-bottom: 21px">
+		<div class="inside" style="padding-top:10px">
+		<a href="https://www.heateor.com/donate/?action=Super+Socializer" style="text-decoration:none" target="_blank"><input type="button" style="background-color:#D51F1F" class="ss_demo" value="<?php _e( 'Donate Now', 'Super-Socializer' ) ?>" /></a>
 		</div>
 	</div>
-	
+
 	<div style="margin-bottom: 21px">
 		<div class="inside" style="padding-top:10px">
 		<a target="_blank" style="text-decoration:none" href="https://super-socializer-wordpress.heateor.com/"><input type="button" class="ss_demo" value="<?php _e('Plugin Demo', 'Super-Socializer') ?>" /></a>
@@ -34,6 +32,12 @@
 		</div>
 	</div>
 
+	<div style="margin-bottom: 21px">
+		<div class="inside" style="padding-top:10px">
+		<a target="_blank" style="text-decoration:none" href="https://www.heateor.com/social-login-buttons"><input type="button" class="ss_demo" value="<?php _e('Customize Social Login Icons', 'Super-Socializer') ?>" /></a>
+		</div>
+	</div>
+	
 	<div style="margin-bottom: 21px">
 		<div class="inside" style="padding-top:10px">
 		<a target="_blank" style="text-decoration:none" href="https://www.heateor.com/social-analytics-sharing"><input type="button" class="ss_demo" value="<?php _e('Integrate with Google Analytics', 'Super-Socializer') ?>" /></a>
