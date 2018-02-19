@@ -6,6 +6,10 @@ class Membership_Base_Model_Attachment extends Membership_Base_Model_Base
 	public function addImageAttachment($image)
 	{
 		$userId = get_current_user_id();
+
+		if($userId === 0){
+		    $userId = $image['userId'];
+        }
 		
 		$this->cleanUnusedAttachments($userId);
 		

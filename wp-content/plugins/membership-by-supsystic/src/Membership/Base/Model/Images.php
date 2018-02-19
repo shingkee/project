@@ -63,7 +63,7 @@ class Membership_Base_Model_Images extends Membership_Base_Model_Base
 		return str_replace($this->getUploadsPath(), $this->getUploadsUrl(), $path);
 	}
 
-	public function uploadAttachmentFromUrl($url) {
+	public function uploadAttachmentFromUrl($url, $userId = 0) {
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_HEADER, 0);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -82,7 +82,12 @@ class Membership_Base_Model_Images extends Membership_Base_Model_Base
 		fclose($fp);
 
 		$attachmentModel = $this->getModel('attachment', 'base');
-		$attachment = $attachmentModel->addImageAttachment(array('tmp_name' => $path));
+
+		if($userId === 0 && $userId >= 1){
+            $attachment = $attachmentModel->addImageAttachment(array('tmp_name' => $path));
+        }else{
+            $attachment = $attachmentModel->addImageAttachment(array('tmp_name' => $path, 'userId' => $userId));
+        }
 
 		$result = null;
 
@@ -97,7 +102,6 @@ class Membership_Base_Model_Images extends Membership_Base_Model_Base
 	{
 		$newImagePath = $this->generateFilename($imagePath, $savePath, null, $prefix);
 		rename($imagePath, $newImagePath);
-		return $newImagePath;
 	}
 
 	public function generateFilePath($directory, $ext)

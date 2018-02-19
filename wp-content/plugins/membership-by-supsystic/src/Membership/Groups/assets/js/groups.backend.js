@@ -1,3 +1,4 @@
+/* ПЕРЕНЕСТИ ЭТОТ КОД В ДРУГОЙ БЛОК*/
 (function($, Membership) {
     var rolesField = $('.mp-option-select.roles-to-invite');
 
@@ -20,7 +21,12 @@
 			})
 		}, {'method': 'post'})
 		.error(function(response) {
-			console.error(response.responseJSON.message);
+			if(response && response.responseJSON && response.responseJSON.message) {
+				console.error(response.responseJSON.message);
+			} else {
+				console.error('Error ocured');
+			}
+
 		});
 	});
 })(jQuery, Membership);

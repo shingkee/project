@@ -28,6 +28,7 @@
 
 
 		.sc-membership .ui.secondary.button,
+		.ui.modals .mbs-add-attachment,
 		.ui.modals .ui.secondary.button {
 			background: {{ settings.design.general['secondary-button-color'] }}!important;
 			{# New feature compatibility #}
@@ -35,6 +36,12 @@
 				color: {{ settings.design.general['secondary-button-text-color'] }}!important;
 			{% endif %}
 		}
+
+		{% if settings.design.general['secondary-button-text-color'] is defined %}
+			.ui.modals .mbs-add-attachment .icon.attach {
+				color: {{ settings.design.general['secondary-button-text-color'] }}!important;
+			}
+		{% endif %}
 
 		.sc-membership .ui.secondary.button:hover,
 		.sc-membership .ui.secondary.buttons .button:hover,
@@ -110,7 +117,9 @@
 
 	.mp-profile-header {
 		background-color: {{ settings.design.profile['header-background-color'] }}!important;
-		background-color: {{ settings.design.profile['avatar-style'] }}!important;
+		{% if settings.design.profile['avatar-style'] != null %}
+			background-color: {{ settings.design.profile['avatar-style'] }}!important;
+		{% endif %}
 	}
 
 	{% if settings.design.general['avatar-style'] == 'round' %}

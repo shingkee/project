@@ -3,23 +3,24 @@
         <div class="ui divided items">
             <div class="item">
                 {% if context == 'group' and canEditGroup(requestedGroup) %}
-                    <img class="mp-activity-post-avatar activity-author-group" src="{{ groupLogo(requestedGroup, 'medium') }}">
-	                <img class="mp-activity-post-avatar activity-author-user" src="{{ userAvatar(currentUser, 'medium') }}" style="display: none">
+                    <img class="mp-activity-post-avatar activity-author-group" src="{{ groupLogo(requestedGroup, 'medium') }}" alt="">
+	                <img class="mp-activity-post-avatar activity-author-user" src="{{ userAvatar(currentUser, 'medium') }}" style="display: none" alt="">
                 {% else %}
-                    <img class="mp-activity-post-avatar activity-author-user" src="{{ userAvatar(currentUser, 'medium') }}">
+                    <img class="mp-activity-post-avatar activity-author-user" src="{{ userAvatar(currentUser, 'medium') }}" alt="">
                 {% endif %}
                 <div class="middle aligned content">
                     <form class="ui reply form">
                         <div class="field">
-							<textarea class="mp-form-textarea" rows="2" placeholder="What's new?"></textarea>
+							<textarea class="mp-form-textarea" rows="2" placeholder="{{ translate("What's new?") }}"></textarea>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-	
+
 	<div class="ui segment mp-attachment-images" style="display:none;"></div>
+
 	{{ environment.dispatcher.dispatch('activity.form.photoGalleryContainer') }}
 	{{ environment.dispatcher.dispatch('activity.form.sliderContainer') }}
 	{{ environment.dispatcher.dispatch('activity.form.googleMapsContainer') }}
@@ -31,7 +32,7 @@
     <div class="ui secondary basic segment clearing post-form-buttons">
 
 	    <div class="post-activity-buttons">
-		    <button class="ui icon button secondary mini" data-action="add-image-attachment"><i class="photo icon"></i></button>
+			<button class="ui icon button secondary mini mbsActivityAttachmentBtn" data-action="mbs-add-attachment"><i class="icon attach"></i></button>
 		    <button class="ui icon button primary mini right floated" data-action="post-activity">
 			    <span><i class="send icon"></i>{{ translate('Post') }}</span>
 		    </button>
@@ -74,6 +75,21 @@
 	    </div>
 	
 	    <div class="edit-activity-buttons" style="display:none;">
+		    <div class="post-activity-buttons edit-activity-buttons" style="display: inline-block;">
+			    <button class="ui icon button secondary mini mbsActivityAttachmentBtn" data-action="mbs-add-attachment"><i class="icon attach"></i></button>
+			    {% if smilesList|length > 0 %}
+				    <div class="mbs-smile-btn-wrapper">
+					    <button class="ui button mini" data-action="add-smile-to-text">:D</button>
+					    <div class="mp-smiles-window mbs-displ-hidden">
+						    <div class="mbs-smiles-wrapper">
+							    {% for scIndex, smileCode in smilesList %}
+								    <div class="mbs-sw-one-smile" data-id="{{ scIndex }}" data-code="{{ smileCode }}">{{ smileCode }}</div>
+							    {% endfor %}
+						    </div>
+					    </div>
+				    </div>
+			    {% endif %}
+		    </div>
 		    <button class="ui floating icon button mini right floated primary" data-action="save">{{ translate('Save') }}</button>
 		    <button class="ui floating icon button mini right floated secondary" data-action="cancel">{{ translate('Cancel') }}</button>
 		</div>

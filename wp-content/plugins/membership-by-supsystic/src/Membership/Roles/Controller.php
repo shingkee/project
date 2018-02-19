@@ -8,14 +8,39 @@ class Membership_Roles_Controller extends Membership_Base_Controller {
 		$wpRoles = $rolesModel->getWpRoles();
 		$defaultWpRole = get_option('default_role');
 
+		// Groups settings
+		$baseSettings = $this->getModel('settings', 'base')->getSettings();
+		$groupsSettings = $this->getModel('settings', 'groups')->getSettings();
+
 		return $this->response(
 			'@roles/backend/index.twig',
 			array(
 				'roles' => $roles,
 				'wpRoles' => $wpRoles,
 				'wpDefaultRole' => $defaultWpRole,
+				'baseSettings' => $baseSettings,
+				'groupsSettings' => $groupsSettings,
+				'mainSettingsLink' => $this->generateUrl('membership'),
 			)
 		);
+	}
+
+	public function saveSettings($request) {
+		$settings = $request->get('settings');
+		if(isset($settings['groups'])) {
+			$groupSettings = $settings['groups'];
+			$groupSettingsModel = $this->getModel('settings', 'groups');
+
+			$prevSettings = $groupSettingsModel->getSettings();
+			$groupSettings = array_replace_recursive($prevSettings, $groupSettings);
+			try {
+				$groupSettingsModel->saveSettings($groupSettings);
+			} catch (Exception $e) {
+				status_header(500);
+				return $this->response('ajax', array('message' => $e->getMessage()));
+			}
+		}
+		return $this->response('ajax');
 	}
 
 	public function createRole(Rsc_Http_Parameters $parameters) {

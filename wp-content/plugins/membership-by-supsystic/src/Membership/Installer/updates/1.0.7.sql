@@ -28,4 +28,5 @@ INSERT IGNORE INTO `%prefix%users_roles`
   FROM %prefix%roles AS r
     JOIN %wp_base_prefix%usermeta AS um ON um.meta_key = '%wp_prefix%capabilities' AND um.meta_value REGEXP r.type
   WHERE type != '__guest__'
+  AND um.user_id NOT IN (SELECT user_id FROM `%prefix%users_roles`)
 );

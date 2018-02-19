@@ -39,6 +39,6 @@
 			{% endfor %}
 		</div>
 	</div>
-	
-	{% include '@users/partials/users-send-message-modal.twig' %}
+
+	{{ environment.dispatcher.dispatch('users.send.message.modal.wnd') }}
 {% endblock %}

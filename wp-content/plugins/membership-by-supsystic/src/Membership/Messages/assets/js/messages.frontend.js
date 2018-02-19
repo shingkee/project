@@ -1,4 +1,6 @@
 (function($, Membership) {
+	var mbsSemPopup = new mbsSemanticPopup()
+	,	mbsAttachmentBeh = null;
 
 	var NewConversationForm = function(conversations) {
 
@@ -145,9 +147,13 @@
 		});
 
 		$sendButton.on('click', function(event) {
-			var message = $textArea.val();
+			var message = $textArea.val()
+			,	attachmentArr = [];
+			if(mbsAttachmentBeh) {
+				attachmentArr = mbsAttachmentBeh.getAttachedIds();
+			}
 
-			if (message.length) {
+			if (message.length || attachmentArr.length) {
 				self.setSendState();
 				$textArea.trigger('sendMessage', message);
 			}
@@ -353,7 +359,7 @@
 	};
 
 	Conversation.prototype.show = function() {
-
+		var isInited = this.isInitialized;
 		if (!this.isInitialized) {
 			this.init();
 		} else {
@@ -369,6 +375,12 @@
 		this.isActive = true;
 		this.conversations.updateUnreadMessagesCounter(this.id);
 		this.$el.show();
+
+		if(isInited) {
+			if(mbsAttachmentBeh) {
+				mbsAttachmentBeh.initMessageConversationContainer();
+			}
+		}
 	};
 
 	Conversation.prototype.init = function() {
@@ -413,9 +425,14 @@
 		var messageForm = new MessageForm(this.$messageForm);
 
 		messageForm.onSend(function(event, message) {
+			var attachmentArr = [];
+			if(mbsAttachmentBeh) {
+				attachmentArr = mbsAttachmentBeh.getAttachedIds();
+			}
 			Membership.api.messages.sendMessage({
 				conversationId: self.id,
-				message: message
+				message: message,
+				'attachments': attachmentArr,
 			}).then(function(response) {
 				if (response.success) {
 					var $messages = $(response.html).filter('.mp-message');
@@ -423,6 +440,10 @@
 					self.newMessagesLastMessageId = $messages.last().attr('data-id');
 					self.conversations.updateConversationListLastMessage(self.id, message);
 					self.scrollMessagesContainerToBottom(1);
+
+					if(mbsAttachmentBeh) {
+						mbsAttachmentBeh.clearAttachmentWrapper(true);
+					}
 				} else {
 					Snackbar.show({text: response.message});
 				}
@@ -536,7 +557,6 @@
 
 		});
 
-
 		this.$messagesContainer.show();
 		this.isInitialized = true;
 	};
@@ -582,6 +602,7 @@
 					if ($messages.length === 10) {
 						self.oldMessagesLoading = false;
 					}
+					mbsSemPopup.init();
 				}
 
 				self.$messagesLoader.hide();
@@ -594,6 +615,7 @@
 	Conversation.prototype.fetchNewMessages = function(scroll) {
 
 		var self = this;
+		this.firstFetchCompleted = false;
 
 		if (!this.newMessagesLoading) {
 			this.newMessagesLoading = true;
@@ -616,11 +638,20 @@
 				}
 
 				if (scroll) {
-					self.scrollMessagesContainerToBottom(scroll);
+					// calc offset size when images loaded
+					setTimeout(function() {
+						self.scrollMessagesContainerToBottom(scroll);
+					}, 350);
 				}
 
+				if(!self.firstFetchCompleted) {
+					if(mbsAttachmentBeh) {
+						mbsAttachmentBeh.initMessageConversationContainer();
+					}
+					self.firstFetchCompleted = true;
+				}
+				mbsSemPopup.init();
 				self.newMessagesLoading = false;
-
 			});
 		}
 
@@ -633,6 +664,25 @@
 		}, delay || 500);
 	};
 
+	function mbsSemanticPopup() {}
+	mbsSemanticPopup.prototype.init = (function() {
+		$('.mbsPopupImage').off('click').on('click', function(event) {
+			event.preventDefault();
+
+			$('.ui.modal img.image').attr('src', $(this).find('.mbsMsgAttachmImage').attr('src'));
+			$('#mbsImagePopupModalWnd').mpModal('show');
+		});
+	});
+
 	new Conversations();
+
+
+	$(document).ready(function() {
+		if(window.mbsAttachmentMessageBehavior) {
+			mbsAttachmentBeh = new window.mbsAttachmentMessageBehavior();
+			// first init
+			mbsAttachmentBeh.initMessageConversationContainer();
+		}
+	});
 
 })(jQuery, Membership);

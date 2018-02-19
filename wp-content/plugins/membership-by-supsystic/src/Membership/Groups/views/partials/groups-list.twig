@@ -2,7 +2,7 @@
 	<div class="ui card mp-group-card" data-id="{{ group.id }}">
 		<div class="image">
 			<a href="{{ groupUrl(group) }}" class="header">
-				<img src="{{ groupCover(group, 'medium') }}">
+				<img src="{{ groupCover(group, 'medium') }}" alt="">
                 {% if group.currentUserIsFollowing == true %}
                     {% set count =  notReadPost(group.id) %}
                     {% if count >= 1 %}
@@ -18,7 +18,7 @@
 			<div class="mp-group-logo-container">
 				<div class="mp-group-logo">
 					<a href="{{ groupUrl(group) }}" class="header">
-						<img src="{{ groupLogo(group, 'large') }}">
+						<img src="{{ groupLogo(group, 'large') }}" alt="">
 					</a>
 				</div>
 			</div>

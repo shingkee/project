@@ -14,13 +14,25 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
 		$currentUserId = get_current_user_id();
 		$requestedUserId = intval($parameters->get('userId'));
 		$postData = $parameters->get('data');
-
 		$usersModule = $this->getModule('users');
 		$activityModel = $this->getModel('activity', 'activity');
 		$usersModel = $this->getModel('profile', 'users');
 		$requestedUser = $usersModel->getUserById($requestedUserId);
 
+		if(isset($postData['message']) && empty($postData['message'])) {
+			if(empty($postData['images']) && empty($postData['files'])) {
+				return $this->response(
+					'ajax',
+					array(
+						'success' => false,
+						'message' => $this->translate('Post can\'t be empty'),
+					)
+				);
+			}
+		}
+
 		if ($usersModule->currentUserHasPermission('post-activity', $requestedUser)) {
+			$toSharePostToUserFriends = false;
 
 			if ($requestedUserId && ($requestedUserId !== $currentUserId)) {
 				$activityId = $activityModel->createActivity(
@@ -30,11 +42,15 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
 				$activityId = $activityModel->createActivity(
 					$currentUserId, 'post', $postData['message']
 				);
+				$toSharePostToUserFriends = true;
 			}
 
             if (isset($postData['images'])) {
                 $this->setActivityImages($activityId, $postData['images']);
             }
+			if(isset($postData['files'])) {
+				$this->setActivityAttachments($activityId, $postData['files']);
+			}
 
 			if (isset($postData['link']) && !isset($postData['images'])) {
 				$linksModel = $this->getModel('Links', 'Activity');
@@ -57,6 +73,12 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
 			}
 
 			$activities = $activityModel->getActivityById($activityId, $currentUserId);
+
+			if($toSharePostToUserFriends) {
+				$this->createFriendPostInActivity(
+					$currentUserId, $activityId, $currentUserId,'post'
+				);
+			}
 
 			return $this->response(
 				'ajax',
@@ -82,7 +104,6 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
 		$postData = $parameters->get('data');
 		$attachmentLinkHash = $postData['link'];
 
-
 		$usersModule = $this->getModule('Users');
 		$activityModel = $this->getModel('activity', 'activity');
 
@@ -104,6 +125,12 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
 			}
 
 			$activityModel->updateActivityData($activityId, $postData['message']);
+			// update image attachments
+			$this->updateActivityImages($activityId, $postData['images']);
+			// update file attachments
+			$attachmentFiles = isset($postData['files']) ? $postData['files'] : array();
+			$this->updateAttachFileDiffByArr($activityId, $attachmentFiles);
+			
 			$activities = $activityModel->getActivityById($activityId, $currentUserId);
 
 			return $this->response(
@@ -156,6 +183,65 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
         }
     }
 
+	public function updateActivityImages($activityId, $attachmentsIds) {
+		
+		$currentUserId = get_current_user_id();
+		$imagesModel = $this->getModel('images', 'base');
+		$albumsModel = $this->getModel('albums', 'base');
+		$activityModel = $this->getModel('activity', 'activity');
+		$attachmentsImagesIdsExist = array();
+		$attachmentsIdsExist = array();
+		$attachmentsIdsToDb = array();
+
+		$imagesIdInDb = $activityModel->getActivityImages($activityId);
+
+		$activityImagesIdsToRemove = array();
+
+		if(count($imagesIdInDb)) {
+			foreach($imagesIdInDb as $oneElem) {
+				if (in_array($oneElem['image_id'], $attachmentsIds)) {
+					$attachmentsIdsExist[] = $oneElem['id'];
+					$attachmentsImagesIdsExist[] = $oneElem['image_id'];
+				}else{
+					$activityImagesIdsToRemove[] = $oneElem['id'];
+				}
+			}
+
+			// remove activity images
+			$activityModel->removeActivityImages($activityImagesIdsToRemove);
+		}
+		
+		foreach ( $attachmentsIds as $item ) {
+			if (!in_array($item, $attachmentsImagesIdsExist)) {
+				$attachmentsIdsToDb[] = $item;
+			}
+		}
+
+		$images = $imagesModel->createImagesFromAttachments($attachmentsIdsToDb, $currentUserId);
+		
+		// Create thumbnails
+		if($images){
+			foreach ($images as $image) {
+				$imagesModel->resizeImage($image, 600, 600);
+				$imagesModel->resizeImage($image, 300, 300);
+			}
+			$imagesIds = array();
+			
+			foreach ($images as $image) {
+				$imagesIds[] = $image['id'];
+			}
+		
+		}
+		
+		if($attachmentsImagesIdsExist && $imagesIds){
+			$imagesIds = array_merge($imagesIds,$attachmentsImagesIdsExist);
+		}
+		
+		$activityModel->setActivityImages($activityId, $imagesIds);
+		$activityAlbum = $albumsModel->getUserActivityAlbum($currentUserId);
+		$albumsModel->addImages($activityAlbum['id'], $imagesIds);
+	}
+
 	public function setActivityImages($activityId, $attachmentsIds) {
 
         $currentUserId = get_current_user_id();
@@ -181,6 +267,15 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
         $activityAlbum = $albumsModel->getUserActivityAlbum($currentUserId);
         $albumsModel->addImages($activityAlbum['id'], $imagesIds);
     }
+
+	public function setActivityAttachments($activityId, $attachmentsIds) {
+
+		$attachmentAllModel = $this->getModule('base')->getModel('AttachmentAll');
+		$attachmentAllModel->updateSavedParamFor($attachmentsIds);
+
+		$activityModel = $this->getModule('activity')->getModel('activity');
+		$activityModel->addAttachmentFiles($activityId, $attachmentsIds);
+	}
 
 	public function getActivity(Rsc_Http_Parameters $parameters) {
 
@@ -451,6 +546,11 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
 			$currentUserId, 'shared_' . $activity['type'], null, null, null, $activity['id']
 		);
 
+		// "Friend Post" Behaviour
+		$this->createFriendPostInActivity(
+			$currentUserId, $shareActivityId, (!empty($activity['user_id']) ? $activity['user_id'] : 0),'post'
+		);
+
 		$activities = $activityModel->getActivityShares($activityId, $currentUserId, 6);
 
 		return $this->response('ajax', array(
@@ -460,6 +560,47 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
 				array('activities' => $activities)
 			)
 		));
+	}
+
+	public function createFriendPostInActivity($createPostUserId, $activityId, $activityUserId = 0, $activityType = 'post') {
+		$activityModel = $this->getModel('activity', 'activity');
+		// get user friends
+		$usersFriendsModel = $this->getModel('friends', 'users');
+		$friendArr = $usersFriendsModel->getAcceptedUserFriendIds($createPostUserId, true);
+
+		if(count($friendArr)) {
+			// get settings
+			$designSettings = $this->getModule('base')->getModel('settings')->get('design');
+			// if "Shares" == true and "Share to Friends Activity" == 1
+			if(!empty($designSettings['design']['activity']['type']['shares']) && !empty($designSettings['design']['activity']['type']['friendPostOn'])
+				&& $designSettings['design']['activity']['type']['shares'] == 'true' && $designSettings['design']['activity']['type']['friendPostOn'] == 1
+			) {
+				// user DON't make his own decisions for FriendPost
+				if(empty($designSettings['design']['activity']['type']['friendPostOnShowInFrontend']) or $designSettings['design']['activity']['type']['friendPostOnShowInFrontend'] != 1) {
+					// ### FriendPost was Posted
+					foreach($friendArr as $oneUserId) {
+						if($activityUserId != $oneUserId) {
+							$resActivity = $activityModel->createActivity($oneUserId, 'friend_' . $activityType, null, null, null, $activityId);
+						}
+					}
+					// ###
+				} else {
+					// get FriendUser Info
+					$usersModel = $this->getModule('users')->getModel('profile', 'users');
+					// ### FriendPost was Posted
+					foreach($friendArr as $oneUserId) {
+						// can user add FriendPost to this User?
+						$requestedUser = $usersModel->getUserById($oneUserId);
+						if(empty($requestedUser['privacy']['hideFriendPost']) or $requestedUser['privacy']['hideFriendPost'] != 1) {
+							if($activityUserId != $oneUserId) {
+								$resActivity = $activityModel->createActivity($oneUserId, 'friend_' . $activityType, null, null, null, $activityId);
+							}
+						}
+					}
+					// ###
+				}
+			}
+		}
 	}
 
 	public function createComment(Rsc_Http_Parameters $parameters) {
@@ -475,6 +616,16 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
 		$activity = array_shift($activities);
 
 		$allowCommenting = false;
+
+		if(empty($commentData['message']) && empty($commentData['image']) && empty($commentData['files'])) {
+			return $this->response(
+				'ajax',
+				array(
+					'success' => false,
+					'message' => $this->translate('Comment can\'t be empty'),
+				)
+			);
+		}
 
 		if ($activity) {
 
@@ -513,6 +664,10 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
         if (isset($commentData['images'])) {
             $this->setActivityImages($commentId, $commentData['images']);
         }
+
+		if(!empty($commentData['files'])) {
+			$this->setActivityAttachments($commentId, $commentData['files']);
+		}
 
 		if (isset($commentData['link']) && !isset($commentData['images'])) {
 			$linksModel = $this->getModel('Links', 'Activity');
@@ -693,6 +848,10 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
                 $this->setActivityImages($commentId, $commentData['images']);
             }
 
+			if(!empty($commentData['files'])) {
+				$this->setActivityAttachments($commentId, $commentData['files']);
+			}
+
 			if (isset($commentData['link']) && !isset($commentData['images'])) {
 				$linksModel = $this->getModel('Links', 'Activity');
 				$linksModel->setActivityLinkByHash($commentId, $commentData['link']);
@@ -809,7 +968,9 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
 			);
 		}
 
-		if (intval($comment['user_id']) !== $currentUserId) {
+		$usersModule = $this->getModule('Users');
+		$userCanEditActivity = $usersModule->currentUserCan('edit-activity');
+		if(intval($comment['user_id']) !== $currentUserId && !$userCanEditActivity) {
 			return $this->response('ajax',
 				array(
 					'success' => false,
@@ -856,7 +1017,9 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
 
 		$success = false;
 
-		if (intval($activity['user_id']) === $currentUserId || intval($comment['user_id']) === $currentUserId) {
+		$usersModule = $this->getModule('Users');
+		$userCanEditActivity = $usersModule->currentUserCan('edit-activity');
+		if(intval($activity['user_id']) === $currentUserId || intval($comment['user_id']) === $currentUserId || $userCanEditActivity) {
 			$commentsModel->removeComment($commentId);
 			$success = true;
 		}
@@ -878,8 +1041,10 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
 				)
 			);
 		}
+		$settings = $this->getModule()->getSettings();
 
 		$linksModel = $this->getModel('Links');
+		$linksModel->settings = $settings;
 		$link = $linksModel->parseUrl($url);
 
 		if (!$link) {
@@ -932,4 +1097,34 @@ class Membership_Activity_Controller extends Membership_Base_Controller {
 		);
 	}
 
+	/**
+	 * Calc Difference between "previous attachments" and @$attachmentsIds
+	 * 		removed attachments - remove from Db
+	 * 		added attachments - add to Db
+	 * @param $activityId
+	 * @param array $attachmentsIds
+	 */
+	public function updateAttachFileDiffByArr($activityId, $resultAttachmentsIds) {
+		$attachmentAllModel = $this->getModel('AttachmentAll', 'Base');
+		$activityModel = $this->getModel('Activity', 'Activity');
+
+		$activityArr = $activityModel->getActivityAttachmentIds($activityId);
+		// attachmentIds to Remove
+		$toRemovedAttachArr = array_diff($activityArr, $resultAttachmentsIds);
+		// attachmentIds to Add
+		$toAddAttachmentArr = array_diff($resultAttachmentsIds, $activityArr);
+
+		if(count($toRemovedAttachArr)) {
+			// remove from ActivityAttachment
+			$activityModel->removeActivityAttachmentsBy($activityId, $toRemovedAttachArr);
+			// remove from Attachment_All
+			$attachmentAllModel->removeAttachmentById($toRemovedAttachArr);
+		}
+		if(count($toAddAttachmentArr)) {
+			// add to ActivityAttachment
+			$activityModel->addAttachmentFiles($activityId, $toAddAttachmentArr);
+			// update is_save param
+			$attachmentAllModel->updateSavedParamFor($toAddAttachmentArr);
+		}
+	}
 }

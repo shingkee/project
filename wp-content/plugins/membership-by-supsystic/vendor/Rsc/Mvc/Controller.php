@@ -119,4 +119,8 @@ class Rsc_Mvc_Controller
     {
         return $this->request;
     }
+
+    public function requireNonces() {
+        return array();
+}
 }

@@ -59,8 +59,13 @@ class SupsysticMembership {
     }
 
 	public function run() {
+
+	    global $membership_supsystic;
+
 		$this->environment->run();
         $this->environment->getTwig()->addGlobal('core_alerts', $this->alerts);
+
+        $membership_supsystic = $this->environment;
 	}
 
 	public function loadThemeTextDomain() {
@@ -86,6 +91,10 @@ class SupsysticMembership {
 
         return $environment;
     }
+
+	public function getEnvironment() {
+		return $this->environment;
+	}
 
     protected function initialize() {
         $config = $this->environment->getConfig();

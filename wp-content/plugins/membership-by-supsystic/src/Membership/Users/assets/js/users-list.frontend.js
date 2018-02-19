@@ -2,15 +2,20 @@
 
 	var $sendMessageToUserModal = $('#send-message-modal'),
 		$sendMessageToUserModalButtons = $sendMessageToUserModal.find('.actions button'),
+		mbsAmb = null,
 		$loginModal = $('#membership-login-modal').mpModal();
 
 	$sendMessageToUserModal.mpModal({
 		onApprove: function($button) {
 			var $textarea = $sendMessageToUserModal.find('textarea'),
 				message = $.trim($textarea.val()),
+				attachmentArr = [],
 				userId = $sendMessageToUserModal.attr('data-user-id');
 
-			if (!message.length) {
+			if(mbsAmb) {
+				attachmentArr = mbsAmb.getAttachedIds();
+			}
+			if (!message.length && !attachmentArr.length) {
 				return false;
 			}
 
@@ -19,7 +24,8 @@
 
 			Membership.api.messages.sendMessageToUser({
 				userId: userId,
-				message: message
+				message: message,
+				'attachments': attachmentArr,
 			}).then(function(response) {
 				if (response.success) {
 					$sendMessageToUserModal.mpModal('hide');
@@ -28,6 +34,12 @@
 			});
 
 			return false;
+		},
+		'onShow': function() {
+			$('.mbsAttMessSendBtn').prop('disabled', false);
+			if(mbsAmb) {
+				mbsAmb.clearAttachmentWrapper();
+			}
 		},
 		onHidden: function($button) {
 			$sendMessageToUserModal.find('textarea').val('');
@@ -90,4 +102,10 @@
 
 	});
 
+	$(document).ready(function() {
+		if(window.mbsAttachmentMessageBehavior) {
+			mbsAmb = new window.mbsAttachmentMessageBehavior();
+			mbsAmb.init($sendMessageToUserModal);
+		}
+	});
 })(jQuery, Membership);

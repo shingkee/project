@@ -32,8 +32,8 @@
 					maxFileSize = parseInt(Membership.get('settings.base.uploads.max-file-size'), 10),
 					imageSize = upload.image.size;
 
-				if (['jpg', 'jpeg', 'png'].indexOf(fileExtension.toLowerCase()) === -1) {
-					return $.Deferred().reject({message:'Unsupported file format. Allowed formats: .jpg .jpeg .png'});
+				if (['jpg', 'jpeg', 'png', 'gif', 'ico'].indexOf(fileExtension.toLowerCase()) === -1) {
+					return $.Deferred().reject({message:'Unsupported file format. Allowed formats: .jpg .jpeg .png, .gif, .ico'});
 				}
 
 				if (upload.image.size > Membership.get('settings.base.uploads.max-file-size')) {
@@ -96,6 +96,44 @@
 					}
 				});
 			},
+			uploadAnyFile: function(upload) {
+
+				var formData = new FormData(),
+					fileExtension = upload.uFile.name.split('.').pop(),
+					maxFileSize = parseInt(Membership.get('settings.base.uploads.max-file-size'), 10),
+					fileSize = upload.uFile.size;
+
+				/*if (['jpg', 'jpeg', 'png'].indexOf(fileExtension.toLowerCase()) === -1) {
+					return $.Deferred().reject({message:'Unsupported file format. Allowed formats: .jpg .jpeg .png'});
+				}/**/
+
+				if (upload.uFile.size > Membership.get('settings.base.uploads.max-file-size')) {
+					return $.Deferred().reject({
+						'statusText': 'File exceeds the maximum file size (' +(maxFileSize/1024/1024).toFixed(2)+ 'MB). The file size: ' + (fileSize/1024/1024).toFixed(2) + 'MB'
+					});
+				}
+
+				formData.append('route', 'base.uploadAnyFile');
+				formData.append('file', upload.uFile);
+				formData.append('wpnonce', Membership.wpnonce);
+				formData.append('action', Membership.action);
+
+				return $.ajax({
+					'method': 'post',
+					'url': Membership.ajaxUrl,
+					'data': formData,
+					'processData': false,
+					'contentType': false,
+					'beforeSend':  upload.beforeSend,
+					'xhr': function() {
+						var xhr = $.ajaxSettings.xhr();
+						if(xhr.upload) {
+							xhr.upload.addEventListener('progress', upload.uploadProgress, false);
+						}
+						return xhr;
+					}
+				});
+			},
 			sendReport: function(params) {
 				return Membership.ajax($.extend({
 					route: 'reports.send'
@@ -105,6 +143,11 @@
 				return Membership.ajax($.extend({
 					route: 'photos.get'
 				}, params));
+			},
+			'getAttachmentFiles': function(params) {
+				return Membership.ajax($.extend({
+					'route': 'base.getAttachmentFiles',
+				}, params), {'method': 'post'});
 			},
 			getNonce: function(params) {
 				return Membership.ajax($.extend({
@@ -333,7 +376,11 @@
 				return Membership.ajax($.extend({
 					route: 'users.settings.deleteAccount'
 				}, params), {method: 'post'});
-
+			},
+			wpLogout: function(params) {
+				return Membership.ajax($.extend({
+					'route': 'users.wpLogout',
+				}, params), {'method': 'post'});
 			},
 			getPosts: function(params) {
 				return Membership.ajax($.extend({
@@ -497,6 +544,23 @@
 					route: 'groups.unblock'
 				}, params), {method: 'post'});
 			}
+		},
+		'groupsCategory': {
+			'add': function() {
+				return Membership.ajax($.extend({
+					route: 'groupsCategory.add'
+				}, params), {method: 'post'});
+			},
+			'update': function() {
+				return Membership.ajax($.extend({
+					route: 'groupsCategory.update'
+				}, params), {method: 'post'});
+			},
+			'remove': function() {
+				return Membership.ajax($.extend({
+					route: 'groupsCategory.remove'
+				}, params), {method: 'post'});
+			},
 		},
 		messages: {
 			createConversation: function(params) {

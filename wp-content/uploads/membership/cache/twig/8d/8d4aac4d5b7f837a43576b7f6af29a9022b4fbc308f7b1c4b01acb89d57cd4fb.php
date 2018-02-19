@@ -22,7 +22,7 @@ class __TwigTemplate_75ea1d8b72e8421101859826db3f3d11dc6ef7d69e6addfaf81f0c44284
         if (($context["contactFormPresets"] ?? null)) {
             // line 3
             echo "\t<div class=\"row\">
-\t\t<div class=\"col-md-4\">
+\t\t<div class=\"col-md-4 mbsThinCol\">
 \t\t\t<div class=\"mp-option-label\">
 \t\t\t\t<span title=\"";
             // line 6
@@ -60,8 +60,8 @@ class __TwigTemplate_75ea1d8b72e8421101859826db3f3d11dc6ef7d69e6addfaf81f0c44284
 \t";
             // line 24
             echo "\t<div class=\"row\" id=\"contact-form-preset-row\">
-\t\t<div class=\"col-md-4\">
-\t\t\t<div class=\"mp-option-label\" style=\"text-align: right; width: 100%; margin-top: 7px;\">
+\t\t<div class=\"col-md-4 mbsThinCol\">
+\t\t\t<div class=\"mp-option-label\" style=\"text-align: right; width: 300px; margin-top: 10px;\">
 \t\t\t\t<div class=\"mpp-tooltip tooltip\">
 \t\t\t\t\t<i class=\"fa fa-question sc-tooltip\"></i>
 \t\t\t\t\t<div class=\"tooltip_content\">
@@ -74,7 +74,7 @@ class __TwigTemplate_75ea1d8b72e8421101859826db3f3d11dc6ef7d69e6addfaf81f0c44284
 \t\t\t</div>
 \t\t</div>
 \t\t<div class=\"col-md-8\">
-\t\t\t<div class=\"mp-option-input-with-button\">
+\t\t\t<div class=\"mp-option-input-with-button\" style=\"padding-top: 5px;\">
 \t\t\t\t<div class=\"mp-option-select\">
 \t\t\t\t\t<select id=\"contactFormPresetSel\" style=\"width: 165px;\" name=\"pages[contact_form_preset]\">
 \t\t\t\t\t\t<option value=\"\">";
@@ -112,7 +112,7 @@ class __TwigTemplate_75ea1d8b72e8421101859826db3f3d11dc6ef7d69e6addfaf81f0c44284
 ($context["isPluginActive"] ?? null) == true)) {
             // line 49
             echo "\t<div class=\"row\">
-\t\t<div class=\"col-md-4\">
+\t\t<div class=\"col-md-4 mbsThinCol\">
 \t\t\t<div class=\"mp-option-label\">
 \t\t\t\t<span title=\"";
             // line 52
@@ -123,7 +123,7 @@ class __TwigTemplate_75ea1d8b72e8421101859826db3f3d11dc6ef7d69e6addfaf81f0c44284
 \t\t\t</div>
 \t\t</div>
 \t\t<div class=\"col-md-8\">
-\t\t\t<div style=\"margin: 0.8em 0\">
+\t\t\t<div style=\"margin: 7px 0;\">
 \t\t\t\t";
             // line 57
             echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("You have no Contact Form for now. Create your Contact Form or Enable Membership feature for contact form which you want to use for Contact Us page.")), "html", null, true);
@@ -135,7 +135,7 @@ class __TwigTemplate_75ea1d8b72e8421101859826db3f3d11dc6ef7d69e6addfaf81f0c44284
         } else {
             // line 62
             echo "\t<div class=\"row\">
-\t\t<div class=\"col-md-4\">
+\t\t<div class=\"col-md-4 mbsThinCol\">
 \t\t\t<div class=\"mp-option-label\">
 \t\t\t\t<span title=\"";
             // line 65
@@ -146,7 +146,7 @@ class __TwigTemplate_75ea1d8b72e8421101859826db3f3d11dc6ef7d69e6addfaf81f0c44284
 \t\t\t</div>
 \t\t</div>
 \t\t<div class=\"col-md-8\">
-\t\t\t<div style=\"margin: 0.8em 0\">
+\t\t\t<div style=\"margin: 7px 0;\">
 \t\t\t\t";
             // line 70
             echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("You need to install Contact Form by Supsystic to use this feature. ")), "html", null, true);

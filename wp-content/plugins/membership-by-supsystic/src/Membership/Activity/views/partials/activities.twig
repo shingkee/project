@@ -2,13 +2,13 @@
 
 {%  for activity in activities %}
 	{% if activity.relatedActivity %}
-		{{ this.activity(activity.relatedActivity, 'relatedActivity', activity, context) }}
+		{{ this.activity(activity.relatedActivity, 'relatedActivity', activity, context, params) }}
 	{% else %}
-		{{ this.activity(activity, null, null, context) }}
+		{{ this.activity(activity, null, null, context, params) }}
 	{% endif %}
 {% endfor %}
 
-{% macro activity(activity, activityType, relatedActivity, activityContext) %}
+{% macro activity(activity, activityType, relatedActivity, activityContext, params) %}
     {% import _self as this %}
     <div class="ui segments mp-activity" data-activity-id="{{ activity.id }}">
 	    {% if relatedActivity %}
@@ -42,18 +42,20 @@
 
 	                {% if activity.type != 'group_post' %}
 		                <a href="{{ profileUrl(activity.author) }}">
-			                {% if not activity.sharedActivity %}
-				                <img src="{{ userAvatar(activity.author, 'medium') }}">
+							{% if not activity.friendPost %}
+								<img src="{{ userAvatar(activity.author, 'small') }}" alt="">
+							{% elseif not activity.sharedActivity %}
+				                <img src="{{ userAvatar(activity.author, 'medium') }}" alt="">
 			                {% else %}
-				                <img src="{{ userAvatar(activity.author, 'small') }}">
+				                <img src="{{ userAvatar(activity.author, 'small') }}" alt="">
 			                {% endif %}
 		                </a>
 	                {% else %}
 		                <a href="{{ groupUrl(activity.group) }}">
 			                {% if not activity.sharedActivity %}
-				                <img src="{{ groupLogo(activity.group, 'medium') }}">
+				                <img src="{{ groupLogo(activity.group, 'medium') }}" alt="">
 			                {% else %}
-				                <img src="{{ groupLogo(activity.group, 'small') }}">
+				                <img src="{{ groupLogo(activity.group, 'small') }}" alt="">
 			                {% endif %}
 		                </a>
 	                {% endif %}
@@ -118,6 +120,17 @@
 			                }}
 		                {% endif %}
 	                {% endif %}
+
+					{% if activity.friendPost %}
+						{% if activity.type == 'friend_post' %}
+							{{ translate('Posted from %s activity.')
+								| format(
+									'<a href="' ~  profileUrl(activity.friendPost.author) ~ '">' ~  activity.friendPost.author.displayName ~ '</a>'
+								) | raw
+							}}
+						{% endif %}
+					{% endif %}
+
                     <div class="date">{{ activity.updated_at }}</div>
                 </div>
             </div>
@@ -151,6 +164,16 @@
 							{% endfor %}
 						</div>
 					{% endif %}
+					{% if activity.attachmentFiles %}
+						<div class="mbsActivAttachFilesWr" data-activity-id="{{ activity.id }}">
+							{% for oneAttachId, oneAttach in activity.attachmentFiles %}
+								<a class="mbsOneAttachItem" title="{{ oneAttach['file_info']['name'] }}" href="{{ oneAttach['file_info']['url'] }}" target="_blank" data-id="{{ oneAttach['attachment_all_id'] }}">
+									<i class="icon attach mbsOneAttachIcon"></i>
+									<span class="mbsOneAttachCaption">{{ oneAttach['file_info']['name'] }}</span>
+								</a>
+							{% endfor %}
+						</div>
+					{% endif %}
 
 					{{ environment.dispatcher.dispatch('activity.view.activityContent', [activity]) }}
 
@@ -159,50 +182,57 @@
 							{{ this.activity(activity.sharedActivity, 'sharedActivity') }}
 						</div>
 					{% endif %}
+
+					{% if activity.type == 'friend_post' %}
+						<div class="mp-shared-activity">
+							{{ this.activity(activity.friendPost, 'friendPost') }}
+						</div>
+					{% endif %}
 				{% endif %}
             </div>
         </div>
 
 		{% if relatedActivity.relatedActivity.status != 'deleted' %}
-			{% if activityType != 'sharedActivity' and userLoggedIn  %}
-				<div class="mp-activity-menu ui top right pointing dropdown item">
-					<i class="ellipsis horizontal icon"></i>
-					<div class="menu">
-						{% if activity.type in [
-							'group_post',
-							'group_user_post',
-							'group_created'
-						] %}
-							{% if activity.type not in [
-								'group_created',
-							] %}
-								{% if isCurrentUser(activity.author) %}
-									<div class="item edit-action">{{ translate('Edit') }}</div>
-								{% endif %}
-								{% if canEditGroup(activity.group)  %}
-									<div class="item group-delete-action">{{ translate('Delete') }}</div>
-								{% endif %}
-							{% endif %}
-						{% else %}
-							{% if isCurrentUser(activity.author) or currentUserCan('edit-activity') %}
-								{% if activity.type not in [
-									'user_registered',
-									'follow',
-									'friendship'
-								] %}
-									<div class="item edit-action">{{ translate('Edit') }}</div>
-									<div class="item delete-action">{{ translate('Delete') }}</div>
-								{% endif %}
-							{% endif %}
-						{% endif %}
-						{% if not isCurrentUser(activity.author) %}
-							<div class="item report-action">{{ translate('Report') }}</div>
-						{% endif %}
+
+			{% if activityType != 'sharedActivity' and activityType != 'friendPost' and userLoggedIn and params.isReadPostPage != true %}
+				{% set menuHtml %}
+					{%- if activity.type in ['post', 'group_post', 'shared_post', 'shared_group_post'] -%}
+						<a href="{{ getActivityUrl(activity.id) }}" class="item menu-link-action">{{ translate('Read this post') }}</a>
+					{%- endif -%}
+					{%- if activity.type in ['group_post', 'group_user_post', 'group_created'] -%}
+						{%- if activity.type not in ['group_created',] -%}
+							{%- if isCurrentUser(activity.author) or currentUserCan('edit-activity') -%}
+								<div class="item edit-action">{{ translate('Edit') }}</div>
+							{%- endif -%}
+							{%- if canEditGroup(activity.group) or currentUserCan('edit-activity')  -%}
+								<div class="item group-delete-action">{{ translate('Delete') }}</div>
+							{%- endif -%}
+						{%- endif -%}
+					{%- else -%}
+						{%- if isCurrentUser(activity.author) or currentUserCan('edit-activity') -%}
+							{%- if activity.type not in ['user_registered', 'follow', 'friendship'] -%}
+								<div class="item edit-action">{{ translate('Edit') }}</div>
+								<div class="item delete-action">{{ translate('Delete') }}</div>
+							{%- endif -%}
+						{%- endif -%}
+					{%- endif -%}
+					{%- if not isCurrentUser(activity.author) -%}
+						<div class="item report-action">{{ translate('Report') }}</div>
+					{%- endif -%}
+				{%- endset -%}
+
+				{# if menu exists #}
+				{% if menuHtml | length %}
+					<div class="mp-activity-menu ui top right pointing dropdown item">
+						<i class="ellipsis horizontal icon"></i>
+						<div class="menu">
+							{{ menuHtml|raw }}
+						</div>
 					</div>
-				</div>
+				{% endif %}
 			{% endif %}
 
-			{% if not userLoggedIn and activityType != 'sharedActivity' %}
+			{% if not userLoggedIn and activityType != 'sharedActivity' and activityType != 'friendPost' %}
 				<div class="ui segment">
 					{{ translate('Please <a href="%s">sign up</a> or <a href="%s">sign in</a> to like or write comments on this post.')
 						|format(getRouteUrl('registration'), getRouteUrl('login'))
@@ -210,7 +240,7 @@
 				</div>
 			{% endif %}
 
-			{% if activityType != 'sharedActivity' %}
+			{% if activityType != 'sharedActivity' and activityType != 'friendPost' %}
 				<div class="ui segment mp-activity-actions">
 
 					<a class="like-action {% if activity.likes.likedByCurrentUser %}mp-liked-activity{% endif %}">
@@ -282,7 +312,7 @@
 			{% endif %}
 		{% endif %}
 
-		{% if activityType != 'sharedActivity' and userLoggedIn %}
+		{% if activityType != 'sharedActivity' and activityType != 'friendPost' and userLoggedIn %}
 			{% if activity.type starts with 'group' or currentUserHasPermission('view-comments', activity.author) %}
 				<div class="ui secondary segment mp-activity-comments" {% if not activity.comments %}style="display: none"{% endif %}>
 					<div class="ui equal width grid mp-previous-comments" {% if activity.comments.comments|length == activity.comments.count %}style="display: none"{% endif %}>

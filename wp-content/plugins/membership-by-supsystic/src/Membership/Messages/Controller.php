@@ -67,13 +67,27 @@ class Membership_Messages_Controller extends Membership_Base_Controller
 				);
 			}
 
+			// save attachments
+			$attachmentArr = $parameters->get('attachments', array());
+			$attachmentAllModel = $this->getModule('Messages')->getModel('MessageAttachments');
+			$saveAttachmentRes = $attachmentAllModel->saveAttachmentForMessage(array(
+				'attachment_all_id' => $attachmentArr,
+				'message_id' => (int) $addMessage['messageId'],
+			));
+
 			$messages = $conversationModel->getMessageById($addMessage['messageId'], $currentUserId);
+			// add attachments to messages
+			$attachmentAllModel->addAttachmentToMessageArray($messages);
 
 			return $this->response(
 				'ajax',
 				array(
 					'success' => true,
-					'html' => $this->render('@messages/partials/messages.twig', array('messages' => $messages))
+					'attachmentErr' => (!$saveAttachmentRes) ? $this->translate('Message attachment save error!') : null,
+					'html' => $this->render('@messages/partials/messages.twig', array(
+						'messages' => $messages,
+						'attachmentIcon' => $usersModule->getUsersModuleUrl() . '/assets/images/attachment_icon.png',
+					))
 				)
 			);
 
@@ -88,9 +102,11 @@ class Membership_Messages_Controller extends Membership_Base_Controller
 		$limit = min(max($parameters->get('limit', 0), 1), 50);
 		$lastMessageId = $parameters->get('lastMessageId');
 		$direction = $parameters->get('direction', 1);
-
 		$currentUserId = get_current_user_id();
 		$messages = $conversationModel->getConversationMessages($conversationId, $currentUserId, $limit, $lastMessageId, $direction);
+		$usersModule = $this->getModule('users');
+		$attachmentAllModel = $this->getModule('Messages')->getModel('MessageAttachments');
+		$attachmentAllModel->addAttachmentToMessageArray($messages);
 
 		if ($messages) {
 			$conversationModel->markMessagesAsRead($currentUserId, $conversationId);
@@ -100,7 +116,10 @@ class Membership_Messages_Controller extends Membership_Base_Controller
 			'ajax',
 			array(
 				'success' => true,
-				'html' => $this->render('@messages/partials/messages.twig', array('messages' => $messages)),
+				'html' => $this->render('@messages/partials/messages.twig', array(
+					'messages' => $messages,
+					'attachmentIcon' => $usersModule->getUsersModuleUrl() . '/assets/images/attachment_icon.png',
+				)),
 			)
 		);
 	}
@@ -236,10 +255,18 @@ class Membership_Messages_Controller extends Membership_Base_Controller
 			);
 		}
 
+		$attachmentArr = $parameters->get('attachments', array());
+		$attachmentAllModel = $this->getModule('Messages')->getModel('MessageAttachments');
+		$saveAttachmentRes = $attachmentAllModel->saveAttachmentForMessage(array(
+			'attachment_all_id' => $attachmentArr,
+			'message_id' => (int) $addMessage['messageId'],
+		));
+
 		return $this->response(
 			'ajax',
 			array(
 				'success' => true,
+				'attachmentErr' => (!$saveAttachmentRes) ? $this->translate('Message attachment save error!') : null,
 				'html' => array(
 					'conversationListItem' => $this->getTwig()->render('@messages/partials/conversations-list.twig', array('conversations' => $conversations)),
 					'conversationMessages' => $this->getTwig()->render('@messages/partials/conversations.twig', array('conversations' => $conversations))

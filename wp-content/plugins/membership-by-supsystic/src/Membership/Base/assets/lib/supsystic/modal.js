@@ -73,6 +73,12 @@
 				resizeModal();
 				$modalOverlay.hide().fadeIn();
 			});
+			
+			if( parseInt($('.sc-modal-container').css('top')) > $(window).height()){
+				var offset = $(window).height() / 2 + 40;
+				$('.sc-modal-container').css('top' , offset);
+			}
+			
 		}
 
 		function resizeModal() {
@@ -86,8 +92,9 @@
 		function createInstance($modalTemplate) {
 
 			$modalOverlay = $('<div class="sc-modal-overlay" tabindex="0">').css(modalOverlayStyle);
+			
 			$modalContainer = $('<div class="sc-modal-container">').css(modalContainerStyle);
-
+			
 			$closeModalButton = $('<div class="sc-modal-close-button">&times;</div>').css(closeButtonStyle);
 			$closeModalButton.appendTo($modalOverlay);
 
@@ -134,6 +141,7 @@
 
 				$modalButtons.appendTo($modalContainer);
 			}
+			
 		}
 
 		createInstance(this);

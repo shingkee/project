@@ -9,6 +9,10 @@ class Membership_Groups_Module extends Membership_Base_Module {
 			$this->getConfig('shortcode_name') . '-groups',
 			array($this, 'shortcodeHandler')
 		);
+		add_shortcode(
+			$this->getConfig('shortcode_name') . '-joined-groups',
+			array($this, 'joinedGroupsShortcodeHandler')
+		);
 		add_action('setup_theme', array($this, 'registerRewriteRules'));
 		$this->getDispatcher()->on('activity.relatedData', array($this, 'activityData'), 10, 2);
 
@@ -194,8 +198,19 @@ class Membership_Groups_Module extends Membership_Base_Module {
                 'groups.isNoteOnGroup' => array(
                     'method' => 'post',
                     'handler' => array($this->getController(), 'isNoteOnGroup')
-                )
-
+                ),
+				'groupsCategory.add' => array(
+					'method' => 'post',
+					'handler' => array($this->getController(), 'addGroupCategory')
+				),
+				'groupsCategory.update' => array(
+					'method' => 'post',
+					'handler' => array($this->getController(), 'updateGroupCategory')
+				),
+				'groupsCategory.remove' => array(
+					'method' => 'post',
+					'handler' => array($this->getController(), 'removeGroupCategory')
+				),
 			));
 
 		}
@@ -311,6 +326,43 @@ class Membership_Groups_Module extends Membership_Base_Module {
 		}
 	}
 
+	public function enqueueGroupAddAsset() {
+		$assetsPath = $this->getAssetsPath();
+		// <script type="text/javascript" src="{{ assets('groups', 'js/create-group.frontend.js') }}"></script>
+		$this->getModule('assets')->enqueueAssets(
+			array(),
+			array(
+				$assetsPath . '/js/create-group.frontend.js',
+			),
+			MBS_FRONTEND
+		);
+	}
+
+	public function enqueueJoinGroupAsset() {
+		$assetsPath = $this->getAssetsPath();
+		$usersModule = $this->getModule('Users');
+		$usersAssetsPath = $usersModule->getAssetsPath();
+
+		$baseModule = $this->getModule('Base');
+		$baseAssetsPath = $baseModule->getAssetsPath();
+		$baseModule->enqueueAssets();
+
+		$this->getModule('assets')->enqueueAssets(
+			array(
+				$assetsPath . '/css/groups-list.frontend.css',
+			),
+			array(
+				array(
+					'source' => $assetsPath . '/js/create-group.frontend.js',
+					'dependencies' => array('jquery')
+				),
+				$assetsPath . '/js/groups-list.frontend.js',
+				$assetsPath . '/js/groups.frontend.js',
+			),
+			MBS_FRONTEND
+		);
+	}
+
 	public function enqueueGroupMembersAssets() {
 		$this->getModule('users')->enqueueUsersListsAssets();
 		$this->getModule('assets')->enqueueAssets(
@@ -367,6 +419,7 @@ class Membership_Groups_Module extends Membership_Base_Module {
 		$usersModule = $this->getModule('users');
 		$currentUser = $usersModule->getCurrentuser();
 		$groupsModel = $this->getModel('Groups', 'Groups');
+		$groupCategoryModel = $this->getModel('GroupsCategory', 'Groups');
 
 		$settings = $this->getSettings();
 
@@ -457,7 +510,9 @@ class Membership_Groups_Module extends Membership_Base_Module {
 
 			} elseif ($action === 'settings') {
 				if ($group['currentUserRole'] === 'administrator') {
+					$groupCategoryList = $groupCategoryModel->getGroupCategoryList();
 					$template = '@groups/settings.twig';
+					$templateData['groupCategoryList'] = $groupCategoryList;
 				} else {
 					$error = $this->translate('Your account don\'t have permission to access this page');
 				}
@@ -471,20 +526,50 @@ class Membership_Groups_Module extends Membership_Base_Module {
 			return $this->render($template, $templateData);
 
 		} else {
-
+			$this->enqueueGroupAddAsset();
 			$groupsCounts = $groupsModel->countUserGroups($currentUser['id']);
+			$groupCategoryList = $groupCategoryModel->getGroupCategoryList();
+
+			$joinedType = 'joined';
+			if(isset($settings['base']['groups']['joined-sort-order']) && $settings['base']['groups']['joined-sort-order'] == '1') {
+				$joinedType = 'joined-ordered-by-activity';
+			}
 
 			return $this->render('@groups/groups.twig', array(
 				'counts' => $groupsCounts,
+				'groupCategoryList' => $groupCategoryList,
 				'groups' => array(
 					'all' => $groupsModel->getGroups($currentUser['id'], $groupsModel->limit),
-					'joined' => $groupsModel->getUserGroups($currentUser['id'], 'joined', $groupsModel->limit),
+					'joined' => $groupsModel->getUserGroups($currentUser['id'], $joinedType, $groupsModel->limit),
 					'managed' => $groupsModel->getUserGroups($currentUser['id'], 'managed', $groupsModel->limit),
 					'invited' => $groupsModel->getUserGroups($currentUser['id'], 'invited', $groupsModel->limit)
 				)
 			));
 		}
 
+	}
+
+	public function joinedGroupsShortcodeHandler($attributes) {
+
+		$usersModule = $this->getModule('users');
+		$currentUser = $usersModule->getCurrentuser();
+		$groupsModel = $this->getModel('Groups', 'Groups');
+		$groupCategoryModel = $this->getModel('GroupsCategory', 'Groups');
+
+		//
+		$this->enqueueJoinGroupAsset();
+		$groupCategoryList = $groupCategoryModel->getGroupCategoryList();
+
+		$joinedType = 'joined';
+		$settings = $this->getSettings();
+		if(isset($settings['base']['groups']['joined-sort-order']) && $settings['base']['groups']['joined-sort-order'] == '1') {
+			$joinedType = 'joined-ordered-by-activity';
+		}
+
+		return $this->render('@groups/joined-groups.twig', array(
+			'groupCategoryList' => $groupCategoryList,
+			'joinedGroups' => $groupsModel->getUserGroups($currentUser['id'], $joinedType, $groupsModel->limit),
+		));
 	}
 
 	public function registerRewriteRules() {

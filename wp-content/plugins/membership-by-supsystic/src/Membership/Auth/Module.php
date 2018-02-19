@@ -6,7 +6,7 @@ class Membership_Auth_Module extends Membership_Base_Module {
 
 		$this->addShortcodes();
 		add_action('user_register', array($this, 'userRegistered'));
-
+		add_action('mssl_import_facebook_avatar', array($this, 'importAvatar'));
 
 		$settings = $this->getSettings();
 
@@ -23,7 +23,6 @@ class Membership_Auth_Module extends Membership_Base_Module {
 			}
 
 		}
-
 
 		$routesModule = $this->getModule('routes');
 
@@ -48,16 +47,67 @@ class Membership_Auth_Module extends Membership_Base_Module {
 					'guest' => true,
 					'handler' => array($this->getController(), 'resetPasswordConfirmation')
 				),
-
+				'auth.getNonce' => array(
+					'method' => 'post',
+					'guest' => true,
+					'handler' => array($this->getController(), 'getNonceHandler')
+				),
 			)
 		);
-		
+
 		$routesModule->registerOnRequestAction(
 			array(
 				array($this, 'onRequest')
 			)
 		);
 	}
+
+	public function importAvatar($picture){
+        if(is_null($picture)){ return; }
+        $formData = $_POST['formData'];
+        $userId = null;
+        if(!is_user_logged_in()){
+            $username = $formData['user_login'];
+
+            $user = get_user_by('login', $username);
+            $userId = $user->ID;
+        }else{
+            $userId = get_current_user_id();
+        }
+        /**
+         * @var $imagesModel Membership_Base_Model_Images
+         */
+        $imagesModel = $this->getModel('images', 'base');
+
+        $attachmentId = $imagesModel->uploadAttachmentFromUrl($picture, $userId);
+
+        $images = $imagesModel->createImagesFromAttachments(array($attachmentId), $userId);
+
+        $avatarImage = array_pop($images);
+
+        $cropData = array(
+            'x' => 0,
+            'y' => 0,
+            'height' => $avatarImage['height'],
+            'width' => $avatarImage['width'],
+            'rotate' => 0
+        );
+
+        $settings = $this->getModule('base')->getSettings();
+
+        $sizes = array(
+            $settings['profile']['avatar-size'],
+            $settings['profile']['avatar-large-size'],
+            $settings['profile']['avatar-medium-size'],
+            $settings['profile']['avatar-small-size']
+        );
+
+        foreach ($sizes as $size) {
+            $imagesModel->cropImage($avatarImage, $cropData, $size['width'], $size['height']);
+        }
+
+        $imagesModel->setUserAvatar($userId, $avatarImage['id'], serialize($cropData));
+    }
 
 	public function enqueueLoginAssets() {
 		$baseModule = $this->getModule('Base');

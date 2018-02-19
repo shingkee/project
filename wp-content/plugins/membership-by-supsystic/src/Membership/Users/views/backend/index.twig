@@ -28,8 +28,12 @@
 			<i class="fa fa-user"></i>{{ translate('Main') }}
 		</a>
 		<a href="#" class="tab" data-target="fields">
-			<i class="fa fa-list-alt"></i>{{ translate('Registration Fields') }}
+			<i class="fa fa-list-alt"></i>{{ translate('User Fields') }}
 		</a>
+		{#<button data-save-settings class="save-settings sc-button icon-button primary">#}
+			{#<i class="fa fa-save"></i>#}
+			{#<span>{{ translate('Save Settings') }}</span>#}
+		{#</button>#}
 	</div>
 {% endblock %}
 
@@ -40,7 +44,7 @@
 
 	{% import _self as f %}
 	<div class="sc-tabs-container">
-		<div class="sc-tab-content active" data-tab="main">
+		<div class="sc-tab-content mbsProfileTabMenu active" data-tab="main">
 			
 			<div class="sc-header">
 				<h2>{{ translate('Profile') }}</h2>
@@ -67,7 +71,9 @@
 					{{ options.selectRow(translate('Default User role'), 
 						_roles,
 						'default-role',
-						'default-role'
+						'default-role',
+						null,
+						{'mbsThinCol': 1}
 					) }}
 
 					{{ options.radioRow(translate('Use Profile Avatar'), 
@@ -83,7 +89,8 @@
 							'value': 'no',
 							'checked': settings['use-avatar'] == 'no'
 						}], 
-						'use-avatar'
+						'use-avatar',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.radioRow(translate('Use Profile Gravatar'), 
@@ -99,12 +106,13 @@
 							'value': 'no',
 							'checked': settings['use-gravatar'] == 'no'
 						}], 
-						'use-gravatar'
+						'use-gravatar',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					<div class="mp-option" id="avatar-size">
 						<div class="row">
-							<div class="col-md-4">
+							<div class="col-md-4 mbsThinCol">
 								{{ options.label(translate('Profile Avatar Size')) }}
 							</div>
 							<div class="col-md-8">
@@ -123,7 +131,7 @@
 
 					<div class="mp-option" id="avatar-large-size">
 						<div class="row">
-							<div class="col-md-4">
+							<div class="col-md-4 mbsThinCol">
 								{{ options.label(translate('Avatar Thumbnail Large Size')) }}
 							</div>
 							<div class="col-md-8">
@@ -142,7 +150,7 @@
 
 					<div class="mp-option" id="avatar-medium-size">
 						<div class="row">
-							<div class="col-md-4">
+							<div class="col-md-4 mbsThinCol">
 								{{ options.label(translate('Avatar Thumbnail Medium Size')) }}
 							</div>
 							<div class="col-md-8">
@@ -161,7 +169,7 @@
 
 					<div class="mp-option" id="avatar-small-size">
 						<div class="row">
-							<div class="col-md-4">
+							<div class="col-md-4 mbsThinCol">
 								{{ options.label(translate('Avatar Thumbnail Small Size')) }}
 							</div>
 							<div class="col-md-8">
@@ -183,7 +191,7 @@
 
 					<div class="mp-option" id="default-avatar">
 						<div class="row">
-							<div class="col-md-4">
+							<div class="col-md-4 mbsThinCol">
 								{{ options.label(translate('Default Avatar Image')) }}
 							</div>
 							<div class="col-md-8">
@@ -250,12 +258,13 @@
 							'value': 'no',
 							'checked': settings['use-cover'] == 'no'
 						}], 
-						'use-cover'
+						'use-cover',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					<div class="mp-option" id="cover-size">
 						<div class="row">
-							<div class="col-md-4">
+							<div class="col-md-4 mbsThinCol">
 								{{ options.label(translate('Profile Cover Size')) }}
 							</div>
 							<div class="col-md-8">
@@ -274,7 +283,7 @@
 
 					<div class="mp-option" id="cover-small-size">
 						<div class="row">
-							<div class="col-md-4">
+							<div class="col-md-4 mbsThinCol">
 								{{ options.label(translate('Cover Thumbnail Medium Size')) }}
 							</div>
 							<div class="col-md-8">
@@ -293,7 +302,7 @@
 
 					<div class="mp-option" id="cover-small-size">
 						<div class="row">
-							<div class="col-md-4">
+							<div class="col-md-4 mbsThinCol">
 								{{ options.label(translate('Cover Thumbnail Small Size')) }}
 							</div>
 							<div class="col-md-8">
@@ -314,7 +323,7 @@
 
 					<div class="mp-option" id="default-cover">
 						<div class="row">
-							<div class="col-md-4">
+							<div class="col-md-4 mbsThinCol">
 								{{ options.label(translate('Default Cover Image')) }}
 							</div>
 							<div class="col-md-8">
@@ -379,7 +388,9 @@
 					{{ options.selectRow(translate('Profile Permalink Base'), 
 						permalinks,
 						'permalink-base',
-						'permalink-base'
+						'permalink-base',
+						null,
+						{'mbsThinCol': 1}
 					) }}
 
 
@@ -399,12 +410,19 @@
 							'title': translate('Last Name First Name'),
 							'selected': settings['display-name'] == 'lastname-firstname'
 						},
+						{
+							'value': 'nickname',
+							'title': translate('Nickname '),
+							'selected': settings['display-name'] == 'nickname',
+						},
 					] %}
 
 					{{ options.selectRow(translate('User Display Name'), 
 						displayNames,
 						'display-name',
-						'display-name'
+						'display-name',
+						null,
+						{'mbsThinCol': 1}
 					) }}
 
 			
@@ -427,7 +445,8 @@
 							'name': 'registration-confirmation',
 							'checked': settings['registration-confirmation'] == 'admin-confirmation'
 						}],
-						'registration-confirmation'
+						'registration-confirmation',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 						
@@ -702,21 +721,28 @@
 
 			<hr>
 			<div class="row field-states">
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<label class="sc-checkbox">
 						<input type="checkbox" name="registration" value="true">
 						{{ translate('Registration') }}
 						<div class="sc-checkbox-state"></div>
 					</label>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<label class="sc-checkbox">
-						<input type="checkbox" name="required" value="true">
+						<input type="checkbox" name="required" value="true" id="popup-required">
 						{{ translate('Required') }}
 						<div class="sc-checkbox-state"></div>
 					</label>
 				</div>
-				<div class="col-md-4">
+                <div class="col-md-3">
+                    <label class="sc-checkbox">
+                        <input type="checkbox" name="asterisk" value="true" id="popup-asterisk">
+                        {{ translate('Asterisk') }}
+                        <div class="sc-checkbox-state"></div>
+                    </label>
+                </div>
+				<div class="col-md-3">
 					<label class="sc-checkbox">
 						<input type="checkbox" name="enabled" value="true" checked>
 						{{ translate('Enabled') }}
@@ -727,7 +753,7 @@
 
 			<div class="field-options-container sc-hidden">
 				<hr>
-				<div class="row">
+				<div class="row mbsModalEditAddToDdOpt">
 					<div class="col-md-4">
 						<label class="sc-label">{{ translate('Option Name') }}</label>
 					</div>

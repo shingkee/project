@@ -1,6 +1,9 @@
 <?php
 class Membership_Users_Module extends Membership_Base_Module {
 
+	private static $isInitSendMessageModalWnd = false;
+	private static $isInitSendMessageAttTempl = false;
+
 	private $currentUser;
 	private $requestedUser;
 
@@ -8,6 +11,12 @@ class Membership_Users_Module extends Membership_Base_Module {
 		if (!$this->currentUser) {
 			$this->currentUser = $this->getModel('profile')->getCurrentUser();
 			if ($this->currentUser) {
+
+				$this->currentUser = $this->getDispatcher()->apply(
+					'badges.addBadgesOne',
+					array($this->currentUser)
+				);
+
 				$this->getTwig()->addGlobal('currentUser', $this->currentUser);
 			}
 		}
@@ -61,7 +70,9 @@ class Membership_Users_Module extends Membership_Base_Module {
 		$this->getDispatcher()->on('activity.buildActivitySelectQuery', array($this, 'activityQueryBuild'), 10, 1);
 		$this->getDispatcher()->on('activity.view.activityTitle', array($this, 'activityTitle'), 10, 1);
 		$this->getDispatcher()->on('activity.view.activityContent', array($this, 'activityContent'), 10, 1);
-
+		$this->getDispatcher()->on('userBadges', array($this, 'membersShortcodeHandler'));
+		$this->getDispatcher()->on('users.send.message.modal.wnd', array($this, 'renderSendMessageModalWnd'), 10, 1);
+		$this->getDispatcher()->on('users.send.message.attachment.template', array($this, 'renderSendMessageAttachmTemplate'), 10, 1);
 
 		if (!$this->isModule('users')) {
 			return;
@@ -128,6 +139,12 @@ class Membership_Users_Module extends Membership_Base_Module {
 				'admin' => true,
 				'method' => 'post',
 				'handler' => array($this->getController(), 'saveSettings')
+			),
+
+			'users.showAllMembers' => array(
+				'admin' => true,
+				'method' => '',
+				'handler' => array($this, 'membersShortcodeHandler')
 			),
 
 			'users.getFields' => array(
@@ -198,6 +215,10 @@ class Membership_Users_Module extends Membership_Base_Module {
 				'admin' => true,
 				'handler' => array($this->getController(), 'bulkUpdate')
 			),
+			'users.wpLogout' => array(
+				'method' => 'post',
+				'handler' => array($this->getController(), 'wpLogout'),
+			),
 		));
 
         $settings = $this->getSettings();
@@ -205,9 +226,9 @@ class Membership_Users_Module extends Membership_Base_Module {
         if ($settings['base']['main']['friends'] === 'true') {
             $routesModule->registerAjaxRoutes(array(
                 'users.friends.add' => array(
-                    'method' => 'post',
-                    'handler' => array($this->getController(), 'addFriend')
-                ),
+		            'method' => 'post',
+		            'handler' => array($this->getController(), 'addFriend')
+	            ),
                 'users.friends.remove' => array(
                     'method' => 'post',
                     'handler' => array($this->getController(), 'removeFriend')
@@ -236,6 +257,10 @@ class Membership_Users_Module extends Membership_Base_Module {
                     'handler' => array($this->getController(), 'getFollowers'),
                     'guest' => true
                 ),
+//                'users.followers.post' => array(
+//	                'method' => 'post',
+//	                'handler' => array($this->getController(), 'getFollowers'),
+//                ),
                 'users.followers.follow' => array(
                     'method' => 'post',
                     'handler' => array($this->getController(), 'follow')
@@ -382,6 +407,10 @@ class Membership_Users_Module extends Membership_Base_Module {
 			} else {
 				$this->requestedUser = $usersModel->getUserById($requestUserName);
 			}
+			$this->requestedUser = $this->getDispatcher()->apply(
+				'badges.addBadgesOne',
+				array($this->requestedUser)
+			);
 		}
 
 		/**
@@ -406,6 +435,7 @@ class Membership_Users_Module extends Membership_Base_Module {
 				$mailModule->sendAccountWelcomeEmail($this->requestedUser);
 				$mailModule->sendNewUserNotificationEmail($this->requestedUser);
 				$this->getModule('Routes')->replaceContentWith('@users/account-confirmed.twig');
+				return;
 			}
 		}
 
@@ -523,6 +553,7 @@ class Membership_Users_Module extends Membership_Base_Module {
 							break;
 						case 'messages':
 							$this->getModule('Messages')->enqueueMessagesAssets();
+							$this->enqueueAttachmentAssets();
 							break;
 						case 'posts':
 							$this->enqueuePostsAssets();
@@ -580,6 +611,7 @@ class Membership_Users_Module extends Membership_Base_Module {
 									array('error' => $this->translate('Profile is not exists.'))
 								);
 							}
+							$this->enqueueUsersListsAssets();
 						}
 					}
 
@@ -754,9 +786,20 @@ class Membership_Users_Module extends Membership_Base_Module {
 				)
 			),
 			array(
-				$assetsPath . '/js/users-list.frontend.js'
+				$assetsPath . '/js/attachment.frontent.js',
+				$assetsPath . '/js/users-list.frontend.js',
 			),
 			MBS_FRONTEND
+		);
+	}
+
+	public function enqueueAttachmentAssets() {
+		$assetsPath = $this->getAssetsPath();
+		$this->getModule('assets')->enqueueAssets(array(
+
+			), array(
+				$assetsPath . '/js/attachment.frontent.js',
+			), MBS_FRONTEND
 		);
 	}
 
@@ -765,6 +808,7 @@ class Membership_Users_Module extends Membership_Base_Module {
 			array($this, 'shortcodeHandler'));
         add_shortcode($this->getConfig('shortcode_name') . '-members',
             array($this, 'membersShortcodeHandler'));
+		add_shortcode($this->getConfig('shortcode_name') . '-user-avatar', array($this, 'userAvatarShortCodeHandler'));
 	}
 
 	public function registerRewriteRules() {
@@ -808,7 +852,12 @@ class Membership_Users_Module extends Membership_Base_Module {
 		}
 	}
 
-	public function membersShortcodeHandler() {
+	public function membersShortcodeHandler($params = array()) {
+
+		$userMetaKey = isset($params['meta_key']) ? $params['meta_key'] : false;
+		$userMetaValue = isset($params['meta_value']) ? $params['meta_value'] : false;
+		$currentUser = $this->getCurrentUser();
+		$currentId = $currentUser['id'];
 
 		if (!$this->currentUserCan('access-to-members-page')) {
 			return $this->render('@base/error.twig', array('error' => $this->translate('Your account don\'t have permission to see members page')));
@@ -817,9 +866,11 @@ class Membership_Users_Module extends Membership_Base_Module {
 		$settings = $this->getSettings();
 
 		$profileModel = $this->getModel('Profile');
+		$rolesModel = $this->getModel('roles', 'roles');
 		$data = array();
 		$usersPerRequest = 10;
 		$search = $this->getRequest()->query->get('search', null);
+		$userRoleId = $this->getRequest()->query->get('role_id', 0);
 
 //		/**
 //		 * Check if user privacy rule (show in members directory) set to yes
@@ -828,24 +879,39 @@ class Membership_Users_Module extends Membership_Base_Module {
 //		$extraQuery = "LEFT JOIN {wp_base_prefix}usermeta AS um ON (um.user_id = u.ID and meta_key = 'membership_privacy')";
 //		$extraWhere = "AND (um.meta_value REGEXP '.*\"show-in-members-directory\";s:[0-9]+:\"yes\".*' OR um.meta_value IS NULL)";
 
-
 		if (@$settings['design']['members']['show-pages'] === 'true') {
 			$page = $this->getRequest()->query->get('offset', 1);
-			$totalCount = $profileModel->getUsersCount(
-				array('search' => $search)
-			);
+			$userType = $this->getRequest()->query->get('type', 'all');
 			$offset = ($page - 1) * $usersPerRequest;
 
 			$data['currentPage'] = $page;
-			$data['totalPages'] = max(ceil($totalCount / $usersPerRequest), 1);
+			$data['userRoleId'] = $userRoleId;
+			global $wp;
+			$data['membersPageUrl'] = home_url( $wp->request );
 
-			if ($search) {
-				$users = $profileModel->searchByName(array(
+			if ($search || $userRoleId) {
+				$dataArray = array(
 					'search' => $search,
-					'limit' => $usersPerRequest,
-					'offset' => $offset
-				));
+					'userRoleId' => $userRoleId,
+					'searchBy' => array(
+						'username' => 1,
+						'lastname' => 1,
+						'firstname' => 1,
+					),
+				);
 
+				$totalCount = $profileModel->getUsersCountByParams($dataArray);
+				$data['totalPages'] = max(ceil($totalCount / $usersPerRequest), 1);
+
+				$dataArray['limit'] = $usersPerRequest;
+				$dataArray['offset'] = $offset;
+
+				if($userMetaKey && $userMetaValue){
+					$dataArray['meta_key'] = $userMetaKey;
+					$dataArray['meta_value'] = $userMetaValue;
+				}
+
+				$users = $profileModel->getUsersIdsByParams($dataArray);
 				if ($users) {
 					$_users = implode(', ', $users);
 					$orderBy = " ORDER BY FIELD (u.ID, $_users)";
@@ -854,19 +920,75 @@ class Membership_Users_Module extends Membership_Base_Module {
 
 				$data['users'] = $users;
 			} else {
-				$data['users'] = $profileModel->getUsers(array(
-					'limit' => $usersPerRequest,
-					'offset' => $offset
-				));
+				$dataArray = array(
+					'userRoleId' => $userRoleId,
+					'searchBy' => array(
+						'username' => 1,
+						'lastname' => 1,
+						'firstname' => 1,
+					),
+					'userType' => $userType,
+				);
+
+				$totalCount = $profileModel->getUsersCountByParams($dataArray);
+				$data['totalPages'] = max(ceil($totalCount / $usersPerRequest), 1);
+
+				$dataArray['limit'] = $usersPerRequest;
+				$dataArray['offset'] = $offset;
+
+				if($userMetaKey && $userMetaValue){
+					$dataArray['meta_key'] = $userMetaKey;
+					$dataArray['meta_value'] = $userMetaValue;
+				}
+
+				//$userType = 'followers';
+				switch ($userType) {
+					case 'all':
+						$users = $profileModel->getUsersIdsByParams($dataArray);
+						if ($users) {
+							$_users = implode(', ', $users);
+							$orderBy = " ORDER BY FIELD (u.ID, $_users)";
+							$users = $profileModel->getUsersByIds(array('users' => $users, 'orderBy' => $orderBy));
+						}
+						$data['users'] = $users;
+						$data['userType'] = $userType;
+						break;
+					case 'friends':
+						$totalCount = $currentUser['friends'];
+						$data['totalPages'] = max(ceil($totalCount / $usersPerRequest), 1);
+						$data['users'] = $this->getModel('Friends')->getUserFriends($currentId, $usersPerRequest, $offset);
+						$data['userType'] = $userType;
+						break;
+					case 'follows':
+						$totalCount = $currentUser['follows'];
+						$data['totalPages'] = max(ceil($totalCount / $usersPerRequest), 1);
+						$data['users'] = $this->getModel('Followers')->getUserFollows($currentId, $usersPerRequest, $offset);
+						$data['userType'] = $userType;
+						break;
+					case 'followers':
+						$totalCount = $currentUser['followers'];
+						$data['totalPages'] = max(ceil($totalCount / $usersPerRequest), 1);
+						$data['users'] = $this->getModel('Followers')->getUserFollowers($currentId, $usersPerRequest, $offset);
+						$data['userType'] = $userType;
+						break;
+				}
+
 			}
 
 		} else {
 			if ($search) {
-				$users = $profileModel->searchByName(array(
+				$dataArray = array(
 					'search' => $search,
 					'limit' => $usersPerRequest,
 					'offset' => 0
-				));
+				);
+				if($userMetaKey && $userMetaValue){
+					$dataArray['meta_key'] = $userMetaKey;
+					$dataArray['meta_value'] = $userMetaValue;
+				}
+				$usersFirst = $profileModel->searchByName($dataArray);
+				$usersSecond = $profileModel->searchByName($dataArray, true);
+				$users = array_unique(array_merge($usersFirst, $usersSecond));
 
 				if ($users) {
 					$_users = implode(', ', $users);
@@ -875,14 +997,27 @@ class Membership_Users_Module extends Membership_Base_Module {
 				}
 
 				$data['users'] = $users;
-
 			} else {
-				$data['users'] = $profileModel->getUsers(array(
+				$dataArray = array(
 					'limit' => $usersPerRequest,
 					'offset' => 0
-					));
+				);
+				if($userMetaKey && $userMetaValue){
+					$dataArray['meta_key'] = $userMetaKey;
+					$dataArray['meta_value'] = $userMetaValue;
+				}
+				$data['users'] = $profileModel->getUsers($dataArray);
 			}
 		}
+		if($currentUser){
+			$dataArray['limit'] = 100000;
+			$totalCount = count($profileModel->getUsers($dataArray));
+			$data['current_user_id'] = $currentId;
+			$data['user'] = $currentUser;
+			$data['total_count'] = $totalCount;
+		}
+
+		$data['userRoleList'] = $rolesModel->getUserRolesForSelect($userRoleId);
 
 		return $this->render('@users/members.twig', $data);
 	}
@@ -901,6 +1036,10 @@ class Membership_Users_Module extends Membership_Base_Module {
 			 */
 			if (!$isCurrentUser) {
 				$rolesAccess = $this->getCurrentUserRolesAccessPermissions();
+				// fix empty data
+				if(!$rolesAccess) {
+					$rolesAccess = array();
+				}
 
 				if (isset($requestedUser['role_id']) &&
 				    !in_array($requestedUser['role_id'], $rolesAccess) &&
@@ -986,6 +1125,15 @@ class Membership_Users_Module extends Membership_Base_Module {
 						if ($blockedUsers) {
 							$renderData['blockedUsers'] = $usersModel->getUsersByIds(array('users' => $blockedUsers));
 						}
+						if(!empty($settings['design']['activity']['type']['shares'])
+							&& !empty($settings['design']['activity']['type']['friendPostOn'])
+							&& !empty($settings['design']['activity']['type']['friendPostOnShowInFrontend'])
+							&& $settings['design']['activity']['type']['shares'] == 'true'
+							&& $settings['design']['activity']['type']['friendPostOn'] == 1
+							&& $settings['design']['activity']['type']['friendPostOnShowInFrontend'] == 1
+						) {
+							$renderData['bConfig']['showFriendPostOpt'] = 1;
+						}
 
 						$renderData['template'] = '@users/settings.twig';
 					} else {
@@ -999,9 +1147,8 @@ class Membership_Users_Module extends Membership_Base_Module {
 
 						$fieldsData = $fieldsModel->getUserFieldsData(
 							$requestedUser['id'],
-							array('user_login', 'user_email', 'user_pass', 'user_pass_confirm', 'g-recaptcha-response')
+							array('user_email', 'user_pass', 'user_pass_confirm', 'g-recaptcha-response')
 						);
-
 						$renderData['fields'] = $fieldsData['fields'];
 						$renderData['sections'] = $fieldsData['sections'];
 						$renderData['template'] = '@users/about.twig';
@@ -1017,9 +1164,17 @@ class Membership_Users_Module extends Membership_Base_Module {
 								$renderData['template'] = '@base/error.twig';
 								$renderData['error'] = $this->translate('Your account don\'t have permission to read groups');
 							} else {
+								$joinedType = 'joined';
+								if(isset($settings['base']['groups']['joined-sort-order']) && $settings['base']['groups']['joined-sort-order'] == '1') {
+									$joinedType = 'joined-ordered-by-activity';
+								}
+
+								$groupCategoryModel = $this->getModel('GroupsCategory', 'Groups');
+								$groupCategoryList = $groupCategoryModel->getGroupCategoryList();
+								$renderData['groupCategoryList'] = $groupCategoryList;
 								$renderData['template'] = '@users/groups.twig';
 								$groupsModel = $this->getModel('Groups', 'Groups');
-								$renderData['groups'] = $groupsModel->getUserGroups($requestedUser['id'], 'joined', 10);
+								$renderData['groups'] = $groupsModel->getUserGroups($requestedUser['id'], $joinedType, 10);
 
 								if ($isCurrentUser) {
 									$renderData['groupCounts'] = $groupsModel->countUserGroups($requestedUser['id']);
@@ -1143,6 +1298,8 @@ class Membership_Users_Module extends Membership_Base_Module {
 				case 'posts':
 					if ($settings['base']['main']['posts'] === 'true') {
 						$renderData['template'] = '@users/posts.twig';
+						$renderData['createNewPostUrl'] = admin_url('post-new.php');
+						$renderData['canUserCreatePost'] = current_user_can('publish_posts');
 
 						if ($this->currentUserHasPermission('view-posts', $requestedUser)) {
 							$postsModel = $this->getModel('Posts');
@@ -1256,6 +1413,10 @@ class Membership_Users_Module extends Membership_Base_Module {
         return $settings['profile']['permalink-base'];
 	}
 
+	public function getUsersModuleUrl() {
+		return plugins_url(null, __FILE__);
+	}
+
 	public function showAdminProfileFields($user) {
 		$userId = null;
 		$userStatus = Membership_Users_Model_Fields::STATUS_ACTIVE;
@@ -1308,10 +1469,17 @@ class Membership_Users_Module extends Membership_Base_Module {
 			$displayName = $firstName . ' ' . $lastName;
 		} elseif ($displayNameOption == 'lastname-firstname') {
 			$displayName = $lastName . ' ' . $firstName;
+		} elseif($displayNameOption == 'nickname') {
+			if(!empty($user['nickname'])) {
+				$displayName = $user['nickname'];
+			}
 		}
 
 		if ($displayName == ' ') {
             $displayName = $user['user_login'];
+		}
+		if(!$displayName) {
+			$displayName = $user['user_login'];
 		}
 
 		return $displayName;
@@ -1382,6 +1550,8 @@ class Membership_Users_Module extends Membership_Base_Module {
 	 */
 	public function setRequestedUser(array $requestedUser) {
 		$this->requestedUser = $requestedUser;
+
+
 	}
 
 	public function addToFollowers($currentUserId, $followingUserId) {
@@ -1425,7 +1595,7 @@ class Membership_Users_Module extends Membership_Base_Module {
 				$activity['target'] = $data['users'][$activity['target_id']];
 			}
 
-			if ($activity['type'] === 'friendship') {
+			if ($activity['type'] === 'friendship' && !empty($data['users'][$activity['target_id']])) {
 				$activity['target'] = $data['users'][$activity['target_id']];
 			}
 		}
@@ -1483,4 +1653,48 @@ class Membership_Users_Module extends Membership_Base_Module {
 	    $notificationModel = $this->getModel('Notifications', 'Notifications');
 	    $notificationModel->setViewed($id);
     }
+
+	public function renderSendMessageModalWnd() {
+		if(!self::$isInitSendMessageModalWnd) {
+			echo $this->render('@users/partials/users-send-message-modal.twig', array(
+					'useAttachment' => 1,
+			));
+			self::$isInitSendMessageModalWnd = true;
+		}
+		return null;
+	}
+
+	public function renderSendMessageAttachmTemplate() {
+		if(!self::$isInitSendMessageAttTempl) {
+			$attachmentIconUrl = $this->getUsersModuleUrl() . '/assets/images/attachment_icon.png';
+			echo $this->render('@users/partials/users-send-message-attachment-template.twig', array(
+				'attachmentIcon' => $attachmentIconUrl,
+			));
+			self::$isInitSendMessageAttTempl = true;
+		}
+		return null;
+	}
+
+	public function userAvatarShortCodeHandler($scParams) {
+		if(!empty($scParams['user-id'])) {
+			$userId = (int) $scParams['user-id'];
+		}
+		if(empty($userId) || $userId <= 0) {
+			$userId = get_current_user_id();
+		}
+
+		$profileModel = $this->getModel('profile');
+		$userInfo = $profileModel->getUserById($userId);
+
+		if(empty($userInfo['id'])) {
+			return null;
+		}
+
+		$userSettings = $this->getModel('settings')->getSettings();
+
+		return $this->render('@users/avatar-shortcode.twig', array(
+			'userInfo' => $userInfo,
+			'userSettings' => $userSettings,
+		));
+	}
 }

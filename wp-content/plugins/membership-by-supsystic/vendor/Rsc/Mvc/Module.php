@@ -151,8 +151,18 @@ class Rsc_Mvc_Module
     {
         $action = $this->request->query->get('action', 'index') . 'Action';
 
-        if (method_exists($this->getController(), $action)) {
-            return call_user_func_array(array($this->getController(), $action), array(
+        $controller = $this->getController();
+
+        if (method_exists($controller, $action)) {
+
+            $requireNonces = $controller->requireNonces();
+
+            if (in_array($action, $requireNonces)) {
+				$plugMenuSets = $this->getEnvironment()->getConfig()->get('plugin_menu');
+				check_admin_referer($plugMenuSets['menu_slug']);
+            }
+
+            return call_user_func_array(array($controller, $action), array(
                 $this->request
             ));
         }

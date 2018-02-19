@@ -8,4 +8,4 @@ CREATE TABLE IF NOT EXISTS `%prefix%users_statuses` (
   KEY `%prefix%users_statuses_user_id_index` (`user_id`)
 ) COLLATE='utf8_general_ci' ENGINE=InnoDB;
 
-INSERT INTO `%prefix%users_statuses` (user_id, user_status) SELECT ID, user_status FROM %wp_base_prefix%users;
+INSERT INTO `%prefix%users_statuses` (user_id, user_status) SELECT ID, user_status FROM %wp_base_prefix%users wu WHERE wu.id NOT IN(SELECT user_id FROM `%prefix%users_statuses`);

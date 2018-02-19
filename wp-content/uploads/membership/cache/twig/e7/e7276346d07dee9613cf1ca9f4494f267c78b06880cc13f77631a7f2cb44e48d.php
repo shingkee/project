@@ -35,7 +35,7 @@ class __TwigTemplate_c29813cda768ca110d74b73f3b293828d0f1ddf81e74af08a595f5865de
 \t<i class=\"close icon\"></i>
 \t<div class=\"image-content\">
 \t\t<div class=\"image\">
-\t\t\t<img>
+\t\t\t<img alt=\"\"/>
 \t\t</div>
 \t</div>
 </div>

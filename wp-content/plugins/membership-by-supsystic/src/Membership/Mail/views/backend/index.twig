@@ -10,12 +10,6 @@
 		<a href="#" class="tab" data-target="notifications">
 			<i class="fa fa-bell"></i>{{ translate('Notifications') }}
 		</a>
-	</div>
-{% endblock %}
-
-{% block mainHeader %}
-	<div class="sc-header">
-		<h2>{{ translate('Mails') }}</h2>
 		<button data-save-settings class="save-settings sc-button icon-button primary">
 			<i class="fa fa-save"></i>
 			<span>{{ translate('Save Settings') }}</span>
@@ -23,8 +17,14 @@
 	</div>
 {% endblock %}
 
+{% block mainHeader %}
+	<div class="sc-header">
+		<h2>{{ translate('Mails') }}</h2>
+	</div>
+{% endblock %}
+
 {% block main %}
-	<div class="sc-tab-content active" data-tab="emails">
+	<div class="sc-tab-content active mbsMailsMenuTab" data-tab="emails">
 		<div class="mp-options">
 			<div class="row">
 				<div class="col-md-12">
@@ -33,14 +33,16 @@
 						translate('Mail appears from'),
 						'emails[mail-appears-from]',
 						settings.emails['mail-appears-from'],
-						'mail-appears-from'
+						'mail-appears-from',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.emailRow(
 						translate('Mail appears from address'),
 						'emails[mail-appears-from-address]',
 						settings.emails['mail-appears-from-address'],
-						'mail-appears-from-address'
+						'mail-appears-from-address',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.checkboxSettingRow(
@@ -50,7 +52,7 @@
 							'value': settings.emails['use-html-for-emails'],
 							'checked': settings.emails['use-html-for-emails'] == 'true'
 						}],
-						'use-html-for-emails'
+						null, null, null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.checkboxSettingRow(
@@ -72,7 +74,8 @@
 							'reset': {
 								'label': translate('Reset to Default')
 							}
-						}
+						},
+						null, {'mbsThinCol': 1}
 					) }}
 					
 					{{ options.inputRow(
@@ -110,7 +113,8 @@
 							'reset': {
 								'label': translate('Reset to Default')
 							}
-						}
+						},
+						null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(
@@ -148,7 +152,8 @@
 							'reset': {
 								'label': translate('Reset to Default')
 							}
-						}
+						},
+						null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(
@@ -186,7 +191,8 @@
 							'reset': {
 								'label': translate('Reset to Default')
 							}
-						}
+						},
+						null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(
@@ -224,7 +230,8 @@
 							'reset': {
 								'label': translate('Reset to Default')
 							}
-						}
+						},
+						null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(
@@ -262,7 +269,8 @@
 							'reset': {
 								'label': translate('Reset to Default')
 							}
-						}
+						},
+						null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(
@@ -300,7 +308,8 @@
 							'reset': {
 								'label': translate('Reset to Default')
 							}
-						}
+						},
+						null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(
@@ -339,7 +348,8 @@
 							'reset': {
 								'label': translate('Reset to Default')
 							}
-						}
+						},
+						null, {'mbsThinCol': 1}
 					) }}
 					
 					{{ options.inputRow(
@@ -377,7 +387,8 @@
 							'reset': {
 								'label': translate('Reset to Default')
 							}
-						}
+						},
+						null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(
@@ -415,7 +426,8 @@
 							'reset': {
 								'label': translate('Reset to Default')
 							}
-						}
+						},
+						null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(
@@ -453,7 +465,8 @@
 								'reset': {
 								'label': translate('Reset to Default')
 							}
-						}
+						},
+						null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(
@@ -476,7 +489,7 @@
 		</div>
 	</div>
 
-	<div class="sc-tab-content" data-tab="notifications">
+	<div class="sc-tab-content mbsMailsMenuTabNotification" data-tab="notifications">
 		<div class="mp-options">
 			<div class="row">
 				<div class="col-md-12">
@@ -484,13 +497,15 @@
 					{{ options.inputRow(translate('Messages Refresh Period'),
 						'notifications[messages-refresh-period]',
 						settings.notifications['messages-refresh-period']|default(7),
-						'messages-refresh-period'
+						'messages-refresh-period',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.emailRow(translate('Email address for notifications'),
 						'notifications[notifications-email-address]',
 						settings.notifications['notifications-email-address'],
-						'notifications-email-address'
+						'notifications-email-address',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.checkboxSettingRow(
@@ -512,7 +527,8 @@
 							'reset': {
 								'label': translate('Reset to Default')
 							}
-						}
+						},
+						null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(
@@ -550,7 +566,8 @@
 							'reset': {
 								'label': translate('Reset to Default')
 							}
-						}
+						},
+						null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(
@@ -588,7 +605,8 @@
 							'reset': {
 								'label': translate('Reset to Default')
 							}
-						}
+						},
+						null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(

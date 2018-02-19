@@ -1,8 +1,8 @@
 ﻿===  Membership by Supsystic ===
 Contributors: supsystic.com
 Tags: membership, community, social network, front-end login, front-end registration, profile, member, member directory
-Tested up to: 4.9
-Stable tag: 1.1.25
+Tested up to: 4.9.2
+Stable tag: 1.1.28
 
 Create online membership community with custom user profiles, roles, front end registration and login. Members Directory, activity, groups, messages
 
@@ -124,6 +124,63 @@ To connect Membership plugin with Twitter you need to create your Twitter Applic
 
 
 == Changelog ==
+
+= 1.1.28 / 01.02.2018
+ * Added wpLogout when user delete them account.
+ * Fixed email confirm page.
+ * Remove search by text day count restrict.
+ * Fixed menu button showing for Activity page.
+ * Filled UserGroup Creator.
+ * Added group creator privileges.
+ * Fixed group Members count.
+ * Added Send message to User without text, but with attachments.
+ * Fixed Groups User Search result template.
+ * Fixed plugin activate inserting data.
+ * Fixed bugs with user role settings 'Delete their account'.
+ * Added "Membership Menu Settings" for Edit Navigation Menu items in Admin.
+ * Added shortcode for User Avatar (Example: [supsystic-membership-user-avatar user-id='2']).
+ * Fixed Activity page html markup.
+ * Fixed Extention Tab.
+ * Fixed activity images loading bugs.
+ * Fixed search by hashTag in simple search.
+ * Fixed notice when activate Plugin.
+ * Fixed sorting users profile by meta key in shortcode.
+ * Fixed bugs with "Edit or delete other users activity" option. Now Other User can edit/remove activity posts, group posts and comments.
+ * Added search by Enter for pages: groups; members; profile/groups.
+ * Fixed language Extractor.
+ * Fixed url field for "Redirect after registration to" option in admin.
+ * Added feature to attachment any file to Activity, Group Activity, Comments and replies.
+ * Fixed editing activity images.
+ * Fixed bug for Fields.
+ * Added countries list to user field profile.
+ * Added attachment form User Messages.
+ * Added restriction on number "edit post form" at once.
+ * Fixed Users search.
+ * Fixed access to menu "Read this post".
+ * Added "Read this post" feature in Activity for Group.
+ * Added "Read this post" feature for "shared post" and "shared group post".
+ * Fixed membership page and settings for search by role.
+ * Fixed styles.
+ * Minor issue fix.
+
+= 1.1.27 / 03.01.2018
+ * Fixed activity bugs
+ * Usability improve
+ * Added option Activity link image preview for Amazon.
+ * Added button "Add new post" to profile -> posts.
+ * Fixed activity Social Button style for Firefox.
+ * Fixed post to social. Now User can post states into activity page and profile
+ * Added option "Field sort order" into Main tab.
+ * Added possibility search by name and username in admin panel and frontend.
+ * Added parameters in shortcode "members".
+ * Added protection to registration from bots.
+ * Added tabs in member page to switch friends, followers and follow users.
+ * Fixed "Sort Groups by " value in admin tab.
+ * Added "Friend Post" options.
+ * Created admin crud system for badge module.
+ * Fixed conflict with plugin "NextScripts: Social Networks Auto-Poster".
+ * Added possibility edit images and smile in edit form.
+ * Added Joined Groups shortcode.
 
 = 1.1.25 / 15.11.2017 =
  * Fixed bug with setting of Activity Comment

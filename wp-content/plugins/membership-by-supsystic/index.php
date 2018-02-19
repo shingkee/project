@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Membership by Supsystic
  * Description: Create online membership community with custom user profiles, roles, front end registration / login. Members Directory, Activity, Groups and more
- * Version: 1.1.25
+ * Version: 1.1.28
  * Author: supsystic.com
  * Author URI: https://supsystic.com
  * Text Domain: membership-by-supsystic
@@ -13,5 +13,5 @@
 require_once dirname(__FILE__). '/defines.php';
 require_once dirname(__FILE__). '/app/Membership.php';
 global $scMembership;
-$scMembership = new SupsysticMembership('1.1.25');
+$scMembership = new SupsysticMembership('1.1.28');
 $scMembership->run();

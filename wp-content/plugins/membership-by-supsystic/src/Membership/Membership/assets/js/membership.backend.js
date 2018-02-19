@@ -242,15 +242,25 @@
 
 	});
 
-	$('input[name="main[after-registartion-redirect-url]"],' +
-		' input[name="main[after-login-action-redirect-url]"],' +
-		' input[name="main[after-logout-action-redirect-url]"],' +
-		' input[name="main[after-delete-account-action-redirect-url]"]').hide();
+	var redirectInputNameArr = [
+		'after-registration-action', 'after-login-action', 'after-logout-action', 'after-delete-account-action'
+	];
+
+	for(var indRin = 0; indRin < redirectInputNameArr.length; indRin++) {
+		var $checkBox = $('input[name="main[' + redirectInputNameArr[indRin] + ']"]:checked')
+		,	$urlInput = $('input[name="main[' + redirectInputNameArr[indRin] + '-redirect-url]"]');
+		
+		if($checkBox.length && $checkBox.val() == 'redirect-to-url') {
+			$urlInput.show();
+		} else {
+			$urlInput.hide();
+		}
+	}
 
 	$('input[type="radio"]').on('click', function(event) {
 
 		if (
-			$(this).attr('name') == 'main[after-registartion-action]'
+			$(this).attr('name') == 'main[after-registration-action]'
 			|| $(this).attr('name') == 'main[after-login-action]'
 			|| $(this).attr('name') == 'main[after-logout-action]'
 			|| $(this).attr('name') == 'main[after-delete-account-action]'
@@ -347,7 +357,11 @@
 			$button.removeAttr('disabled');
 		})
 	});
-
+	
+	if ( ! $('input[name="main[badges]"]').is(':checked') ){
+		$('input[name="main[badges]"]').prop("checked", true );
+	}
+	
 	$('.import-ultimate-member-data').on('click', function() {
 		var $button = $(this),
 			notify = $.sNotify({
@@ -369,6 +383,215 @@
 
 			$button.removeAttr('disabled');
 		})
-	})
+	});
+
+	function MembershipBackendMainTab() {
+
+	}
+
+	MembershipBackendMainTab.prototype.init = (function() {
+		this.initGroupTab();
+	});
+
+	MembershipBackendMainTab.prototype.initGroupTab = (function() {
+		var self1 = this
+		,	$saveBtn = $('#mbsSaveNewGroupCategory')
+		,	$cancelBtn = $('#mbsCancelNewGroupCategory')
+		,	$groupCategoryInp = $('#mbsGroupCategoryName')
+		;
+
+		function groupCategoryEditHandler(event) {
+			event.preventDefault();
+
+			var $this = $(this)
+				,	$tableRow = $this.closest('tr')
+				,	recordId = $tableRow.attr('data-id')
+			;
+			$cancelBtn.show();
+
+			if(recordId) {
+				$saveBtn.text($saveBtn.attr('data-update'));
+				$saveBtn.attr('data-id', $tableRow.find('td:nth-of-type(1)').text());
+				$groupCategoryInp.val($tableRow.find('td:nth-of-type(2)').text());
+			}
+		}
+		function groupCategoryRemoveHandler(event) {
+			event.preventDefault();
+			var self2 = this;
+			if(!this.isRemoving) {
+				this.isRemoving = true;
+				var $this = $(this)
+					,	$tableRow = $this.closest('tr')
+					,	recordId = $tableRow.attr('data-id')
+				;
+				if(recordId) {
+					if(confirm($('#mbsMsgGroupCategoryRemove').val())) {
+						// get category id
+						Membership.ajax({
+							'route': 'groupsCategory.remove',
+							'id': recordId,
+						}, {'method': 'post'})
+						.then(function(response) {
+							if(response && response.success) {
+								$.sNotify({
+									'content': '<span>' + $('#mbsMsgRemoveSuccessfully').val() + '</span>',
+									'delay': 3000,
+								});
+								$tableRow.remove();
+							} else {
+								var errMsg = $('#mbsMsgErrorOcured-1').val();
+								if(response.message) {
+									errMsg = response.message;
+								}
+								$.sNotify({
+									'content': '<span>' + errMsg + '</span>',
+									'delay': 3000,
+								});
+							}
+						})
+						.fail(function(responce) {
+							var message = $('#mbsMsgErrorOcured-1').val();
+							if(responce.statusText) {
+								message = responce.statusText;
+							}
+							$.sNotify({
+								'content': '<span>' + message + '</span>',
+								'delay': 3000,
+							});
+						})
+						.always(function(response) {
+							self2.isRemoving = false;
+						});
+					}
+				}
+			}
+		}
+
+		$saveBtn.on('click', function(event) {
+			// hide buttons
+			$saveBtn.prop('disabled', true);
+			if($saveBtn.text() == $saveBtn.attr('data-add')) {
+				var categoryName = $groupCategoryInp.val()
+				,	categoryId = 0;
+
+				Membership.ajax({
+					'route': 'groupsCategory.add',
+					'categoryName': categoryName,
+				}, {'method': 'post'})
+				.then(function(response) {
+					if(response && response.success) {
+						categoryId = response.newId;
+						var	$rowToAdd =  $('<tr id="mbsGcTblRow-' + categoryId + '" data-id="' + categoryId + '">'
+							+ '<td>' + categoryId + '</td>'
+							+ '<td>' + categoryName + '</td>'
+							+ '<td>'
+							+ '<a href="#" class="mbsGroupCategoryEdit">' + $('#mbsTxtEdit').val() + '</a> '
+							+ '<a href="#" class="mbsGroupCategoryRemove">' + $('#mbsTxtRemove').val() + '</a>'
+							+ '</td>'
+							+ '</tr>')
+						,	$editLink = $rowToAdd.find('.mbsGroupCategoryEdit')
+						,	$removeLink = $rowToAdd.find('.mbsGroupCategoryRemove')
+						;
+						$('#mbsGroupCategoryTbl tbody').append($rowToAdd);
+
+						$editLink.on('click', groupCategoryEditHandler);
+						$removeLink.on('click', groupCategoryRemoveHandler);
+
+						$.sNotify({
+							'content': '<span>' + $('#mbsMsgSavedSuccessfully').val() + '</span>',
+							'delay': 3000,
+						});
+						// reset entry
+						$groupCategoryInp.val('');
+					} else {
+						var errMsg = $('#mbsMsgErrorOcured-1').val();
+						if(response.message) {
+							errMsg = response.message;
+						}
+						$.sNotify({
+							'content': '<span>' + errMsg + '</span>',
+							'delay': 3000,
+						});
+					}
+				})
+				.fail(function(responce) {
+					var message = $('#mbsMsgErrorOcured-1').val();
+					if(responce.statusText) {
+						message = responce.statusText;
+					}
+					$.sNotify({
+						'content': '<span>' + message + '</span>',
+						'delay': 3000,
+					});
+				})
+				.always(function(response) {
+					// show buttons
+					$saveBtn.prop('disabled', false);
+				});
+			} else if($saveBtn.text() == $saveBtn.attr('data-update')) {
+				// Edit
+				var categoryId = parseInt($saveBtn.attr('data-id'))
+				,	categoryName = $groupCategoryInp.val()
+				;
+				if(!isNaN(categoryId)) {
+					Membership.ajax({
+						'route': 'groupsCategory.update',
+						'id': categoryId,
+						'categoryName': categoryName,
+					}, {'method': 'post'})
+					.then(function(response) {
+						if(response && response.success) {
+							$.sNotify({
+								'content': '<span>' + $('#mbsMsgUpdatedSuccessfully').val() + '</span>',
+								'delay': 3000,
+							});
+							// update table
+							$('#mbsGcTblRow-' + categoryId + ' td:nth-of-type(2)').text(categoryName);
+							// reset entry
+							$groupCategoryInp.val('');
+							$cancelBtn.hide();
+							$saveBtn.text($saveBtn.attr('data-add'))
+							$saveBtn.attr('data-id', '');
+						} else {
+							var errMsg = $('#mbsMsgErrorOcured-1').val();
+							if(response.message) {
+								errMsg = response.message;
+							}
+							$.sNotify({
+								'content': '<span>' + errMsg + '</span>',
+								'delay': 3000,
+							});
+						}
+					})
+					.fail(function(responce) {
+						var message = $('#mbsMsgErrorOcured-1').val();
+						if(responce.statusText) {
+							message = responce.statusText;
+						}
+						$.sNotify({
+							'content': '<span>' + message + '</span>',
+							'delay': 3000,
+						});
+					})
+					.always(function(response) {
+						// show buttons
+						$saveBtn.prop('disabled', false);
+					});
+				}
+			}
+		});
+
+		$cancelBtn.on('click', function(event) {
+			$groupCategoryInp.val('');
+			$cancelBtn.hide();
+			$saveBtn.text($saveBtn.attr('data-add'))
+		});
+
+		$("#mbsGroupCategoryTbl .mbsGroupCategoryEdit").on('click', groupCategoryEditHandler);
+		$('#mbsGroupCategoryTbl .mbsGroupCategoryRemove').on('click', groupCategoryRemoveHandler);
+	});
+
+	var mbsBackendMaintab = new MembershipBackendMainTab();
+	mbsBackendMaintab.init();
 
 }(jQuery, Membership));

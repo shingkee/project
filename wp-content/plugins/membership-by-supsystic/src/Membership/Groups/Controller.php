@@ -1,31 +1,18 @@
 <?php
 class Membership_Groups_Controller extends Membership_Base_Controller {
 
-	public function indexAction(Rsc_Http_Request $request) {
-		$groupsSettings = $this->getModel('settings', 'groups')->getSettings();
-		$settings = $this->getModel('settings', 'base')->getSettings();
-        $mainSettings = $settings['main'];
-        $roles = $this->getModel('roles', 'roles')->getRoles();
-
-		return $this->response(
-			'@groups/backend/index.twig',
-			array(
-				'settings' => $groupsSettings,
-                'mainSettings' => $mainSettings,
-                'mainSettingsLink' => $this->generateUrl('membership'),
-				'roles' => $roles
-			)
-		);
-	}
-
 	public function createGroup(Rsc_Http_Parameters $parameters) {
 		$name = $parameters->get('name');
 		$description = $parameters->get('description');
+		$category = $parameters->get('category');
 		// other language symbols not supported in url
-		$aliasPrepare = iconv('UTF-8', 'ASCII//TRANSLIT', $parameters->get('name'));
+//		$aliasPrepare = iconv('UTF-8', 'ASCII//TRANSLIT', $parameters->get('name'));
+		$aliasPrepare = mb_convert_encoding($parameters->get('name'), 'UTF-8' );
+
 		$alias = strtolower($this->getModule('base')->translateCyrillicToLatin(
 			preg_replace('/[^\w0-9]/u', '-', $aliasPrepare)
 		));
+
 		$type = $parameters->get('type');
 		$invitedUsers = $parameters->get('invitedUsers', null);
 
@@ -46,6 +33,7 @@ class Membership_Groups_Controller extends Membership_Base_Controller {
 		$groupId = $groupsModel->createGroup(array(
 			'name' => $name,
 			'description' => $description,
+			'category_id' => $category,
 			'alias' => $alias,
 		));
 
@@ -62,7 +50,7 @@ class Membership_Groups_Controller extends Membership_Base_Controller {
 		$groupSettings = $groupsModel->getDefaultGroupSettings();
 		$groupSettings['type'] = $type;
 		$groupsModel->setGroupSettings($groupId, $groupSettings);
-		$groupsModel->setGroupAdmin($groupId, $currentUserId);
+		$groupsModel->setGroupAdmin($groupId, $currentUserId, 1);
 
 		if ($invitedUsers) {
 			$groupsInvitesModel = $this->getModel('GroupsInvites');
@@ -526,7 +514,11 @@ class Membership_Groups_Controller extends Membership_Base_Controller {
 			'ajax',
 			array(
 				'success' => true,
-				'html' => $this->render('@groups/partials/group-users-list.twig', array('users' => $users, 'listType' => $status))
+				'html' => $this->render('@groups/partials/group-users-list.twig', array(
+					'users' => $users,
+					'listType' => $status,
+					'requestedGroup' => $group,
+				))
 			)
 		);
 	}
@@ -542,6 +534,8 @@ class Membership_Groups_Controller extends Membership_Base_Controller {
 		$groupModel = $this->getModel();
 
 		$users = $groupModel->getUsersToInvite($groupId, $userId, $limit, $offsetId, $search);
+
+
 
 		if ($template == 'invite-modal') {
 			$template = '@groups/partials/invite-modal-users.twig';
@@ -742,6 +736,16 @@ class Membership_Groups_Controller extends Membership_Base_Controller {
 		$activityContent = $parameters->get('data');
 		$isCommunityPost = $parameters->get('isCommunityPost') == 'true';
 
+		if(empty($activityContent['images']) && empty($activityContent['message']) && empty($activityContent['files'])) {
+			return $this->response(
+				'ajax',
+				array(
+					'success' => false,
+					'message' => $this->translate('Post can\'t be empty'),
+				)
+			);
+		}
+
 		$currentUserId = get_current_user_id();
 
         /**
@@ -816,6 +820,9 @@ class Membership_Groups_Controller extends Membership_Base_Controller {
             $albumsModel->addImages($activityAlbum['id'], $imagesIds);
         }
 
+		if(!empty($activityContent['files'])) {
+			$this->setActivityAttachments($activityId, $activityContent['files']);
+		}
 
 		if (isset($activityContent['link']) && !isset($activityContent['images'])) {
 			$linksModel = $this->getModel('Links', 'Activity');
@@ -873,6 +880,10 @@ class Membership_Groups_Controller extends Membership_Base_Controller {
 			} else {
 				$group = $groupsModel->getGroup($activity['object_id'], $currentUserId);
 				if ($group && $group['currentUserRole'] == 'administrator') {
+					$userCanDeleteActivity = true;
+				}
+				$usersModule = $this->getModule('Users');
+				if($usersModule->currentUserCan('edit-activity')) {
 					$userCanDeleteActivity = true;
 				}
 			}
@@ -1114,8 +1125,9 @@ class Membership_Groups_Controller extends Membership_Base_Controller {
 			$limit = min(max($parameters->get('limit', 0), 1), 50);
 			$offsetId = $parameters->get('offsetId', null);
 			$search = $parameters->get('search', null);
+			$category_id = $parameters->get('category_id', null);
 
-			$groups = $groupsModel->getUserGroups($requestedUser['id'], $type, $limit, $offsetId, $search);
+			$groups = $groupsModel->getUserGroups($requestedUser['id'], $type, $limit, $offsetId, $search, $category_id);
 
 			return $this->response(
 				'ajax',
@@ -1141,7 +1153,8 @@ class Membership_Groups_Controller extends Membership_Base_Controller {
 		$limit = min(max($parameters->get('limit', 0), 1), 50);
 		$offsetId = $parameters->get('offsetId', null);
 		$search = $parameters->get('search', null);
-		$groups = $groupsModel->getGroups($currentUserId, $limit, $offsetId, $search);
+		$category_id = $parameters->get('category_id', null);
+		$groups = $groupsModel->getGroups($currentUserId, $limit, $offsetId, $search, $category_id);
 
 		return $this->response(
 			'ajax',
@@ -1200,4 +1213,91 @@ class Membership_Groups_Controller extends Membership_Base_Controller {
 
     }
 
+    public function addGroupCategory(Rsc_Http_Parameters $parameters) {
+		$categoryName = trim($parameters->get('categoryName'));
+		$newId = 0;
+		$errMessage = '';
+		$length = strlen($categoryName);
+		if($length) {
+			if($length < 204) {
+				$groupCategoryModel = $this->getModel('GroupsCategory', 'Groups');
+				$newId = $groupCategoryModel->add($categoryName);
+			} else {
+				$errMessage = $this->translate('Error! The maximum length is 204 characters');
+			}
+		} else {
+			$errMessage = $this->translate('Please enter Group Category Name!');
+		}
+
+		return $this->response(
+			'ajax',
+			array(
+				'success' => ((int)$newId) > 0,
+				'newId' => $newId,
+				'message' => $errMessage,
+			)
+		);
+	}
+
+	public function updateGroupCategory(Rsc_Http_Parameters $parameters) {
+		$catId = (int) $parameters->get('id');
+		$categoryName = trim($parameters->get('categoryName'));
+		$errorMsg = '';
+		$length = strlen($categoryName);
+		$updateRes = false;
+		$updateDump = null;
+		if($catId) {
+			if($length) {
+				if($length < 204) {
+					$groupCategoryModel = $this->getModel('GroupsCategory', 'Groups');
+					$updateDump = $groupCategoryModel->update($catId, $categoryName);
+					$updateRes = true;
+				} else {
+					$errorMsg = $this->translate('Error! The maximum length is 204 characters');
+				}
+			} else {
+				$errorMsg = $this->translate('Please enter Group Category Name!');
+			}
+		}
+
+		return $this->response(
+			'ajax',
+			array(
+				'success' => $updateRes,
+				'updateInfo' => $updateDump,
+				'message' => $errorMsg,
+			)
+		);
+	}
+
+	public function removeGroupCategory(Rsc_Http_Parameters $parameters) {
+		$catId = (int) $parameters->get('id');
+		$errorMsg = '';
+		$removeRes = false;
+		$removeDump = null;
+
+		if($catId) {
+			$groupCategoryModel = $this->getModel('GroupsCategory', 'Groups');
+			$removeDump = $groupCategoryModel->remove($catId);
+			$removeRes = true;
+		}
+
+		return $this->response(
+			'ajax',
+			array(
+				'success' => $removeRes,
+				'updateInfo' => $removeDump,
+				'message' => $errorMsg,
+			)
+		);
+	}
+
+	public function setActivityAttachments($activityId, $attachmentsIds) {
+
+		$attachmentAllModel = $this->getModule('base')->getModel('AttachmentAll');
+		$attachmentAllModel->updateSavedParamFor($attachmentsIds);
+
+		$activityModel = $this->getModule('activity')->getModel('activity');
+		$activityModel->addAttachmentFiles($activityId, $attachmentsIds);
+	}
 }

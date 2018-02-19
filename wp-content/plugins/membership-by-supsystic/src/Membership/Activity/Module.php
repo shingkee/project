@@ -2,6 +2,8 @@
 
 class Membership_Activity_Module extends Membership_Base_Module {
 
+	private static $isActivityAttachmTemplInclude = false;
+
 	public function afterModulesLoaded() {
 		$this->registerShortcodes();
 		$this->registerAjaxRoutes();
@@ -10,6 +12,7 @@ class Membership_Activity_Module extends Membership_Base_Module {
 		add_action('setup_theme', array($this, 'registerRewriteRules'));
 		$dispatcher = $this->getDispatcher();
 		$dispatcher->on('createActivity', array($this, 'onCreateActivity'));
+		$dispatcher->on('activity.view.actachmentTemplate', array($this, 'activityAttachmentTemplate'), 10, 1);
 		add_action('widgets_init', array($this, 'widgetsInit'));
 
 		$routesModule = $this->getModule('routes');
@@ -20,6 +23,17 @@ class Membership_Activity_Module extends Membership_Base_Module {
 			)
 		);
 
+	}
+
+	public function activityAttachmentTemplate() {
+		if(!self::$isActivityAttachmTemplInclude) {
+			$usersModule = $this->getModule('users');
+			$attachmentIconUrl = $usersModule->getUsersModuleUrl() . '/assets/images/attachment_icon.png';
+			echo $this->render('@activity/partials/activity-attachment-template.twig', array(
+				'attachmentIcon' => $attachmentIconUrl,
+			));
+			self::$isActivityAttachmTemplInclude = true;
+		}
 	}
 
 	public function widgetsInit() {
@@ -187,7 +201,28 @@ class Membership_Activity_Module extends Membership_Base_Module {
 	}
 
 	public function registerRewriteRules() {
-		//
+		$routesModule = $this->getModule('routes');
+		$routesModule->addQueryVars(array('activity_id'));
+		$pageId = $routesModule->getPageIdByRoute('activity');
+
+		if($pageId) {
+			$slug = basename( get_permalink($pageId) );
+			$activityRouteUrl = $routesModule->getRouteUrl('activity');
+			$pos = strpos($activityRouteUrl, $slug);
+			$permalink = substr($activityRouteUrl, $pos);
+			$permalinkStructure = get_option('permalink_structure');
+
+			if($permalinkStructure) {
+				if (substr($permalinkStructure, -1) !== '/') {
+					$permalink .= '/';
+				}
+			}
+
+			$routesModule->addRewriteRule(
+				'^' . $permalink . '([\d]+)/?$',
+				'index.php?page_id=' . $pageId . '&activity_id=$matches[1]'
+			);
+		}
 	}
 
 	public function registerTwigExtension() {
@@ -217,38 +252,79 @@ class Membership_Activity_Module extends Membership_Base_Module {
 		$activityTypes = $activityModel->getActivityTypesFromSettings($settings['design']['activity']['type']);
 		$smilesList = $activityModel->getSmilesList();
 		$currentUserId = get_current_user_id();
+		$activityId = (int) get_query_var('activity_id');
+		
+		if(!empty($activityId)) {
+			$userModule = $this->getModule('users');
+			$groupModule = $this->getModule('groups');
+			$activities = array();
+			$canUserViewThisPost = false;
 
-		if (! is_user_logged_in() && $activityFilter === 'subscriptions') {
-			$activityFilter = 'site-wide';
-		}
-
-		if (!is_user_logged_in() || $activityFilter === 'site-wide') {
-			$currentUserId = null;
-		}
-
-		if ($activityFilter === 'popular') {
-			$activities = $activityModel->getPopularActivities(array(
-				'since' => 0,
-				'limit' => 5,
-				'activityTypes' => $activityTypes,
+			if($activityId) {
+				$activities = $activityModel->getActivityById($activityId, $currentUserId,array());
+				if(count($activities)) {
+					$oneActivity = $activities[0];
+					if($oneActivity['type'] == 'post') {
+						$canUserViewThisPost = $userModule->currentUserHasPermission('view-activity', $activities[0]['author']);
+					} else if($oneActivity['type'] == 'group_post') {
+						$canUserViewThisPost = $groupModule->currentUserHasGroupPermission('read-activity', $activities[0]['group']);
+					} else if($oneActivity['type'] == 'shared_post') {
+						if(isset($activities[0]['sharedActivity']['author'])
+							&& $userModule->currentUserHasPermission('view-activity', $activities[0]['author'])
+							&& $userModule->currentUserHasPermission('view-activity', $activities[0]['sharedActivity']['author'])
+						) {
+							$canUserViewThisPost = true;
+						}
+					} else if($oneActivity['type'] == 'shared_group_post') {
+						if(isset($activities[0]['sharedActivity']['group'])
+							&& $userModule->currentUserHasPermission('view-activity', $activities[0]['author'])
+							&& $groupModule->currentUserHasGroupPermission('read-activity', $activities[0]['sharedActivity']['group'])
+						) {
+							$canUserViewThisPost = true;
+						}
+					}
+				}
+			}
+			return $this->render('@activity/activity.read.post.twig', array(
+				'activities' => $activities,
+				'params' => array(
+					'isReadPostPage' => true,
+					'canUserViewThisPost' => $canUserViewThisPost,
+				)
 			));
 		} else {
-			$activities = $activityModel->getActivity(array(
-				'userId' => $currentUserId,
-				'limit' => 5,
-				'activityTypes' => $activityTypes,
+			if(! is_user_logged_in() && $activityFilter === 'subscriptions') {
+				$activityFilter = 'site-wide';
+			}
+
+			if(!is_user_logged_in() || $activityFilter === 'site-wide') {
+				$currentUserId = null;
+			}
+
+			if($activityFilter === 'popular') {
+				$activities = $activityModel->getPopularActivities(array(
+					'since' => 0,
+					'limit' => 5,
+					'activityTypes' => $activityTypes,
+				));
+			} else {
+				$activities = $activityModel->getActivity(array(
+					'userId' => $currentUserId,
+					'limit' => 5,
+					'activityTypes' => $activityTypes,
+					'activityFilter' => $activityFilter,
+				));
+			}
+
+			return $this->render('@activity/index.twig', array(
+				'activities' => $activities,
 				'activityFilter' => $activityFilter,
+				'activityTypes' => $activityTypes,
+				'activityAllTypes' => $activityModel->getAllActivityTypes(),
+				'activityFilterEnabled' => $activityFilterEnabled,
+				'smilesList' => $smilesList,
 			));
 		}
-
-		return $this->render('@activity/index.twig', array(
-			'activities' => $activities,
-			'activityFilter' => $activityFilter,
-			'activityTypes' => $activityTypes,
-			'activityAllTypes' => $activityModel->getAllActivityTypes(),
-			'activityFilterEnabled' => $activityFilterEnabled,
-			'smilesList' => $smilesList,
-		));
 	}
 
 	public function profileActivityShortcodeHandler($params) {

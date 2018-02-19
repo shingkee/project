@@ -1,11 +1,10 @@
-{% macro row(label, input, id, attributes, withoutHelper) %}
+{% macro row(label, input, id, attributes, withoutHelper, params) %}
 	{% import "@base/macros/tooltips-templates.twig" as tooltips %}
 	{% import _self as options %}
 	<div class="mp-option" {% if id %}id="{{ id }}"{% endif %}{{ attributes|raw }}>
 		<div class="row">
-			<div class="col-md-4">
-				{{ options.label(label) }}
-    			{% if not withoutHelper %}
+			{% set toolTipHtml %}
+				{% if not withoutHelper %}
 				<div class="mp-option-helper tooltip">
 					<i class="fa fa-question sc-tooltip"></i>
 					<div class="tooltip_content">
@@ -13,7 +12,22 @@
 					</div>
 				</div>
 				{% endif %}
-			</div>
+			{% endset %}
+
+			{% if params and params.mbsThinCol %}
+				<div class="col-md-4 mbsThinCol">
+					<div class="mp-option-label">
+						<span title="{{ label }}">{{ label }}</span>
+						{{ toolTipHtml }}
+					</div>
+				</div>
+			{% else %}
+				<div class="col-md-4">
+					{{ options.label(label) }}
+					{{ toolTipHtml }}
+				</div>
+			{% endif %}
+
 			<div class="col-md-8">
 				{{ input|raw }}
 			</div>
@@ -21,22 +35,34 @@
 	</div>
 {% endmacro %}
 
-{% macro settingRow(label, input, id, attributes, buttons, withoutHelper) %}
+{% macro settingRow(label, input, id, attributes, buttons, withoutHelper, params) %}
 	{% import "@base/macros/tooltips-templates.twig" as tooltips %}
     {% import _self as options %}
     <div class="mp-option mp-option-setting" {% if id %}id="{{ id }}"{% endif %}{{ attributes|raw }}>
         <div class="row">
-            <div class="col-md-4">
-                {{ options.label(label) }}
-    			{% if not withoutHelper %}
-				<div class="mp-option-helper tooltip">
-                    <i class="fa fa-question sc-tooltip"></i>
-                    <div class="tooltip_content">
-                        <div>{% if id %}{{ translate(tooltips.get(id)) | raw }}{% endif %}</div>
-                    </div>
+			{% set toolTipHtml %}
+				{% if not withoutHelper %}
+					<div class="mp-option-helper tooltip">
+						<i class="fa fa-question sc-tooltip"></i>
+						<div class="tooltip_content">
+							<div>{% if id %}{{ translate(tooltips.get(id)) | raw }}{% endif %}</div>
+						</div>
+					</div>
+				{% endif %}
+			{% endset %}
+			{% if params and params.mbsThinCol %}
+				<div class="col-md-4 mbsThinCol">
+					<div class="mp-option-label">
+						<span title="{{ label }}">{{ label }}</span>
+						{{ toolTipHtml }}
+					</div>
 				</div>
-                {% endif %}
-            </div>
+			{% else %}
+				<div class="col-md-4">
+					{{ options.label(label) }}
+					{{ toolTipHtml }}
+				</div>
+			{% endif %}
             <div class="col-md-8">
                 {{ input|raw }}
                 {% if buttons %}
@@ -88,13 +114,12 @@
 	</div>
 {% endmacro %}
 
-{% macro settingRowWithInput(label, input1, id, attributes, input2, withHelper) %}
+{% macro settingRowWithInput(label, input1, id, attributes, input2, withHelper, params) %}
 	{% import "@base/macros/tooltips-templates.twig" as tooltips %}
 	{% import _self as options %}
 	<div class="mp-option mp-option-setting" {% if id %}id="{{ id }}"{% endif %}{{ attributes|raw }}>
 		<div class="row">
-			<div class="col-md-4">
-				{{ options.label(label) }}
+			{% set toolTipHtml %}
 				{% if withHelper == 1 %}
 					<div class="mp-option-helper tooltip">
 						<i class="fa fa-question sc-tooltip"></i>
@@ -103,7 +128,21 @@
 						</div>
 					</div>
 				{% endif %}
-			</div>
+			{% endset %}
+			{% if params and params.mbsThinCol %}
+				<div class="col-md-4 mbsThinCol">
+					<div class="mp-option-label">
+						<span title="{{ label }}">{{ label }}</span>
+						{{ toolTipHtml }}
+					</div>
+				</div>
+			{% else %}
+				<div class="col-md-4">
+					{{ options.label(label) }}
+					{{ toolTipHtml }}
+				</div>
+			{% endif %}
+
 			<div class="col-md-8">
 				<div class="mbs-check-with-input-block">
 					<div class="mbs-cwib-check-block">
@@ -145,24 +184,24 @@
 	</div>
 {% endmacro %}
 
-{% macro radioRow(label, radios, id, attributes, withoutHelper) %}
+{% macro radioRow(label, radios, id, attributes, withoutHelper, params) %}
 	{% import _self as options %}
-	{{ options.row(label, options.radioInput(radios), id, attributes, withoutHelper) }}
+	{{ options.row(label, options.radioInput(radios), id, attributes, withoutHelper, params) }}
 {% endmacro %}
 
-{% macro radioRowWithInput(label, radios, id, attributes, input, withoutHelper) %}
+{% macro radioRowWithInput(label, radios, id, attributes, input, withoutHelper, params) %}
 	{% import _self as options %}
-	{{ options.row(label, options.radioWithInput(radios, input), id, attributes, withoutHelper) }}
+	{{ options.row(label, options.radioWithInput(radios, input), id, attributes, withoutHelper, params) }}
 {% endmacro %}
 
-{% macro selectRow(label, options, name, id, withoutHelper) %}
+{% macro selectRow(label, options, name, id, withoutHelper, params) %}
 	{% import _self as _options %}
-	{{ _options.row(label, _options.selectInput(options, name), id, withoutHelper) }}
+	{{ _options.row(label, _options.selectInput(options, name), id, null, withoutHelper, params) }}
 {% endmacro %}
 
-{% macro multipleSelectRow(label, options, name, id, attributes, selectAttributes, description, withoutHelper, addClasses) %}
+{% macro multipleSelectRow(label, options, name, id, attributes, selectAttributes, description, withoutHelper, addClasses, params) %}
 	{% import _self as _options %}
-	{{ _options.row(label, _options.multipleSelectInput(options, name, selectAttributes, description, addClasses), id, attributes, withoutHelper) }}
+	{{ _options.row(label, _options.multipleSelectInput(options, name, selectAttributes, description, addClasses), id, attributes, withoutHelper, params) }}
 {% endmacro %}
 
 {% macro wpEditorRow(label, name, value, id) %}
@@ -199,24 +238,24 @@
 	</button>
 {% endmacro %}
 
-{% macro inputRow(label, name, value, id, attributes, inputAttributes) %}
+{% macro inputRow(label, name, value, id, attributes, inputAttributes, params) %}
 	{% import _self as options %}
-	{{ options.row(label, options.textInput(name, value, inputAttributes), id, attributes, withoutHelper) }}
+	{{ options.row(label, options.textInput(name, value, inputAttributes), id, attributes, withoutHelper, params) }}
 {% endmacro %}
 
-{% macro emailRow(label, name, value, id, attributes, withoutHelper) %}
+{% macro emailRow(label, name, value, id, attributes, withoutHelper, params) %}
 	{% import _self as options %}
-	{{ options.row(label, options.emailInput(name, value), id, attributes, withoutHelper) }}
+	{{ options.row(label, options.emailInput(name, value), id, attributes, withoutHelper, params) }}
 {% endmacro %}
 
-{% macro textareaRow(label, name, value, id, attributes, cols, rows, withoutHelper) %}
+{% macro textareaRow(label, name, value, id, attributes, cols, rows, withoutHelper, params) %}
 	{% import _self as options %}
-	{{ options.row(label, options.textareaInput(name, value, cols, rows), id, attributes, withoutHelper) }}
+	{{ options.row(label, options.textareaInput(name, value, cols, rows), id, attributes, withoutHelper, params) }}
 {% endmacro %}
 
-{% macro colorRow(label, name, value, id, attributes, withoutHelper) %}
+{% macro colorRow(label, name, value, id, attributes, withoutHelper, params) %}
 	{% import _self as options %}
-	{{ options.row(label, options.colorInput(name, value), id, attributes, withoutHelper) }}
+	{{ options.row(label, options.colorInput(name, value), id, attributes, withoutHelper, params) }}
 {% endmacro %}
 
 {% macro inputRowWithButton(label, buttonLabel, name, value, id, attributes, withoutHelper) %}
@@ -224,9 +263,9 @@
 	{{ options.row(label, options.inputWithButton(buttonLabel, name, value), id, attributes, withoutHelper) }}
 {% endmacro %}
 
-{% macro emailRowWithButton(label, button, name, value, id, attributes, withoutHelper) %}
+{% macro emailRowWithButton(label, button, name, value, id, attributes, withoutHelper, params) %}
 	{% import _self as options %}
-	{{ options.row(label, options.emailWithButton(button, name, value), id, attributes, withoutHelper) }}
+	{{ options.row(label, options.emailWithButton(button, name, value), id, attributes, withoutHelper, params) }}
 {% endmacro %}
 
 {% macro checkboxRow(label, checkboxes, id, attributes, withoutHelper) %}
@@ -234,9 +273,9 @@
     {{ options.row(label, options.checkboxInput(checkboxes), id, attributes, withoutHelper) }}
 {% endmacro %}
 
-{% macro checkboxSettingRow(label, checkboxes, id, attributes, buttons, withoutHelper) %}
+{% macro checkboxSettingRow(label, checkboxes, id, attributes, buttons, withoutHelper, params) %}
     {% import _self as options %}
-    {{ options.settingRow(label, options.checkboxInput(checkboxes), id, attributes, buttons, withoutHelper) }}
+    {{ options.settingRow(label, options.checkboxInput(checkboxes), id, attributes, buttons, withoutHelper, params) }}
 {% endmacro %}
 
 {% macro checkboxSettingRowWithSelect(label, checkboxes, id, attributes, select, withoutHelper) %}
@@ -244,9 +283,9 @@
     {{ options.settingRowWithSelect(label, options.checkboxInput(checkboxes), id, attributes, select, withoutHelper) }}
 {% endmacro %}
 
-{% macro checkboxSettingRowWithInput(label, checkboxes, input2, id, attributes, withHelper) %}
+{% macro checkboxSettingRowWithInput(label, checkboxes, input2, id, attributes, withHelper, params) %}
 	{% import _self as options %}
-	{{ options.settingRowWithInput(label, options.checkboxInput(checkboxes), id, attributes, input2, withHelper) }}
+	{{ options.settingRowWithInput(label, options.checkboxInput(checkboxes), id, attributes, input2, withHelper, params) }}
 {% endmacro %}
 
 {% macro checkboxInput(checkboxes) %}
@@ -461,7 +500,7 @@
 	{% import _self as options %}
 
 	<div class="row" {% if id %}id="{{ id }}"{% endif %}>
-		<div class="col-xs-4 mpp-mrgn-top-8">
+		<div class="col-xs-4 mpp-mrgn-top-8 mbsThinCol">
 			<label class="sc-checkbox">
 				<input type="checkbox" name="{{ inputName }}[enabled]" value="1" {{ attributes.input is defined ? attributes.input : null }}>
 				{{ translate(label) }}

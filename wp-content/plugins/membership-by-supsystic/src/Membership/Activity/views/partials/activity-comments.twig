@@ -39,13 +39,24 @@
 					</div>
 				{% endif %}
 
+				{% if comment.attachmentFiles %}
+					<div class="mbsActivAttachFilesWr" data-activity-id="{{ comment.id }}">
+						{% for oneAttachId, oneAttach in comment.attachmentFiles %}
+							<a class="mbsOneAttachItem" title="{{ oneAttach['file_info']['name'] }}" href="{{ oneAttach['file_info']['url'] }}" target="_blank" data-id="{{ oneAttach['attachment_all_id'] }}">
+								<i class="icon attach mbsOneAttachIcon"></i>
+								<span class="mbsOneAttachCaption">{{ oneAttach['file_info']['name'] }}</span>
+							</a>
+						{% endfor %}
+					</div>
+				{% endif %}
+
 				{% if isPostComment(activity.group) %}
 					<div class="actions">
                         {% if relatedActivity.status != 'deleted' %}
                             {% if activity.type starts with 'group' or currentUserHasPermission('post-comments', activity.author) %}
 								<a class="reply reply-action">{{ translate('Reply') }}</a>
                             {% endif %}
-                            {% if isCurrentUser(comment.author) %}
+							{% if isCurrentUser(comment.author) or currentUserCan('edit-activity') %}
 								<a class="edit-action">{{ translate('Edit') }}</a>
 								<a class="remove-action">{{ translate('Remove') }}</a>
                             {% endif %}

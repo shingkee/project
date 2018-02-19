@@ -9,6 +9,17 @@ class Membership_Membership_Controller extends Membership_Base_Controller
 
 		$isBuddyPressExists = in_array('buddypress/bp-loader.php', array_keys(get_plugins()));
 		$isUltimateMemberExists = in_array('ultimate-member/index.php', array_keys(get_plugins()));
+		// Reports tab
+		$orderColumn = 'id';
+		$order = 'DESC';
+		if (isset($request->query['order_by'])) {
+			$orderColumn = $request->query['order_by'];
+			$order = $request->query['order'];
+		}
+		$reportComment = $request->query->get('report_comment', null);
+		$reports = $this->getModel('reports', 'reports')->get(50, 0, $orderColumn, $order, $reportComment);
+		$groupCategoryModel = $this->getModel('GroupsCategory', 'Groups');
+		$groupCategoryList = $groupCategoryModel->getGroupCategoryList('id');
 
 		return $this->response(
 			'@membership/backend/index.twig',
@@ -19,7 +30,10 @@ class Membership_Membership_Controller extends Membership_Base_Controller
 				'wpPages' => get_pages(),
 				'pages' => $routesModule->getRoutesPages(),
 				'isBuddyPressExists' => $isBuddyPressExists,
-				'isUltimateMemberExists' => $isUltimateMemberExists
+				'isUltimateMemberExists' => $isUltimateMemberExists,
+				'reports' => $reports,
+				'reportsUrl' => $this->generateUrl('membership'),
+				'groupCategoryList' => $groupCategoryList,
 			)
 		);
 	}

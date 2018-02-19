@@ -94,7 +94,7 @@ class Membership_Users_Model_Followers extends Membership_Base_Model_Base
             $follows = $usersModel->getUsersByIds(array('users' => $follows));
 
         }
-
+	    $follows = $this->getDispatcher()->apply('badges.addBadges', array($follows));
         return $follows;
     }
 
@@ -154,7 +154,7 @@ class Membership_Users_Model_Followers extends Membership_Base_Model_Base
 			$followers = $usersModel->getUsersByIds(array('users' => $followers));
 
 		}
-
+		$followers = $this->getDispatcher()->apply('badges.addBadges', array($followers));
 		return $followers;
 	}
 }

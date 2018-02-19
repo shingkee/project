@@ -4,7 +4,7 @@
 		moment.locale(Membership.locale.split('_').shift());
 	}
 
-	var $imageAttachmentTemplate = $($('#image-attachment-template').html()),
+	var $imageAttachmentTemplate = $($('#mbsImageAttachmentTemplate').html()),
 		gallery = new Gallery();
 
 	var ActivityPostForm = function(container) {
@@ -49,14 +49,19 @@
 				data = {
 					message: message,
 					images: [],
+					'files': [],
 					galleries: [],
 					sliders: [],
 					googleMapsEasy: [],
 					link: activityPostForm.attachmentLink
 				};
 
-			$.map(activityPostForm.$imageAttachmentList.children(), function(attachment) {
+			$.map(activityPostForm.$fileAttachmentList.children('.mbs-one-any-attachment[data-is-image="1"]'), function(attachment) {
 				data.images.push($(attachment).attr('data-attachment-id'));
+			});
+
+			$.map(activityPostForm.$fileAttachmentList.children('.mbs-one-any-attachment[data-is-image="0"]'), function(attachment) {
+				data.files.push($(attachment).attr('data-attachment-id'));
 			});
 
 			$.map($galleryContainer.children(), function(gallery) {
@@ -124,12 +129,14 @@
 					container.initActivities($activities);
                     Membership.ActivityAfterSuccessPostSubmit(response.id, message, container.activityContext);
 					container.$noActivitiesMessage.hide();
+				}else{
+					Snackbar.show({text: response.message});
 				}
 
 				container.$activitiesList.children().slice(0, 1).fadeTo(0, 0).fadeTo(700, 1);
 
 				activityPostForm.$textarea.val('').trigger('change');
-				activityPostForm.$imageAttachmentList.empty().hide();
+				activityPostForm.$fileAttachmentList.empty().hide();
 				activityPostForm.attachmentLink = null;
 				$galleryContainer.html('').addClass('mbs-hidden');
 				$sliderContainer.html('').addClass('mbs-hidden');
@@ -152,12 +159,77 @@
 		var EditForm = new ActivityForm(activity.container.$activityPostForm.clone()),
 			activityId = $activity.attr('data-activity-id'),
 			$activityContent = $activity.find('.mp-activity-content:first'),
+			$activityGalleryFirst = $activity.find('.segment > .mp-activity-content > .mp-activity-gallery  .mp-activity-gallery-image').first(),
+			$activityGalleryFirstId = $activityGalleryFirst.attr('data-image-id'),
 			$activityLinkOriginal = $activityContent.find('.mp-activity-link'),
 			$activityLink = $activityLinkOriginal.clone();
-
+		
+			Membership.api.base.getImages({
+				imageId: $activityGalleryFirstId + '.' + activityId,
+			}).then(function(response) {
+				if (response.success) {
+					response.images.forEach(function (item) {
+						var attachmentId = item.id
+							,   imgSrc = item.source;
+						
+						var imgWrapperHtml = '<div class="mp-attachment-image mbs-one-any-attachment" data-attachment-id="">\n' +
+							'\t\t<img class="ui image" src="">\n' +
+							'\t\t<div class="mp-attachment-image-overlay"></div>\n' +
+							'\t\t<div class="mp-progress-bar">\n' +
+							'\n' +
+							'\t\t</div>\n' +
+							'\t\t<i class="close icon"></i>\n' +
+							'\t</div>';
+						
+						var imgWrapper = $($.parseHTML( imgWrapperHtml ));
+						imgWrapper.attr('data-attachment-id', attachmentId).attr('data-is-image', '1');
+						imgWrapper.find('img').attr('src', imgSrc);
+						
+						EditForm.$fileAttachmentList.append(imgWrapper);
+					});
+				}
+			}).then(function() {
+				Membership.api.base.getAttachmentFiles({
+					'activity_id': activityId,
+				}).then(function(response) {
+					if(response && !response.errors) {
+						var attachKeyArr = Object.keys(response.attachments);
+						if(attachKeyArr.length) {
+							// get array list
+							var attachmList = response.attachments[attachKeyArr[0]];
+							if(attachmList && attachmList.length) {
+								for(var ind1 = 0; ind1 < attachmList.length; ind1++) {
+									var $oneAttachmentFile = $imageAttachmentTemplate.clone()
+									,	$progressBar = $oneAttachmentFile.find('.mp-progress-bar')
+									,	$attachmentCaption = $oneAttachmentFile.find('.mbs-image-caption')
+									;
+									$progressBar.remove();
+									// init values
+									$oneAttachmentFile.attr('data-attachment-id', attachmList[ind1]['attachment_all_id']);
+									$oneAttachmentFile.attr('title', attachmList[ind1]['file_info']['name']);
+									$oneAttachmentFile.attr('data-is-image', 0);
+									$attachmentCaption.text(attachmList[ind1]['file_info']['name']);
+									EditForm.$fileAttachmentList.append($oneAttachmentFile);
+									// remove event
+									$oneAttachmentFile.find('i.close.icon').on('click', function() {
+										var $this = $(this)
+										,	$attachmentWr = $this.closest('.mbs-one-any-attachment');
+										$attachmentWr.remove();
+										if (!EditForm.$fileAttachmentList.children().length) {
+											EditForm.$fileAttachmentList.hide();
+										}
+									});
+								}
+							}
+						}
+					}
+				});
+			});
+		
 		EditForm.$el.find('.post-form-buttons .post-activity-buttons').hide();
 		EditForm.$el.find('.post-form-buttons .edit-activity-buttons').show();
 		EditForm.$el.show();
+		EditForm.$fileAttachmentList.show();
 		EditForm.$el.insertAfter($activityContent.hide());
 
 		var activitiContentStr = $activityContent.attr('data-activity-data')
@@ -185,9 +257,9 @@
 				googleMapsEasyContent = EditForm.googleMapsEasyInfo.googleMapsEasyContent;
 			}
 		}
-
+		
 		EditForm.$textarea.val(activitiContentStr);
-
+		
 		if ($activityLink.length) {
 			EditForm.$attachmentLinkContainer.append($activityLink);
 			EditForm.attachmentLink = $activityLink.attr('data-hash');
@@ -199,21 +271,37 @@
 				EditForm.attachmentLink = null;
 			});
 		}
-
+		
+		EditForm.$el.find('textarea').focusTextToEnd();
+		$('body').on('click', 'i.close.icon', function(){
+			var wrapperImg = $(this).closest('.mp-attachment-image')
+			,   wrapperAllImages = $(this).closest('.mp-attachment-images');
+			wrapperImg.remove();
+			if (!wrapperAllImages.children().length) {
+				wrapperAllImages.hide();
+			}
+		});
+		
 		EditForm.$el.on('click', '.post-form-buttons [data-action="cancel"]', function() {
 			EditForm.$el.remove();
 			$activityContent.show();
 		});
 
 		EditForm.$el.on('click', '.post-form-buttons [data-action="save"]', function(event) {
-
 			var data = {
 					message: $.trim(EditForm.$textarea.val() + galleryContent + sliderContent + googleMapsEasyContent),
 					images: [],
+					'files': [],
 					link: EditForm.attachmentLink
 				},
 				$saveButton = $(event.target);
-
+			
+			$.map(EditForm.$fileAttachmentList.children('.mbs-one-any-attachment[data-is-image="1"]'), function(attachment) {
+				data.images.push($(attachment).attr('data-attachment-id'));
+			});
+			$.map(EditForm.$fileAttachmentList.children('.mbs-one-any-attachment[data-is-image="0"]'), function(attachment) {
+				data.files.push($(attachment).attr('data-attachment-id'));
+			});
 			EditForm.$el.find('.post-form-buttons button').attr('disabled', true).addClass('disabled');
 			$saveButton.addClass('loading disabled');
 			Membership.api.activity.update({
@@ -223,7 +311,9 @@
 				var $activities = $(response.html);
 				$activity.replaceWith($activities);
 				activity.container.initActivities($activities);
+				
 			});
+			
 		});
 	};
 
@@ -280,11 +370,16 @@
 			var data = {
 				message: $.trim(commentPostForm.$textarea.val()),
 				images: [],
+				'files': [],
 				link: commentPostForm.attachmentLink
 			};
 
-			$.map(commentPostForm.$imageAttachmentList.children(), function(attachment) {
+			$.map(commentPostForm.$fileAttachmentList.children('.mbs-one-any-attachment[data-is-image="1"]'), function(attachment) {
 				data.images.push($(attachment).attr('data-attachment-id'));
+			});
+
+			$.map(commentPostForm.$fileAttachmentList.children('.mbs-one-any-attachment[data-is-image="0"]'), function(attachment) {
+				data.files.push($(attachment).attr('data-attachment-id'));
 			});
 
 			commentPostForm.$textarea.attr('disabled', true);
@@ -328,12 +423,19 @@
 					activity.comments.updateCommentsCounters();
 					initComments($comments, activity);
 					$commentsList.find('.comment:last').fadeTo(0, 0).fadeTo(700, 1);
+
+					commentPostForm.$textarea.val('').trigger('change');
+					commentPostForm.$fileAttachmentList.empty().hide();
+					commentPostForm.attachmentLink = null;
+					commentPostForm.$attachmentLinkContainer.hide().find('.mp-activity-link').remove();
+				} else {
+					var message = 'Error occurred!';
+					if(response.message) {
+						message = response.message;
+					}
+					Snackbar.show({'text': message});
 				}
 
-				commentPostForm.$textarea.val('').trigger('change');
-				commentPostForm.$imageAttachmentList.empty().hide();
-				commentPostForm.attachmentLink = null;
-				commentPostForm.$attachmentLinkContainer.hide().find('.mp-activity-link').remove();
 				commentPostForm.$textarea.removeAttr('disabled');
 				$commentButtons.find('> *').show();
 				$loader.hide();
@@ -450,11 +552,16 @@
 			var data = {
 				message: $.trim(replyCommentForm.$textarea.val()),
 				images: [],
+				'files': [],
 				link: replyCommentForm.attachmentLink
 			};
 
-			$.map(replyCommentForm.$imageAttachmentList.children(), function(attachment) {
+			$.map(replyCommentForm.$fileAttachmentList.children('.mbs-one-any-attachment[data-is-image="1"]'), function(attachment) {
 				data.images.push($(attachment).attr('data-attachment-id'));
+			});
+
+			$.map(replyCommentForm.$fileAttachmentList.children('.mbs-one-any-attachment[data-is-image="0"]'), function(attachment) {
+				data.files.push($(attachment).attr('data-attachment-id'));
 			});
 
 			replyCommentForm.$textarea.attr('disabled', true);
@@ -501,7 +608,7 @@
 				}
 
 				replyCommentForm.$textarea.val('').trigger('change');
-				replyCommentForm.$imageAttachmentList.empty().hide();
+				replyCommentForm.$fileAttachmentList.empty().hide();
 				replyCommentForm.attachmentLink = null;
 				replyCommentForm.$attachmentLinkContainer.hide().find('.mp-activity-link').remove();
 				replyCommentForm.$textarea.removeAttr('disabled');
@@ -576,18 +683,18 @@
 
 		var self = this,
 			$textarea = $postForm.find('textarea'),
-			$addImageAttachmentButton = $postForm.find('[data-action="add-image-attachment"]'),
+			$addImageAttachmentButton = $postForm.find('[data-action="mbs-add-attachment"]'),
 			$smilesButton = $postForm.find('.button[data-action="add-smile-to-text"]'),
-			$imageAttachmentList = $postForm.find('.mp-attachment-images');
+			$fileAttachmentList = $postForm.find('.mp-attachment-images');
 
 		$addImageAttachmentButton.on('click', function() {
 
-			$('<input type="file" name="image" multiple accept=".jpg,.jpeg,.png">').on('change', function(event) {
+			$('<input type="file" name="file" multiple accept="*.*">').on('change', function(event) {
 				event.preventDefault();
 				var files = event.target.files || event.dataTransfer.files;
 
 				if (files.length) {
-					$imageAttachmentList.show();
+					$fileAttachmentList.show();
 				}
 
 				var $chainUpload = $.Deferred().resolve();
@@ -598,46 +705,98 @@
 
 						var	reader = new FileReader(),
 							$attachment = $imageAttachmentTemplate.clone(),
-							$image = $attachment.find('img'),
-							$progressBar = $attachment.find('.ui.progress').mpProgress();
+							$attachmentFile = $attachment.find('.mbs-att-image'),
+							$progressBar = $attachment.find('.ui.progress').mpProgress(),
+							$attachmentCaption = $attachment.find('.mbs-image-caption'),
+							isAttachmImage = 0;
+
+
+						if(files[i].type && files[i].type.indexOf('image') != '-1') {
+							var fileName = files[i].name
+							,	ext = ''
+							,	extPos = fileName.lastIndexOf('.');
+							if(extPos != -1) {
+								ext = fileName.substr(extPos + 1);
+								if(['jpg', 'jpeg', 'png', 'gif', 'ico'].indexOf(ext.toLowerCase()) !== -1) {
+									isAttachmImage = 1;
+								}
+							}
+						}
 
 						$attachment.find('i.close.icon').on('click', function() {
 							$attachment.remove();
-							if (!$imageAttachmentList.children().length) {
-								$imageAttachmentList.hide();
+							if (!$fileAttachmentList.children().length) {
+								$fileAttachmentList.hide();
 							}
 						});
 
-						$imageAttachmentList.append($attachment);
+						$fileAttachmentList.append($attachment);
 
-						reader.onload = (function(event) {
-							$image.attr('src', event.target.result);
-						});
+						if(isAttachmImage) {
+							reader.onload = (function(event) {
+								$attachmentFile.attr('src', event.target.result);
+							});
+						}
 
 						reader.readAsDataURL(files[i]);
-
 						$chainUpload = $chainUpload.then(function() {
-							return uploadImage(files[i], $progressBar).then(function(response) {
-								$image.attr('src', response.attachment.src);
-								$attachment.attr('data-attachment-id', response.attachment.id);
-								$imageAttachmentList.stop(true).animate({
-									scrollLeft: ($attachment.get(0).offsetLeft + $attachment.width())
-								}, 500);
-								$progressBar.remove();
 
-							}, function(response) {
+							function attachFileUploadHandler(response) {
+								if(!response || response.error || !response.success) {
+									$attachment.remove();
+									var errorText = 'Error occured';
+									if(response.message) {
+										errorText = response.message;
+									}
+									if(response.error) {
+										errorText = response.error;
+									}
+									Snackbar.show({text: errorText});
+								} else {
+									if(response['isImage']) {
+										$attachmentFile.attr('src', response['url']);
+									}
+									$attachment.attr('data-attachment-id', response['attachment_id']);
+									$attachment.attr('title', response['file_name']);
+									$attachmentCaption.text(response['file_name']);
+									$attachment.attr('data-is-image', response['isImage']);
+									$progressBar.remove();
+									$fileAttachmentList.stop(true).animate({
+										scrollLeft: ($attachment.get(0).offsetLeft + $attachment.width())
+									}, 500);
+								}
+							}
+							function attachFileUploadErrHandler(response) {
+								var errorText = 'Error occured';
+								if(response) {
+									if(response.statusText) {
+										errorText = response.statusText;
+									}
+									if(response.responseJSON && response.responseJSON.error) {
+										errorText = response.responseJSON.error;
+									}
+
+									if(response.responseJSON && response.responseJSON.message && response.responseJSON.message.image && response.responseJSON.message.image.length) {
+										errorText = response.responseJSON.message.image[0];
+									}
+								}
 								$attachment.remove();
-								Snackbar.show({text: response.message});
+								Snackbar.show({text: errorText});
 								return $.Deferred().resolve();
-							});
+							}
+							if(isAttachmImage) {
+								return uploadImage(files[i], $progressBar).then(attachFileUploadHandler, attachFileUploadErrHandler);
+							} else {
+								return uploadAttachmentFile(files[i], $progressBar).then(attachFileUploadHandler, attachFileUploadErrHandler);
+							}
 						});
 
 					})(i);
 				}
 
 				$chainUpload.then(function() {
-					if (!$imageAttachmentList.has('*').length) {
-						$imageAttachmentList.hide();
+					if (!$fileAttachmentList.has('*').length) {
+						$fileAttachmentList.hide();
 					}
 				})
 			}).trigger('click');
@@ -727,16 +886,27 @@
 			e1.stopPropagation();
 			return false;
 		});
-
-		$(document).off('mbsActivitySmileSelected').on('mbsActivitySmileSelected', function(event, $smileImg) {
+		
+		$(document).off('mbsActivitySmileSelected').on('mbsActivitySmileSelected', function(event, $smileImg, $firefoxIE) {
 			// insert Smile to textBox
-			if($smileImg.closest) {
+			if($firefoxIE && $smileImg){
 				var $parentForm = $smileImg.closest('.mp-activity-post-form');
 				if($parentForm && $parentForm.length) {
 					var $textArea = $parentForm.find('.mp-form-textarea')
-					,	smileCode = $smileImg.attr('data-code');
+						,	smileCode = $smileImg.attr('data-code');
 					if($textArea && $textArea.length) {
 						$textArea.val($textArea.val() + ' ' + smileCode + ' ');
+					}
+				}
+			}else{
+				if($smileImg.closest) {
+					var $parentForm = $smileImg.closest('.mp-activity-post-form');
+					if($parentForm && $parentForm.length) {
+						var $textArea = $parentForm.find('.mp-form-textarea')
+						,	smileCode = $smileImg.attr('data-code');
+						if($textArea && $textArea.length) {
+							$textArea.val($textArea.val() + ' ' + smileCode + ' ');
+						}
 					}
 				}
 			}
@@ -745,7 +915,7 @@
 		this.$el = $postForm;
 		this.$attachmentLinkContainer = $attachmentLinkContainer;
 		this.$textarea = $textarea;
-		this.$imageAttachmentList = $imageAttachmentList;
+		this.$fileAttachmentList = $fileAttachmentList;
 		this.galleryInfo = new GalleryInfo();
 		this.sliderInfo = new SliderInfo();
 		this.googleMapsEasyInfo = new GoogleMapsEasyInfo();
@@ -756,6 +926,16 @@
 		return Membership.api.base.uploadImage({
 			image: file,
 			uploadProgress: function(event) {
+				if (event.lengthComputable) {
+					$progressBar.mpProgress('set percent', parseInt((event.loaded / event.total) * 100));
+				}
+			}
+		});
+	}
+	function uploadAttachmentFile(myFile, $progressBar) {
+		return Membership.api.base.uploadAnyFile({
+			'uFile': myFile,
+			'uploadProgress': function(event) {
 				if (event.lengthComputable) {
 					$progressBar.mpProgress('set percent', parseInt((event.loaded / event.total) * 100));
 				}
@@ -1056,7 +1236,9 @@
 		});
 
 		$activityMenu.find('.edit-action').on('click', function() {
-			new ActivityEditForm($activity, self);
+			if($activity.find('.mp-activity-post-form').length === 0){
+				new ActivityEditForm($activity, self);
+			}
 		});
 	};
 
@@ -2043,6 +2225,8 @@
 	$(document).on('click', function(event, elem) {
 		// window with activity smiles
 		if(window.mbsSmilesWindowShow == 1) {
+			if( !event ) event = window.event;
+			
 			var $target = $(event.target);
 			if($target && $target.length) {
 				var $foundedSmileImg = null
@@ -2055,15 +2239,20 @@
 						$foundedSmileImg = $smileParent;
 					}
 				} else if($target.hasClass('mbs-sw-one-smile')) {
-					var $smileImg = $target.find('.emoji');
-					if($smileImg.length) {
-						$foundedSmileImg = $target;
-					}
+					var firefoxIE = true;
+					$foundedSmileImg = $target;
 				}
+				
 				if($foundedSmileImg && $foundedSmileImg.length) {
-					$(document).trigger('mbsActivitySmileSelected', [$foundedSmileImg]);
-					$('.post-activity-buttons .mp-smiles-window:not(.mbs-displ-hidden)').addClass('mbs-displ-hidden');
-					window.mbsSmilesWindowShow = null;
+					if(firefoxIE){
+						$(document).trigger('mbsActivitySmileSelected', [$foundedSmileImg, firefoxIE]);
+						$('.post-activity-buttons .mp-smiles-window:not(.mbs-displ-hidden)').addClass('mbs-displ-hidden');
+						window.mbsSmilesWindowShow = null;
+					}else{
+						$(document).trigger('mbsActivitySmileSelected', [$foundedSmileImg]);
+						$('.post-activity-buttons .mp-smiles-window:not(.mbs-displ-hidden)').addClass('mbs-displ-hidden');
+						window.mbsSmilesWindowShow = null;
+					}
 				} else if(!notCloseWindow) {
 					$('.post-activity-buttons .mp-smiles-window:not(.mbs-displ-hidden)').addClass('mbs-displ-hidden');
 					window.mbsSmilesWindowShow = null;
@@ -2078,7 +2267,7 @@
 
 	function setViewedActivity(){
 		var ui = $("div.ui.segment.vertical.basic.mp-activity-container");
-		var single = parseInt(ui.attr("single"));
+		var single = parseInt(ui.attr("data-single"));
 	    var groupId = Membership.get('requestedGroup.id');
         if(single === 0){
             Membership.api.notifications.setViewedAllByType({
@@ -2101,3 +2290,12 @@
 
 
 })(jQuery, Membership);
+
+(function($){
+	$.fn.focusTextToEnd = function(){
+		this.focus();
+		var $thisVal = this.val();
+		this.val('').val($thisVal);
+		return this;
+	}
+}(jQuery));

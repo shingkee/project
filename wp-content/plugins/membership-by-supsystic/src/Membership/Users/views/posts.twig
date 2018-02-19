@@ -2,6 +2,9 @@
 
 {% block content %}
 	<div id="mp-posts" class="ui basic vertical segment">
+		{% if isCurrentUser(requestedUser) and createNewPostUrl != null and canUserCreatePost and requestedUser['permissions']['can-access-wp-admin'] == 'true' %}
+			<a href="{{ createNewPostUrl }}" class="ui primary button">{{ translate('Add new post') }}</a>
+		{% endif %}
 		{% if posts %}
 			<div class="ui divided items">
 				{% include '@users/partials/posts.twig' with {'posts': posts} %}

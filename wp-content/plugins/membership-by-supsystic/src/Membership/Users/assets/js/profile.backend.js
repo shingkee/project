@@ -81,7 +81,16 @@
 			$field.find('[name="required"]').attr('checked', data.required);
 			$field.find('[name="registration"]').attr('checked', data.registration);
 			$field.find('[name="enabled"]').attr('checked', data.enabled);
-			$field.attr('data-field', JSON.stringify(data));
+
+
+			//Merge data and fieldData
+            var mergedData = null;
+            if(fieldData === undefined){
+                mergedData = data;
+            }else{
+                mergedData = Object.assign(fieldData, data);
+            }
+			$field.attr('data-field', JSON.stringify(mergedData));
 		},
 		updateFieldData = function($field, data) {
 			$field.attr('data-field',
@@ -218,7 +227,7 @@
 			var $addFieldOptionButton,
 				$editField,
 				$fieldModal = $('.edit-field-modal').sModal({
-					width: 500,
+					width: 550,
 					height: 550,
 					buttons: [
 						{
@@ -253,33 +262,53 @@
 				$fieldOption = $fieldModal.find('.option-template .option');
 
 			function collectFieldData() {
-
 				var field = $fieldModal.find(':input:visible')
 					.serializeJSON({
 						checkboxUncheckedValue: false,
 						parseBooleans: true,
-					});
+					})
+				,	dataFieldName = $fieldModal.attr('data-field-name')
+				,	dataFieldType = $fieldModal.attr('data-field-type')
+				,	isUserRoleField = (dataFieldName == 'user_role') && (dataFieldType == 'drop');
+				;
 
 				if (field.options) {
-					for (var i = 0; i < field.options.length; i++) {
-						var name = field.options[i],
-							checked = false;
+					if(!isUserRoleField) {
+						for (var i = 0; i < field.options.length; i++) {
+							var name = field.options[i],
+								checked = false;
 
-						if (validate.isArray(field['selected-options']) &&
-							field['selected-options'][0] === name) {
-							// Radio
-							checked = true;
-						} else if (validate.isObject(field['selected-options']) &&
-							field['selected-options'][name]) {
-							// Checkbox
-							checked = true;
+							if(validate.isArray(field['selected-options']) &&
+								field['selected-options'][0] === name) {
+								// Radio
+								checked = true;
+							} else if(validate.isObject(field['selected-options']) &&
+								field['selected-options'][name]) {
+								// Checkbox
+								checked = true;
+							}
+
+							field.options[i] = {
+								name: name,
+								checked: checked,
+								id: name.toLowerCase().replace(/\s/g, '_')
+							};
 						}
+					} else {
+						var $inputsOpt = $fieldModal.find(':input[name="options[]"]:visible')
+						,	ind = 0;
+						if($inputsOpt.length) {
 
-						field.options[i] = {
-							name: name,
-							checked: checked,
-							id: name.toLowerCase().replace(/\s/g, '_')
-						};
+							$inputsOpt.each(function(ind, oneOptItem) {
+								var $oneOptItem = $(oneOptItem);
+								field.options[ind] = {
+									'name': $oneOptItem.val(),
+									'checked': false,
+									id: $oneOptItem.attr('data-id'),
+								};
+								ind++;
+							});
+						}
 					}
 				}
 
@@ -342,6 +371,21 @@
 				$option
 					.find('[name="options[]"]')
 					.val(optionName);
+
+				return $option;
+			}
+			function createUserRoleOption(oneOptionData) {
+				var $option = $fieldOption.clone(true, true)
+				,	$textInput = $option.find('[name="options[]"]')
+				;
+				// remove default Trash icon
+				$option.find('.remove-option').remove();
+				// turn off Default value
+				$option.find('input[type="radio"]').prop('disabled', true);
+
+				$textInput.val(oneOptionData['name']);
+				$textInput.attr('data-id', oneOptionData['id']);
+				$textInput.prop('readonly', true);
 
 				return $option;
 			}
@@ -433,6 +477,8 @@
 
 			// Update modal form with field data before open
 			function updateModalData(data) {
+				var isUserRoleOpt = (data.type == 'drop') && (data.name == 'user_role')
+				,	$addNewOptionRow = $('.mbsModalEditAddToDdOpt');
 
 				$fieldModal.find('.field-label').val(data.label || '');
 				$fieldModal.find('.field-description').val(data.description || '');
@@ -456,6 +502,15 @@
 					$fieldTypesSelect.val(data.type);
 				} else {
 					$fieldTypesSelect.prop("selectedIndex", 0);
+				}
+				if(isUserRoleOpt) {
+					$addNewOptionRow.hide();
+					$fieldModal.attr('data-field-name', 'user_role');
+					$fieldModal.attr('data-field-type', $fieldTypesSelect.val());
+				} else {
+					$addNewOptionRow.show();
+					$fieldModal.attr('data-field-name', '');
+					$fieldModal.attr('data-field-type', '');
 				}
 
 				if (data.type == 'date') {
@@ -488,15 +543,20 @@
 
 				if (data.options) {
 					for (var i = 0; i < data.options.length; i++) {
-						$fieldModal.find('.field-options-list').append(
-							createOption(data.options[i].name, data.options[i].checked)
-						);
+						var $oneOption = null;
+						if(isUserRoleOpt) {
+							$oneOption = createUserRoleOption(data.options[i]);
+						} else {
+							$oneOption = createOption(data.options[i].name, data.options[i].checked);
+						}
+						$fieldModal.find('.field-options-list').append($oneOption);
 					}
 				}
 
 				$fieldModal.find('[name="registration"]').prop('checked', data.registration).trigger('change');
 				$fieldModal.find('[name="required"]').prop('checked', data.required);
 				$fieldModal.find('[name="enabled"]').prop('checked', data.enabled);
+                $fieldModal.find('[name="asterisk"]').prop('checked', data.asterisk);
 			}
 
 			return $.extend($fieldModal, {
@@ -532,11 +592,25 @@
 			fModal.newField();
 			fModal.open();
 		});
+		
+        function hide($object, visible) {
+            if(visible === true){ $object.parent().parent().show(0);}
+            else{ $object.parent().parent().hide(0); }
+        }
+
+
+        var require = $("input[name='required']#popup-required");
+        var asterisk = $("input[name='asterisk']#popup-asterisk");
+        require.change(function() { hide(asterisk, require.prop('checked')); });
 
 		$(document).on('click', '.mp-field-edit-button', function(event) {
 			event.preventDefault();
 			var $field = $(this).closest('.mp-field');
+
 			fModal.editField($field, JSON.parse($field.attr('data-field')));
+
+            hide(asterisk, require.prop('checked'));
+
 			fModal.open();
 		});
 
@@ -573,15 +647,19 @@
 
 		$(document).on('click', 'input[name="required"]', function() {
 			if ($(this).prop('checked')) {
-				var fieldContainer = $(this).closest('.mp-field'),
-					data = JSON.parse(fieldContainer.attr('data-field'));
+				var fieldContainer = $(this).closest('.mp-field');
+				if(fieldContainer.length > 0) {
+                    var data = JSON.parse(fieldContainer.attr('data-field'));
+                }
                 $(this).closest(':has(input[name="registration"])')
                     .find('input[name="registration"]').prop('checked', true);
                 $(this).closest(':has(input[name="enabled"])')
                     .find('input[name="enabled"]').prop('checked', true);
-				data.enabled = true;
-				data.registration = true;
-				updateFieldData(fieldContainer, data);
+				if(fieldContainer.length > 0){
+                    data.enabled = true;
+                    data.registration = true;
+                    updateFieldData(fieldContainer, data);
+                }
 			}
 		});
 
@@ -693,6 +771,5 @@
 		}
 		return;
 	});
-
 
 })(jQuery, Membership || {});

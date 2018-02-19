@@ -1,3 +1,7 @@
+.sc-table.roles {
+     width: auto;
+     margin: 0;
+}
 .sc-table.roles td, .sc-table.roles th {
     min-width: 200px;
 }

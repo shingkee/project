@@ -129,4 +129,24 @@
 
 	});
 
+	$(function() {
+		$('.save-settings').on('click', function(event) {
+			event.preventDefault();
+			Membership.ajax({
+				'route': 'roles.saveSettings',
+				'settings': $('.mp-options :input').serializeJSON({
+					checkboxUncheckedValue: false,
+				})
+			}, {'method': 'post'})
+			.error(function(response) {
+				if(response && response.responseJSON && response.responseJSON.message) {
+					console.error(response.responseJSON.message);
+				} else {
+					console.error('Error ocured');
+				}
+
+			});
+		});
+	});
+
 })(jQuery, Membership);

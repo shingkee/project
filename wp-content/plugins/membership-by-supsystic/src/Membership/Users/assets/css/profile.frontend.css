@@ -150,19 +150,23 @@
 }
 
 .mp-profile-social-stats {
-    left: 185px;
+    /*left: 185px;*/
     font-size: 11px;
     display: inline-block;
     position: relative;
     width: auto!important;
-    margin-top: 1rem;
+    /*margin-top: 1rem;*/
+    margin: 1rem 0 0 185px;
+    float: left;
 }
 
 @media screen and (max-width: 992px) {
     .mp-profile-social-stats {
         text-align: right;
-        right: 0;
-        left: auto!important;
+        /*right: 0;*/
+        /*left: auto!important;*/
+        float: right;
+        margin-left: 0;
         display: block;
     }
 
@@ -295,4 +299,11 @@
 .mp-profile-social-stats.social-stats .label {
 	font-size: 14px!important;
 	color: #a3a3a3!important;
+}
+#membership-profile .mp-update-cover {
+    z-index: 100;
+}
+.mp-single-badge{
+	width: 40px;
+	padding-bottom: 20px;
 }

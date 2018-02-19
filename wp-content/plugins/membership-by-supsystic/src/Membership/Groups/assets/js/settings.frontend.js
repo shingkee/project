@@ -33,6 +33,7 @@
 	$groupSettingsForm.find('.update-button').on('click', function() {
 		var $button = $(this),
 			$groupName = $groupSettingsForm.find('[name="name"]').val(),
+			$categoryId = $groupSettingsForm.find('[name="category"]').val(),
 			$groupDescription = $groupSettingsForm.find('[name="description"]').val();
 
 		$button.addClass('loading disabled');
@@ -41,8 +42,9 @@
 		Membership.api.groups.updateData({
 			groupId: groupId,
 			data: {
-				name: $groupName,
-				description: $groupDescription
+				'name': $groupName,
+				'description': $groupDescription,
+				'category_id': $categoryId,
 			}
 		}).then(function(response) {
 			Snackbar.show({text: response.message});

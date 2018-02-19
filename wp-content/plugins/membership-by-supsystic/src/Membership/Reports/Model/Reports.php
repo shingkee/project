@@ -20,12 +20,13 @@ class Membership_Reports_Model_Reports extends Membership_Base_Model_Base {
         return $this->db->insert_id;
     }
 
-    public function get($limit = 50, $offset = 0, $orderColumn = 'id', $order = 'DESC') {
+	public function get($limit = 50, $offset = 0, $orderColumn = 'id', $order = 'DESC', $commentInfo = null) {
 
     	$queryParams = array(
 		    $limit,
 		    $offset
 	    );
+		$leftJoinStr = null;
 
     	if (!in_array($orderColumn, array(
     		'id',
@@ -35,22 +36,47 @@ class Membership_Reports_Model_Reports extends Membership_Base_Model_Base {
 		    'status',
 		    'date'
 	    ))) {
-		    $orderColumn = 'id';
+			$orderColumn = 'id';
 	    }
 
 	    $order = strtoupper($order) === 'DESC' ? 'DESC' : 'ASC';
 
-    	$query = $this->preparePrefix("
-    	    SELECT 
-			    *
-			FROM
-			    {prefix}reports
-			WHERE
-			    reported_id IS NOT NULL
-				ORDER BY {$orderColumn} {$order}
-			    LIMIT %d
-			    OFFSET %d
+		if($orderColumn == 'reporter_id') {
+			$leftJoinStr = 'LEFT JOIN {wp_prefix}users w ON w.ID = r.reporter_id';
+			$orderColumn = 'w.display_name';
+		} else if($orderColumn == 'status') {
+			// only for status sorting
+			if($order == 'ASC') {
+				$order = "CASE r.status WHEN 'new' THEN 2 ELSE 1 END, date {$order}";
+			} else {
+				$order = "CASE r.status WHEN 'new' THEN 1 ELSE 2 END, date {$order}";
+			}
+			$orderColumn = null;
+		} else {
+			$orderColumn = 'r.' . $orderColumn;
+		}
+
+		$commentInfo = trim($commentInfo);
+		// always Add User table when user enter Search Field
+		if($orderColumn != 'reporter_id' && $commentInfo) {
+			$leftJoinStr = 'LEFT JOIN {wp_prefix}users w ON w.ID = r.reporter_id';
+		}
+
+		$query = $this->preparePrefix("
+			SELECT r.*
+			FROM {prefix}reports r
+			{$leftJoinStr}
+			WHERE r.reported_id IS NOT NULL
     	");
+
+		if($commentInfo) {
+			$likeParam1 = '%' . $this->db->_escape($commentInfo) . '%';
+			$queryParams = array_merge(array($likeParam1, $likeParam1), $queryParams);
+			$query = $query . " AND (r.comment like %s OR w.display_name like %s)";
+		}
+		$query = $query . "ORDER BY {$orderColumn} {$order}
+			LIMIT %d
+			OFFSET %d";
 
 	    array_unshift($queryParams, $query);
 

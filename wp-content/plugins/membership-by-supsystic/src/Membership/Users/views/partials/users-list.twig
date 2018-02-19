@@ -2,7 +2,7 @@
     <div class="ui card mp-user-card" data-id="{{ user.id }}">
         <div class="image">
             <a href="{{ profileUrl(user) }}" class="header">
-                <img src="{{ userCover(user, 'medium') }}">
+                <img src="{{ userCover(user, 'medium') }}" alt="">
             </a>
         </div>
 
@@ -15,7 +15,21 @@
                 </div>
             </div>
 
-            <a href="{{ profileUrl(user) }}" class="header">{{ user.displayName }}</a>
+            <a href="{{ profileUrl(user) }}" style="position: relative" class="header">{{ user.displayName }}
+	            {% if user.badge_src and settings.base.main.badges == 'true' %}
+	                <img class="mp-user-badge" src="{{ (user.badge_src) }}" />
+	            {% endif %}
+            </a>
+
+			{% if user.groupInfo and user.groupInfo.group_role == 'administrator' %}
+				<div class="mbsGroupUserRole">
+					{% if user.groupInfo.is_creator == 1 %}
+						{{ translate('(Group Creator)') }}
+					{% else %}
+						{{ translate('(Group Administrator)') }}
+					{% endif %}
+				</div>
+			{% endif %}
 
             <div class="ui center aligned container mp-social-stats social-stats">
                 {% if friendsActive %}

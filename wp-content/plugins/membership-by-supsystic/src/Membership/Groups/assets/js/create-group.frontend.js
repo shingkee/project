@@ -6,6 +6,7 @@
 		$groupName = $createGroupModal.find('[name="name"]'),
 		$groupDescription = $createGroupModal.find('[name="description"]'),
 		$groupType = $createGroupModal.find('[name="type"]'),
+		$groupCategory = $createGroupModal.find('[name="category"]'),
 		$searchLoader = $searchDropdown.find('.loader'),
 		searchedUsers = [],
 		cachedSearches = [],
@@ -23,31 +24,33 @@
 				invitedUsers = invitedUsers.split(',');
 			}
 
-			if (!$groupName.val().length) {
-				return false;
-			}
-
 			Membership.api.groups.createGroup({
-				name: $groupName.val(),
-				description: $groupDescription.val(),
-				type: $groupType.val(),
-				invitedUsers: invitedUsers
+				'name': $groupName.val(),
+				'description': $groupDescription.val(),
+				'category': $groupCategory.val(),
+				'type': $groupType.val(),
+				'invitedUsers': invitedUsers,
 			}).then(function(response) {
-
-				$approveButton.removeClass('loading');
-					if (response.success) {
-						Snackbar.show({text: 'Your group successfully created. Redirecting to you new group...'});
-						window.location = response.redirect;
+				if(!response.success) {
+					if(response.message) {
+						Snackbar.show({text: response.message});
 					} else {
-						$createGroupModal.find('.actions button').removeAttr('disabled');
+						Snackbar.show({text: $('#mbsMsgErrorOcured').val()});
 					}
-				});
+				} else {
+					Snackbar.show({text: $('#mbsMsgGroupCreated-1').val()});
+					window.location = response.redirect;
+				}
+				$createGroupModal.find('.actions button').removeAttr('disabled');
+				$approveButton.removeClass('loading');
+			});
 			return false;
 		},
 		onHidden: function () {
 			$groupName.val('');
 			$groupDescription.val('');
 			$groupType.val('open');
+			$groupCategory.val(0);
 			$searchDropdown.mpDropdown('restore defaults');
 			$searchDropdown.find('.search').val('');
 		}
@@ -75,6 +78,7 @@
 
 						if (searchedUsers.indexOf(userId) === -1) {
 							$usersList.append($user);
+							searchedUsers.push(userId);
 						}
 					});
 
@@ -99,7 +103,7 @@
 			}
 		},
 		onNoResults: function(searchValue) {
-			return !(searchValue.length < 2 || self.searchUsersRequest);
+			return (searchValue.length < 2 || !self.searchUsersRequest);
 		},
 		context: $createGroupModal,
 		forceSelection: false,

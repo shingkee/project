@@ -6,7 +6,7 @@
 .mpp-tooltip {
     display: inline-block;
     vertical-align: middle;
-    margin: 0 0 0 5px;
+    margin: 0 0 0 20px;
 }
 .mbs-plug-not-install {
     padding: 15px 10px;
@@ -31,4 +31,7 @@
 #photo-gallery-enable,
 #slider-enable {
     margin-top: 10px;
+}
+.mpp-mrgn-top-8.mbsThinCol {
+    width: 250px !important;
 }

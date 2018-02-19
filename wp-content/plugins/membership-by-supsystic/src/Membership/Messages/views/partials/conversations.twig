@@ -44,8 +44,12 @@
 					<div class="field">
 						<textarea placeholder="{{ translate('Write a message') }}" rows="2"></textarea>
 					</div>
-					<div class="ui right label characters-count" style="display:none;"></div>
-					<button class="ui submit mini primary right floated button">{{ translate('Send') }}</button>
+					<div class="ui right label characters-count mbsConversationCount" style="display:none;"></div>
+					<div class="mbsMessButtonsWrap">
+						<button class="mbsAddAttachment2 ui button mini"><span class="mbs-invisible">_</span><i class="icon attach"></i></button>
+						<button class="ui submit mini primary right floated button mbsAttMessSendBtn2">{{ translate('Send') }}</button>
+						<div class="mbsAllAttachmentList2"></div>
+					</div>
 				</div>
 			</div>
 			

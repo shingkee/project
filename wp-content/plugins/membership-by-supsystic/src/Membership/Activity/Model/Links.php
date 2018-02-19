@@ -2,11 +2,14 @@
 
 class Membership_Activity_Model_Links extends Membership_Base_Model_Base
 {
+	private $url = null;
+	public $settings = null;
 
 	public function parseUrl($url) {
 
 		$urlHash = sha1($url);
 		$data = $this->getLinkDataByUrlHash($urlHash);
+		$this->url = $url;
 
 		if ($data) {
 			return $data;
@@ -124,8 +127,19 @@ class Membership_Activity_Model_Links extends Membership_Base_Model_Base
 
 		$meta['description'] = mb_substr(html_entity_decode($meta['description'], ENT_QUOTES, 'UTF-8'), 0, 160, 'UTF-8');
 
-		if (!isset($meta['og:image'])) {
-			$meta['og:image'];
+		// special prepare for amazon
+		// http://amzn.to/2saOfdF
+		// https://www.amazon.it/dp/B00U8ZRECE/ref=as_li_ss_tl?&linkCode=sl1&tag=lostadit-21&linkId=9ed4416eed6e67a101fac1e73b4bcd58
+		if(
+			!empty($this->settings['base']['import']['amazon-link-img-preview']) && $this->settings['base']['import']['amazon-link-img-preview'] == 1
+			&& !empty($this->url) && (preg_match('/amazon\./', $this->url, $urlMatch1) || preg_match('/\/amzn\./', $this->url, $urlMatch2))
+		) {
+			// url example:
+			// https://images-eu.ssl-images-amazon.com/images/I/417TDYd50UL._SY300_QL70_.jpg
+			if (preg_match('`https?:\/\/[\w\.\-_]*\/images\/[\w\.\-_]*\/[\w\.\-_]*(?:\.jpg|\.png|\.gif)`ims', $str, $match)) {
+				$meta['og:image'] = $match[0];
+			}
+		} else if (!isset($meta['og:image'])) {
 			if (preg_match('/https?:\/\/[^ ]+?(?:\.jpg|\.png|\.gif)/ims', $str, $match)) {
 				$meta['og:image'] = $match[0];
 			}

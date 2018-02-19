@@ -161,7 +161,7 @@ function the_champ_prepare_sharing_html( $postUrl, $sharingType = 'horizontal', 
 		$shareCount = array();
 		foreach ( $theChampSharingOptions[$sharingType.'_re_providers'] as $provider ) {
 			$shareCount[$provider] = $shareCounts == '&nbsp;' ? '' : ( isset( $shareCounts[$provider] ) ? $shareCounts[$provider] : '' );
-			$issetStartingShareCount = isset( $sharingMeta[$provider . '_' . $sharingType . '_count'] ) && $sharingMeta[$provider . '_' . $sharingType . '_count'] != '' ? true : false;
+			$issetStartingShareCount = isset( $sharingMeta[$provider . '_' . $sharingType . '_count'] ) && intval($sharingMeta[$provider . '_' . $sharingType . '_count']) != 0 ? true : false;
 			$totalShareCount += intval( $shareCount[$provider] ) + ($issetStartingShareCount ? $sharingMeta[$provider . '_' . $sharingType . '_count'] : 0) ;
 			$sharingNetworks[$provider] = str_replace( $toBeReplaced, $replaceBy, $sharingNetworks[$provider] );
 			$liItems .= str_replace(

@@ -3,6 +3,25 @@
 class Membership_Membership_Module extends Membership_Base_Module
 {
 	protected $menu = array();
+	protected $menuWalkerClassName = null;
+
+	public function onInit() {
+		parent::onInit();
+
+		if(is_admin()) {
+			// init custom navigation menu edit items
+			if(!$this->menuWalkerClassName) {
+				$mbsMenuItemsClass = new Membership_Membership_Model_MenuEditItemCustomFields();
+				$mbsMenuItemsClass->init();
+				add_action('wp_loaded', array($this, 'wpLoadHandler'));
+				$this->menuWalkerClassName = 'Membership_Membership_Model_MenuEditItemCustomFieldsWalker';
+			}
+		}
+
+		if(!is_admin()) {
+			add_filter('wp_get_nav_menu_items', array($this, 'conditionalNavMenuHandler'), 9999, 3);
+		}
+	}
 
 	public function afterModulesLoaded() {
 
@@ -65,6 +84,7 @@ class Membership_Membership_Module extends Membership_Base_Module
 
 		$assetsPath = $this->getAssetsPath();
         $baseAssetsPath = $this->getModule('base')->getAssetsPath();
+		$reportsAssetsPath = $this->getModule('reports')->getAssetsPath();
 
         $this->getModule('assets')->enqueueAssets(
 			array(
@@ -74,6 +94,7 @@ class Membership_Membership_Module extends Membership_Base_Module
 			array(
                 $baseAssetsPath . '/lib/tooltipster/tooltipster.bundle.min.js',
 				$assetsPath . '/js/membership.backend.js',
+				$reportsAssetsPath . '/js/reports.backend.js',
 			)
 		);
 	}
@@ -172,5 +193,51 @@ class Membership_Membership_Module extends Membership_Base_Module
 
 	public function showReviewNotice() {
 		print $this->render('@membership/backend/review-notice.twig');
+	}
+
+	public function wpLoadHandler() {
+		add_filter('wp_edit_nav_menu_walker', array($this, 'wpEditNavMenuWalkerHandler' ), 100);
+	}
+
+	public function wpEditNavMenuWalkerHandler() {
+		return $this->menuWalkerClassName;
+	}
+
+	function conditionalNavMenuHandler($items, $menu, $args) {
+
+		$childMenuArrToHide = array();
+		$isCurrUserLoggined = (int) get_current_user_id();
+
+		if(count($items)) {
+			foreach($items as $menuKey => $oneMenuItem) {
+				$mbsVisibilityValue = (int) get_post_meta($oneMenuItem->ID, 'menu-item-mbs-menu-visibility', true);
+				$currItemStayVisible = true;
+
+				if(in_array($oneMenuItem->menu_item_parent, $childMenuArrToHide)) {
+					$currItemStayVisible = false;
+					// for nested menus
+					$childMenuArrToHide[] = $oneMenuItem->ID;
+				}
+
+				// if current user Guest and param = 'logInned user' (1)
+				if(!$isCurrUserLoggined && $mbsVisibilityValue == 1) {
+					$currItemStayVisible = false;
+				}
+
+				// if current user is Authored and param = 'logOuted user' (2)
+				if($isCurrUserLoggined && $mbsVisibilityValue == 2) {
+					$currItemStayVisible = false;
+				}
+
+				if(!$currItemStayVisible) {
+					if(!in_array($oneMenuItem->ID, $childMenuArrToHide)) {
+						$childMenuArrToHide[] = $oneMenuItem->ID;
+					}
+					unset($items[$menuKey]);
+				}
+			}
+		}
+
+		return $items;
 	}
 }

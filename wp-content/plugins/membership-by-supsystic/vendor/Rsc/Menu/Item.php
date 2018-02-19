@@ -159,7 +159,6 @@ class Rsc_Menu_Item
 		$this->sortOrder = $sortOrder;
 		return $this;
 	}
-
 	public function getSortOrder() {
 		return $this->sortOrder;
 	}

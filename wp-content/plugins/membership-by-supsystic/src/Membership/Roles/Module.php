@@ -10,6 +10,11 @@ class Membership_Roles_Module extends Membership_Base_Module {
 
 		$this->getModule('routes')->registerAjaxRoutes(
 			array(
+				'roles.saveSettings' => array(
+					'method' => 'post',
+					'admin' => true,
+					'handler' => array($this->getController(), 'saveSettings')
+				),
 				'roles.createRole' => array(
 					'method' => 'post',
 					'admin' => true,

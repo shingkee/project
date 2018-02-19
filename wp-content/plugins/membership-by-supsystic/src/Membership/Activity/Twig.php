@@ -28,6 +28,7 @@ class Membership_Activity_Twig extends Twig_Extension {
 			new Twig_SimpleFunction('activityContent', array($this, 'activityContent')),
             new Twig_SimpleFunction('activityUrl', array($this->module, 'getActivityUrlById')),
             new Twig_SimpleFunction('isPostComment', array($this->module, 'isPostComment')),
+			new Twig_SimpleFunction('getActivityUrl', array($this, 'getActivityUrl')),
 		);
 	}
 
@@ -116,4 +117,24 @@ class Membership_Activity_Twig extends Twig_Extension {
 		return ' <a href="' . $url . '">' . $matches[1] . '</a>';
 	}
 
+	public function getActivityUrl($id) {
+		$activityUrl = '';
+		$routesModule = $this->module->getModule('routes');
+		$pageId = $routesModule->getPageIdByRoute('activity');
+
+		if($pageId) {
+			$activityUrl = $routesModule->getRouteUrl('activity');
+
+			$permalinkStructure = get_option('permalink_structure');
+			if($permalinkStructure) {
+				if(substr($permalinkStructure, -1) !== '/') {
+					$activityUrl .= '/';
+				}
+				$activityUrl .= $id;
+			} else {
+				$activityUrl .= '&activity_id=' . $id;
+			}
+		}
+		return $activityUrl;
+	}
 }

@@ -9,6 +9,7 @@
 		this.$list = $tabContainer.find('.groups-list');
 		this.$notFoundMessage = $tabContainer.find('.no-groups');
 		this.$searchInput = $tabContainer.find('.group-search-input input');
+		this.$groupsCategory = $tabContainer.find('.mbsGroupsSearchCategory');
 		this.fetchGroupsRequest = false;
 	};
 
@@ -18,16 +19,27 @@
 		this.$groups = this.$list.find('.mp-group-card');
 		this.offsetId = this.$groups.last().attr('data-id');
 		this.hasMoreGroups = this.$groups.length == this.limit;
+		this.searchByEnterFlag = false;
 
-		this.$searchInput.on('keyup', Membership.helpers.debounce(function() {
-			if (this.value.length > 2 || this.value.length === 0) {
+		var searchHandler = Membership.helpers.debounce(function() {
+			if(self.searchByEnterFlag == true || self.$searchInput.val().length > 2 || self.$searchInput.val().length === 0 || $(this).hasClass('mbsGroupsSearchCategory')) {
 				self.$list.empty();
 				self.offsetId = null;
 				self.$loader.show();
 				self.hasMoreGroups = true;
 				self.fetchGroups();
 			}
-		}, 1000));
+			self.searchByEnterFlag = false;
+		}, 1000);
+
+		this.$searchInput.on('keyup', searchHandler);
+		this.$groupsCategory.on('change', searchHandler);
+		this.$searchInput.on('keydown', function(event) {
+			if(event.which  == 13) {
+				self.searchByEnterFlag = true;
+				//searchHandler();
+			}
+		});
 
 		this.$list.mpVisibility({
 			once: false,
@@ -52,20 +64,22 @@
 		switch (this.listType) {
 			case 'all':
 				request = Membership.api.groups.get({
-					limit: this.limit,
-					offsetId: this.offsetId,
-					search: this.$searchInput.val()
+					'limit': this.limit,
+					'offsetId': this.offsetId,
+					'search': this.$searchInput.val(),
+					'category_id': this.$groupsCategory.val(),
 				});
 				break;
 			case 'joined':
 			case 'managed':
 			case 'invited':
 				request = Membership.api.groups.getUserGroups({
-					userId: Membership.get('requestedUser.id') || Membership.get('currentUser.id'),
-					type: this.listType,
-					limit: this.limit,
-					offsetId: this.offsetId,
-					search: this.$searchInput.val()
+					'userId': Membership.get('requestedUser.id') || Membership.get('currentUser.id'),
+					'type': this.listType,
+					'limit': this.limit,
+					'offsetId': this.offsetId,
+					'search': this.$searchInput.val(),
+					'category_id': this.$groupsCategory.val(),
 				});
 				break;
 		}

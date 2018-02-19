@@ -66,7 +66,11 @@
 
 	$('.sc .sc-container, .sc-modal-container').on('change', 'input, textarea', function(event) {
 		if (event.originalEvent !== undefined) {
-			unsavedChanges = true;
+			var elementIdAttrVal = $(this).attr('id');
+			// not set param if changed input is groupCategory
+			if(elementIdAttrVal != 'mbsGroupCategoryName' && elementIdAttrVal != 'mbsReportFindField') {
+				unsavedChanges = true;
+			}
 		}
  	});
 
@@ -149,9 +153,10 @@
 				sourceHeightInputName = $sourceInput.data('default-height-input-name'),
 				cropDataInputName = $sourceInput.data('default-crop-input-name'),
 				$sourceInputValue = $sourceInput.val(),
-				$image = $('<img>', {style: 'height: auto; max-width: 100%;'});
-
-
+				$image = $('<img>', {style: 'height: auto; max-width: 100%;'}),
+				$badgeInput = $parent.find('input[name="badge_img"]'),
+				$ImgInput = $parent.find('input[name="img_id"]');
+			
 			var $modal = $('<div></div>').sModal({
 					width: '80%',
 					height: 600,
@@ -197,6 +202,13 @@
 
 				$sourceInput.val(attachment.url);
 				$previewImage.attr('src', attachment.url);
+				$previewImage.css('display', 'inline');
+				if($badgeInput.length > 0){
+					$badgeInput.val(attachment.id);
+				}
+				if($ImgInput.length > 0){
+					$ImgInput.val(attachment.id);
+				}
 				$parent.find('.mp-set-to-default').fadeIn();
 				frame = null;
 				$modal.find('.crop-image-wrapper').remove();
@@ -243,9 +255,20 @@
 			$input.val($input.data('default-image'));
 			$parent.find('img').attr('src', $input.data('default-image'));
 			$parent.find('.mp-set-to-default').fadeOut();
-
 		});
-
+		
+		$('.mp-default-image').on('click', '.mp-remove-info', function(event) {
+			event.preventDefault();
+			var $this = $(this)
+			,	$parent = $this.parent()
+			,   $inputImgId = $parent.find('input[name="img_id"]')
+			,   $inputImgSrc = $parent.find('input[name="img_src"]')
+			,   $inputPreview = $parent.find('img');
+			
+			$inputImgId.val('');
+			$inputImgSrc.val('');
+			$inputPreview.css('display', 'none').attr('src', '');
+		});
 	});
 
 	$('.mbs-checkbox-for-enable').on('change', function() {

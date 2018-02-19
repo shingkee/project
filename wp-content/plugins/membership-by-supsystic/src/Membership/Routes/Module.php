@@ -347,6 +347,9 @@ class Membership_Routes_Module extends Membership_Base_Module {
 				'groups' => array(
 					'title' => $this->translate('Groups')
 				),
+				'joined-groups' => array(
+					'title' => $this->translate('Joined Groups'),
+				),
 				'activity' => array(
 					'title' => $this->translate('Activity')
 				),
@@ -358,7 +361,7 @@ class Membership_Routes_Module extends Membership_Base_Module {
 				),
 				'search' => array(
 					'title' => $this->translate('Search')
-				)
+				),
 			)));
 		}
 		return $this->pagesList;

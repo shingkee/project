@@ -33,7 +33,7 @@
 
 		$form.on('submit', function(event) {
 			event.preventDefault();
-
+			
 			var formData = $form.find(':input').serializeJSON(),
 				validationCheck = Membership.validateForm($form, formData, validationRules),
 				$firstErrorField = $('.field.tooltipstered').first();
@@ -48,23 +48,45 @@
 			}
 
 			$submitButton.attr('disabled', true).addClass('loading');
-
+			
 			Membership.ajax({
-				route: 'auth.registration',
-				formData: formData
+				route: 'auth.getNonce'
 			}, {
 				method: 'post'
 			}).done(function(response) {
 				if (response.success) {
-					if (response.message !== '') {
-						$('form').hide();
-						$('.message.success').html(response.message).show();
-						setTimeout(function() {
-							window.location = response.redirect;
-						}, 5000);
-					} else {
-						window.location = response.redirect;
-					}
+					$('#_wpnonce').val(response.nonce);
+					var formData = $form.find(':input').serializeJSON();
+					Membership.ajax({
+						route: 'auth.registration',
+						formData: formData
+					}, {
+						method: 'post'
+					}).done(function(response) {
+						if (response.success) {
+							if (response.message !== '') {
+								$('form').hide();
+								$('.message.success').html(response.message).show();
+								setTimeout(function() {
+									window.location = response.redirect;
+								}, 5000);
+							} else {
+								window.location = response.redirect;
+							}
+						} else {
+							if(typeof grecaptcha != 'undefined') {
+								grecaptcha && grecaptcha.reset();
+							}
+							Membership.showFormResponseErrors(response.errors, $form);
+							$submitButton.removeAttr('disabled').removeClass('loading');
+						}
+					}).error(function (response) {
+						if(typeof grecaptcha != 'undefined') {
+							grecaptcha && grecaptcha.reset();
+						}
+						showResponseErrors(response.responseJSON.errors);
+						$submitButton.removeAttr('disabled').removeClass('loading');
+					});
 				} else {
 					if(typeof grecaptcha != 'undefined') {
 						grecaptcha && grecaptcha.reset();

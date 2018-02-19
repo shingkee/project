@@ -149,9 +149,19 @@ class Membership_Base_Validator {
         );
 
 		$file = $this->input[$attribute];
+
+		if (!function_exists('exif_imagetype')) {
+			function exif_imagetype($filename) {
+				if ((list($width, $height, $type, $attr) = getimagesize($filename)) !== false) {
+					return $type;
+				}
+				return false;
+			}
+		}
+
 		$mimeType = image_type_to_mime_type(exif_imagetype($file['tmp_name']));
 		$extension = strtolower(substr(strrchr($file['name'], "."), 1));
-		
+
 		if (!in_array($extension, $allowedFormats) || $mimes[$extension] !== $mimeType) {
 			return false;
 		}

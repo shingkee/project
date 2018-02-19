@@ -97,3 +97,20 @@ input[type=number]::-webkit-outer-spin-button {
     right: auto;
     bottom: auto;
 }
+.mbsInputUnderLabel {
+	font-size: 11px;
+	color: rgba(191,191,191,.87);
+	margin-left: 10px;
+}
+.ui.checkbox.mbsFrontendCheckbox {
+	display: inline;
+	vertical-align: middle !important;
+}
+.sc-membership .ui.form .mbsFrontendLbl {
+	display: inline;
+	vertical-align: middle;
+	margin-left: 10px;
+}
+.ui.two.cards {
+	margin: 0 -1em;
+}

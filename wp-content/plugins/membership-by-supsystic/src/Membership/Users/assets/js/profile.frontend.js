@@ -42,6 +42,7 @@
 	// User action buttons
 	var $actionMenu = $('.mp-user-action-menu'),
 		$actionMenuItems = $actionMenu.find('.menu > .fitted.item').slice(2),
+		mbsAmb2 = null,
 		$dropDownMenu = $actionMenu.find('.menu > .dropdown.item .menu');
 
 	$dropDownMenu.append($actionMenuItems);
@@ -60,9 +61,12 @@
 		onApprove: function($button) {
 			var $textarea = $sendMessageToUserModal.find('textarea'),
 				message = $.trim($textarea.val()),
+				attachmentArr = [],
 				userId = Membership.requestedUser.id;
-
-			if (!message.length) {
+			if(mbsAmb2) {
+				attachmentArr = mbsAmb2.getAttachedIds()
+			}
+			if (!message.length && !attachmentArr.length) {
 				return false;
 			}
 
@@ -71,7 +75,8 @@
 
 			Membership.api.messages.sendMessageToUser({
 				userId: userId,
-				message: message
+				message: message,
+				'attachments': attachmentArr,
 			}).then(function(response) {
 				if (response.success) {
 					Snackbar.show({text: 'Message was sent.'});
@@ -84,6 +89,12 @@
 			});
 
 			return false;
+		},
+		'onShow': function() {
+			if(mbsAmb2) {
+				$('.mbsAttMessSendBtn').prop('disabled', false);
+				mbsAmb2.clearAttachmentWrapper();
+			}
 		},
 		onHidden: function() {
 			$sendMessageToUserModal.find('textarea').val('');
@@ -386,5 +397,11 @@
 		action: 'hide'
 	});
 
+	$(document).ready(function() {
+		if(window.mbsAttachmentMessageBehavior && $sendMessageToUserModal.length) {
+			mbsAmb2 = new window.mbsAttachmentMessageBehavior();
+			mbsAmb2.init($sendMessageToUserModal);
+		}
+	});
 
 }(jQuery, Membership));

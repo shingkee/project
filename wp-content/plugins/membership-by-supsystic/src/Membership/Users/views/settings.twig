@@ -50,17 +50,19 @@
 				</div>
 				<button class="ui button primary mini change-password">{{ translate('Change password') }}</button>
 			</div>
-			
-			<h3 class="ui header">{{ translate('Account Deletion') }}</h3>
-			<div class="ui form">
-				<div class="field">
-					<div class="ui checkbox">
-						<input type="checkbox" id="delete-confirmation" class="hidden confirm-deletion">
-						<label for="delete-confirmation">{{ translate('Confirm deletion (All user data will be deleted and cannot be restored)') }}</label>
+
+			{% if currentUserCan('can-delete-their-account') %}
+				<h3 class="ui header">{{ translate('Account Deletion') }}</h3>
+				<div class="ui form">
+					<div class="field">
+						<div class="ui checkbox">
+							<input type="checkbox" id="delete-confirmation" class="hidden confirm-deletion">
+							<label for="delete-confirmation">{{ translate('Confirm deletion (All user data will be deleted and cannot be restored)') }}</label>
+						</div>
 					</div>
+					<button class="ui button negative mini confirm-deletion-button" style="display: none">{{ translate('Delete account') }}</button>
 				</div>
-				<button class="ui button negative mini confirm-deletion-button" style="display: none">{{ translate('Delete account') }}</button>
-			</div>
+			{% endif %}
 		</div>
 	</div>
 	<div class="ui tab" data-tab="privacy">
@@ -93,6 +95,12 @@
 						{% endfor %}
 					</select>
 				</div>
+				{% if bConfig.showFriendPostOpt == 1 %}
+					<div class="field">
+						<input type="checkbox" class="ui checkbox mbsFrontendCheckbox" id="mbsUserPrivacyHideFriendPost" name="friendPost" value="1" {% if currentUser.privacy['hideFriendPost'] == 1 %}checked="checked"{% endif %}/>
+						<label for="mbsUserPrivacyHideFriendPost" class="mbsFrontendLbl">{{ translate("Don't add friend's posts to my activity.") }}</label>
+					</div>
+				{% endif %}
 				<div class="field">
 					<label>{{ translate('Who can comment my activity posts.') }}</label>
 					<select class="ui dropdown" name="post-comments">

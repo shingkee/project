@@ -43,7 +43,7 @@
     {{ translate('Enable this option and page Activity will be created on your website.') }}
 {% endmacro %}
 
-{% macro after_registartion_action() %}
+{% macro after_registration_action() %}
     {{ translate('After user submits a registration form, he will be redirected to his profile or to the specified link.') }}
 {% endmacro %}
 
@@ -57,6 +57,10 @@
 
 {% macro after_delete_account_action() %}
     {{ translate('After user deletes his account, he will be redirected to the main page or to the specified link.') }}
+{% endmacro %}
+
+{% macro badges() %}
+	{{ translate('Add image to user name in frontend') }}
 {% endmacro %}
 
 {% macro global_site_access() %}
@@ -303,6 +307,10 @@
     {{ translate('If this option is enabled, only members with cover photo will be shown on "Members" tab.') }}
 {% endmacro %}
 
+{% macro show_tabs() %}
+	{{ translate('If this option is enabled, authorized members can swich tabs (friends, follows, followers) on Member page.') }}
+{% endmacro %}
+
 {% macro sort_users_by() %}
     {{ translate('Select the sorting order to display users on "Members" tab.') }}
 {% endmacro %}
@@ -398,6 +406,14 @@
 
 {% macro login_google_recaptcha_secret_key() %}
 	{{ translate('Your secret key, generated on <a href="https://www.google.com/recaptcha/admin#list" target="_blank">https://www.google.com/recaptcha/admin#list</a>.') }}
+{% endmacro %}
+
+{% macro activityTypesFriendPostOn() %}
+	{{ translate("Shared post by user will be displayed in all user's friends Activity page") }}
+{% endmacro %}
+
+{% macro activityTypesFriendPostInFrontendOn() %}
+	{{ translate("Allow users to disable automatic sharing of friend's posts") }}
 {% endmacro %}
 
 {{ environment.dispatcher.dispatch('adminTooltips') }}

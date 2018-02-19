@@ -182,6 +182,7 @@ class Membership_Users_Model_Profile extends Membership_Base_Model_Base
 				$user['fields'] = isset($userMeta['membership_fields']) ? $userMeta['membership_fields'][0] : null;
 				$user['privacy'] = isset($userMeta['membership_privacy']) ? $userMeta['membership_privacy'][0] : null;
 				$user['notifications'] = isset($userMeta['membership_notifications']) ? $userMeta['membership_notifications'][0] : null;
+				$user['nickname'] = !empty($userMeta['nickname'][0]) ? $userMeta['nickname'][0] : null;
 
 
 				$statusesList = $this->userStatusesList();
@@ -393,7 +394,13 @@ class Membership_Users_Model_Profile extends Membership_Base_Model_Base
 
 		return $extraWhere;
 	}
-
+	public function prepareMetaField($meta){
+		$aliasPrepare = mb_convert_encoding($meta, 'UTF-8' );
+		$alias = strtolower($this->getModule('base')->translateCyrillicToLatin(
+			preg_replace('/[^\w0-9]/u', '_', $aliasPrepare)
+		));
+		return $alias;
+	}
 	public function getUsers(array $params) {
 
 		$limit = isset($params['limit']) ? $params['limit'] : 10;
@@ -402,6 +409,8 @@ class Membership_Users_Model_Profile extends Membership_Base_Model_Base
 		$showOnlyActive = isset($params['showOnlyActive']) ? $params['showOnlyActive'] : true;
 		$withUsersExtraQuery = isset($params['withUsersExtraQuery']) ? $params['withUsersExtraQuery'] : true;
 		$count = isset($params['count']) ? true : false;
+		$metaKey = isset($params['meta_key']) ? $params['meta_key'] : false;
+		$metaValue = isset($params['meta_value']) ? $params['meta_value'] : false;
 
 		$settings = $this->getModule('users')->getSettings();
 
@@ -491,6 +500,52 @@ class Membership_Users_Model_Profile extends Membership_Base_Model_Base
 			);
 		}
 
+		if($metaKey && $metaValue){
+			$fields = $this->getModel('fields', 'users')->getFields();
+			$typeNeedPrepare = array('drop', 'checkbox', 'radio', 'scroll');
+			$metaParams = array();
+
+			if(count($fields)){
+				foreach ($fields as $field){
+					if($field['label'] === $metaKey){
+						$metaParams['name'] = $field['name'];
+						$metaParams['type'] = $field['type'];
+						if(in_array($metaParams['type'], $typeNeedPrepare)){
+							$metaParams['value'] = $this->prepareMetaField($metaValue);
+						}else{
+							$metaParams['value'] = $metaValue;
+						}
+					}
+				}
+			}
+
+			$userIdsResult = array();
+
+			$subQuery = $this->preparePrefix("
+				SELECT f.id, f.user_id
+				FROM {prefix}fields AS f
+	            WHERE f.name = '".$metaParams['name']."'
+			");
+			$fields = $this->db->get_results($subQuery, ARRAY_A);
+
+			$subQuery = $this->preparePrefix("
+					SELECT f.field_id
+					FROM {prefix}fields_data AS f
+		            WHERE f.data = '".$metaParams['value']."'
+				");
+			$fieldsData = $this->db->get_col($subQuery);
+
+			foreach ( $fields as $field) {
+				if(in_array($field['id'],$fieldsData)){
+					$userIdsResult[] = $field['user_id'];
+				}
+			}
+
+			$userIdsResultStr = implode(",", $userIdsResult);
+
+			$andWhere = 'AND us.ID in ('.$userIdsResultStr.')';
+		}
+
 		$query = $this->preparePrefix("
 			SELECT DISTINCT u.ID
 			FROM {wp_base_prefix}users AS u
@@ -504,7 +559,6 @@ class Membership_Users_Model_Profile extends Membership_Base_Model_Base
 
 		$query .= " $order";
 		$query .= $this->db->prepare(' LIMIT  %d, %d',  array($offset, $limit));
-
 		$users = $this->db->get_col($query);
 
 		if ($users) {
@@ -513,14 +567,20 @@ class Membership_Users_Model_Profile extends Membership_Base_Model_Base
 			$users = $this->getUsersByIds(array('users' => $users, 'orderBy' => $orderBy));
 		}
 
+
+		$users = $this->getDispatcher()->apply('badges.addBadges', array($users));
+
 		return $users;
 	}
 
     public function getUsersCount(array $params) {
 	    $search = isset($params['search']) ? $params['search'] : null;
 	    $params['count'] = true;
-	    if ($search) {
-		    $count = $this->searchByName($params);
+	    if (!is_null($search)) {
+		    //backend search count by first, last name, and by username
+		    $countFirst = $this->searchByName($params);
+		    $countSecond = $this->searchByName($params, true);
+		    $count = $countFirst + $countSecond;
 	    } else {
 		    $count = $this->getUsers($params);
 	    }
@@ -528,7 +588,10 @@ class Membership_Users_Model_Profile extends Membership_Base_Model_Base
     }
 
     public function searchUsersByName(array $params) {
-	    $users = $this->searchByName($params);
+		//backend search by first, last name, and by username
+	    $usersFirst = $this->searchByName($params);
+	    $usersSecond = $this->searchByName($params, true);
+	    $users = array_unique(array_merge($usersFirst, $usersSecond));
 
 	    if ($users) {
 		    $_users = implode(', ', $users);
@@ -539,8 +602,180 @@ class Membership_Users_Model_Profile extends Membership_Base_Model_Base
 	    return $users;
     }
 
-	public function searchByName(array $params) {
+	public function getQueryForSearchUsersByParams(array $params) {
+		$search = !empty($params['search']) ? $params['search'] : null;
+		$limit = isset($params['limit']) ? $params['limit'] : 10;
+		$offset = isset($params['offset']) ? $params['offset'] : null;
+		$offsetId = isset($params['offsetId']) ? $params['offsetId'] : null;
+		$userRoleId = !empty($params['userRoleId']) ? (int)$params['userRoleId'] : null;
+		$userMetaKey = isset($params['meta_key']) ? $params['meta_key'] : false;
+		$userMetaValue = isset($params['meta_value']) ? $params['meta_value'] : false;
+		$isReturnCount = !empty($params['count']) ? true : false;
 
+		$searchByUserName = false;
+		$searchByFirstName = false;
+		$searchByLastName = false;
+		// search by field name
+		if(!empty($params['searchBy']['username'])) {
+			$searchByUserName = true;
+		}
+		if(!empty($params['searchBy']['lastname'])) {
+			$searchByLastName = true;
+		}
+		if(!empty($params['searchBy']['firstname'])) {
+			$searchByFirstName = true;
+		}
+		if(!$searchByUserName && !$searchByFirstName && !$searchByLastName) {
+			return null;
+		}
+
+		$andWhere = '';
+		$orderBy = null;
+
+		$extraJoin = " LEFT JOIN {prefix}users_roles AS ur ON ur.user_id = search.user_id ";
+		if (is_multisite()) {
+			$extraJoin .= $this->db->prepare(
+				" JOIN {wp_base_prefix}usermeta AS msum ON (msum.user_id = search.user_id AND msum.meta_key = %s)",
+				$this->getCapabilitiesMetaKey()
+			);
+		}
+		if($userMetaKey && $userMetaValue){
+			$extraJoin .= ' INNER JOIN {wp_base_prefix}usermeta AS umeta ON (u.ID = umeta.user_id AND umeta.meta_key = "'.$userMetaKey.'" AND umeta.meta_value = "'.$userMetaValue.'")';
+		}
+		// restrict by role
+		$accessRoles = $this->getModule('users')->getCurrentUserRolesAccessPermissions();
+
+		if(in_array('all', $accessRoles)) {
+			// when all
+			if($userRoleId) {
+				$andWhere .= " AND ur.role_id = $userRoleId ";
+			}
+		} else if(!empty($accessRoles)) {
+			if(is_array($accessRoles)) {
+				if($userRoleId && in_array($userRoleId, $accessRoles)) {
+					$andWhere .= " AND ur.role_id = $userRoleId ";
+				} else {
+					$roles = implode(',', $accessRoles);
+					$andWhere .= " AND ur.role_id IN ($roles) ";
+				}
+			}
+		}
+
+		$queryUserIds = array();
+		$searchLenght = strlen($search);
+		// search by username
+		if ($searchByUserName) {
+			$whereQ1 = array();
+			if($searchLenght) {
+				$whereQ1[] = $this->db->prepare(" u.user_login LIKE %s", array($this->db->esc_like($search) . '%'));
+			}
+			if ($offsetId) {
+				$whereQ1[] = $this->db->prepare(" u.ID < '%d' ", $offsetId);
+			}
+
+			if(count($whereQ1) == 0) {
+				$whereQ1 = '';
+			} else if(count($whereQ1) == 1) {
+				$whereQ1 = " WHERE " . $whereQ1[0];
+			} else if(count($whereQ1) > 1) {
+				$whereQ1 = " WHERE " . implode(" AND ", $whereQ1);
+			}
+
+			$queryUserIds[] = $this->preparePrefix("(
+				SELECT u.ID as user_id
+				FROM {wp_base_prefix}users AS u " . $whereQ1 . ')');
+		}
+		// search by First Name and Last Name
+		if($searchLenght && ($searchByFirstName || $searchByLastName)) {
+			$whereQ2 = array();
+			if ($offsetId) {
+				$whereQ2[] = $this->db->prepare(" um.user_id < '%d' ", $offsetId);
+			}
+			if(strlen($search)) {
+				$whereQ2[] = $this->db->prepare(' um.meta_value REGEXP %s', array('^' . implode('|^', explode(' ', $search))));
+			}
+
+			if(count($whereQ2) == 0) {
+				$whereQ2 = '';
+			} else if(count($whereQ2) == 1) {
+				$whereQ2 = ' AND ' . $whereQ2[0];
+			} else {
+				$whereQ2 = ' AND ' . implode(' AND ', $whereQ2);
+			}
+
+			if($searchByFirstName) {
+				$queryUserIds[] = $this->preparePrefix("(
+					SELECT um.user_id
+					FROM {wp_base_prefix}usermeta AS um
+					WHERE um.meta_key = 'first_name' $whereQ2
+				)");
+			}
+			if($searchByLastName) {
+				$queryUserIds[] = $this->preparePrefix("(
+					SELECT um.user_id
+					FROM {wp_base_prefix}usermeta AS um
+					WHERE um.meta_key = 'last_name' $whereQ2
+				)");
+			}
+		}
+		$fullFindQuery = implode(' UNION ', $queryUserIds);
+
+		// search by Full name
+		if($searchLenght && !$isReturnCount) {
+			$havingRegexp = $search;
+			if (strpos($search, ' ') !== false) {
+				$havingRegexp .= '|' . implode(' ', array_reverse(explode(' ', $search)));
+			}
+			$andWhere .= $this->db->prepare(" HAVING 1=1 OR fullName REGEXP '%s' ", array($havingRegexp));
+		}
+
+		$query = $this->preparePrefix("
+				SELECT DISTINCT search.user_id, CONCAT(umfn.meta_value, ' ', umln.meta_value) AS fullName
+				FROM ({$fullFindQuery}) AS search
+				JOIN {wp_base_prefix}users AS u ON (u.ID = search.user_id)
+				LEFT JOIN {prefix}users_statuses AS us ON (us.user_id = search.user_id)
+				JOIN {wp_base_prefix}usermeta AS umfn ON (umfn.user_id = search.user_id AND umfn.meta_key = 'first_name')
+				JOIN {wp_base_prefix}usermeta AS umln ON (umln.user_id = search.user_id AND umln.meta_key = 'last_name')
+				{$extraJoin}
+				WHERE 1 = 1 {$andWhere}
+			");
+
+		if($isReturnCount) {
+			$query = "SELECT COUNT(*) AS count FROM (" . $query . ") AS cres ";
+		}
+		$query .= $this->db->prepare(' LIMIT %d', $limit);
+
+		if ($offset) {
+			$query .= $this->db->prepare(' OFFSET %d', $offset);
+			$queryParams[] = $offset;
+		}
+
+		return $query;
+	}
+
+	public function getUsersIdsByParams($params) {
+		$res = null;
+		$query = self::getQueryForSearchUsersByParams($params);
+		if($query) {
+			$res = $this->db->get_col($query);
+		}
+		return $res;
+	}
+
+	public function getUsersCountByParams($params) {
+		$params['count'] = 1;
+		$res = 0;
+		$query = self::getQueryForSearchUsersByParams($params);
+		if($query) {
+			$dbRes = $this->db->get_col($query);
+			if(count($dbRes)) {
+				$res = (int)$dbRes[0];
+			}
+		}
+		return $res;
+	}
+
+	public function searchByName(array $params, $searchByNameAndUsername = false) {
 		$search = $params['search'];
 		$limit = isset($params['limit']) ? $params['limit'] : 10;
 		$offset = isset($params['offset']) ? $params['offset'] : null;
@@ -552,9 +787,20 @@ class Membership_Users_Model_Profile extends Membership_Base_Model_Base
 		$showOnlyActive = isset($params['showOnlyActive']) ? $params['showOnlyActive'] : true;
 		$withUsersExtraQuery = isset($params['withUsersExtraQuery']) ? $params['withUsersExtraQuery'] : true;
 
+		$userMetaKey = isset($params['meta_key']) ? $params['meta_key'] : false;
+		$userMetaValue = isset($params['meta_value']) ? $params['meta_value'] : false;
+
 		$settings = $this->getModule('base')->getSettings();
 
 		$searchByUsername = $settings['profile']['display-name'] === 'username';
+
+		if($searchByNameAndUsername){
+			if($searchByUsername){
+				$searchByUsername = false;
+			}else{
+				$searchByUsername = true;
+			}
+		}
 
 		$orderBy = null;
 
@@ -663,6 +909,9 @@ class Membership_Users_Model_Profile extends Membership_Base_Model_Base
 
 		}
 
+		if($userMetaKey && $userMetaValue){
+			$extraJoin .= ' INNER JOIN {wp_base_prefix}usermeta AS umeta ON (u.ID = umeta.user_id AND umeta.meta_key = "'.$userMetaKey.'" AND umeta.meta_value = "'.$userMetaValue.'")';
+		}
 		$query = $this->preparePrefix("
 				SELECT
 					search.user_id, CONCAT(umfn.meta_value, ' ', umln.meta_value) AS fullName

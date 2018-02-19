@@ -847,6 +847,7 @@ class TheChampFollowWidget extends WP_Widget {
 		if ( $instance['rss_feed'] ) {
 			$html .= '<li class="theChampSharingRound"><i style="'. $iconStyle .'" alt="RSS Feed" title="RSS Feed" class="theChampSharing theChampRSSBackground"><a target="_blank" href="'. $instance['rss_feed'] .'" rel="noopener"><ss style="display:block" class="theChampSharingSvg theChampRSSSvg"></ss></a></i></li>';
 		}
+		$html = apply_filters( 'heateor_ss_follow_icons', $html, $instance, $iconStyle );
 		$html .= '<ul>';
 
 		return $html;

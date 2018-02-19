@@ -107,6 +107,7 @@
 					}
 				}
 
+				$closeButton.addClass('mbsCloseTutorial');
 				$closeButton.on('mousedown', function(event) {
 					self.hasNextStep = false;
 				});

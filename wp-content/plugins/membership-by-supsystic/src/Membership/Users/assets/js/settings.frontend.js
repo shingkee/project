@@ -76,10 +76,19 @@
 
 				$request = Membership.api.users.deleteAccount({password:password})
 					.then(function(response) {
-						if (response.success && response.redirect) {
-							window.location = response.redirect;
+						if (response.success) {
+							var redirectUrl = response.redirect;
+							Membership.api.users.wpLogout().then(function(response) {
+								if(redirectUrl) {
+									window.location = redirectUrl;
+								}
+							});
 						}
 						return response;
+					}, function(response) {
+						Snackbar.show({text: 'Access denied!'});
+						$approveButton.removeClass('loading');
+						$modalActionButtons.attr('disabled', false);
 					});
 
 				break;
@@ -90,7 +99,9 @@
 			$modalActionButtons.removeClass('loading').removeAttr('disabled');
 
 			if (response.success) {
-				Snackbar.show({text: response.message});
+				if(response.message) {
+					Snackbar.show({text: response.message});
+				}
 				$modal.mpModal('hide');
 			} else {
 				$form.addClass('error');
@@ -147,23 +158,6 @@
 		$deleteAccountModal.mpModal('show', 'delete-account');
 	});
 
-	var $privacySettings = $('.privacy-settings');
-
-	$privacySettings.find('.dropdown').mpDropdown({
-		onChange: function() {
-			var privacies = {};
-
-			$privacySettings.find('select').each(function() {
-				var $select = $(this);
-				privacies[$select.attr('name')] = $select.val();
-			});
-
-			return Membership.api.users.updatePrivacy({privacies:privacies}).then(function(response) {
-				Snackbar.show({text: response.message});
-			});
-		}
-	});
-
 	var $blockedUsers = $('.blocked-users .blocked-user');
 
 	$blockedUsers.each(function() {
@@ -205,4 +199,37 @@
 		});
 	}
 
+	function mbsProfileSettings() {
+
+	}
+
+	mbsProfileSettings.prototype.init = (function() {
+		this.initPrivacyTab();
+	});
+
+	mbsProfileSettings.prototype.initPrivacyTab = (function() {
+		var $privacySettings = $('.privacy-settings')
+		,	$hideFriendPostCheckbox = $('#mbsUserPrivacyHideFriendPost')
+		;
+		function savePrivacyTabValuesToDb() {
+			var privacies = {};
+			$privacySettings.find('select').each(function() {
+				var $select = $(this);
+				privacies[$select.attr('name')] = $select.val();
+			});
+			privacies['hideFriendPost'] = $hideFriendPostCheckbox.is(':checked') == 1 ? 1 : 0;
+			return Membership.api.users.updatePrivacy({'privacies':privacies}).then(function(response) {
+				Snackbar.show({text: response.message});
+			});
+		}
+
+		$privacySettings.find('.dropdown').mpDropdown({
+			onChange: savePrivacyTabValuesToDb,
+		});
+
+		$hideFriendPostCheckbox.on('change', savePrivacyTabValuesToDb);
+	});
+
+	var profileSettings = new mbsProfileSettings();
+	profileSettings.init();
 })(jQuery, Membership);

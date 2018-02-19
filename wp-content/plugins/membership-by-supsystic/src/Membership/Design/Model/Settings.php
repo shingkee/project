@@ -87,8 +87,9 @@ class Membership_Design_Model_Settings extends Membership_Base_Model_Settings
 				'roles-to-display' => array('all'),
 				'show-only-with-avatar' => 'false',
 				'show-only-with-cover' => 'false',
-                'show-load-more-button' => 'false',
+                'show-load-more-button' => 'true',
                 'show-pages' => 'false',
+                'show-tabs' => 'false',
 				'sort-users-by' => 'new-users-first',
 				'show-friends-and-followers' => 'true'
 			),

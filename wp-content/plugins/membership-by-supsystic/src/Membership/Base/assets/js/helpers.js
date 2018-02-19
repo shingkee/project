@@ -1017,6 +1017,10 @@
 		}
 		this._$form.find(':input[type="checkbox"]').trigger('change');
 		this._$form.find('[name="id"]').val('');
+		this._$form.find('img').css('display', 'none');
+		
+		
+		
 	};
 	editForm.prototype.showForm = function() {
 		Membership.switchWnd(this.get('wndId'), {show: true});
@@ -1044,6 +1048,7 @@
 				this._fillInFormValue( key, data );
 			}
 		}
+		
 	};
 	editForm.prototype._fillInFormValue = function( key, data, isParams ) {
 		var type = this._formFields[ key ] ? this._formFields[ key ].type : false

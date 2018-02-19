@@ -45,7 +45,7 @@ class __TwigTemplate_b3cc1e3de7c0f7ff651bd8476542d13fcdc6d12608726f89e88b91eaf44
 \t\t\t\t<img src=\"";
             // line 5
             echo twig_escape_filter($this->env, $this->env->getExtension('Membership_Groups_Twig')->groupsCover($context["group"], "medium"), "html", null, true);
-            echo "\">
+            echo "\" alt=\"\">
                 ";
             // line 6
             if (($this->getAttribute($context["group"], "currentUserIsFollowing", array()) == true)) {
@@ -81,7 +81,7 @@ class __TwigTemplate_b3cc1e3de7c0f7ff651bd8476542d13fcdc6d12608726f89e88b91eaf44
 \t\t\t\t\t\t<img src=\"";
             // line 21
             echo twig_escape_filter($this->env, $this->env->getExtension('Membership_Groups_Twig')->groupsLogo($context["group"], "large"), "html", null, true);
-            echo "\">
+            echo "\" alt=\"\">
 \t\t\t\t\t</a>
 \t\t\t\t</div>
 \t\t\t</div>

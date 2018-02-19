@@ -33,8 +33,11 @@
                 <button class="ui mini secondary button" data-action="cancel">{{ translate('Cancel') }}</button>
             </div>
         {% endif %}
-
-        <div class="mp-user-display-name">{{ requestedUser.displayName }}</div>
+        <div class="mp-user-display-name">{{ requestedUser.displayName }}
+        {% if(requestedUser.badge_src and settings.base.main.badges == 'true') %}
+	        <img class="mp-single-badge" src="{{ requestedUser.badge_src }}" />
+        {% endif %}
+        </div>
 
         <div class="mp-avatar-container">
             <div class="mp-avatar {% if isDefaultAvatar(requestedUser) %}default{% endif %} update-avatar-menu">
@@ -213,5 +216,5 @@
     {% block content %}{% endblock %}
 </div>
 
-{% include '@users/partials/users-send-message-modal.twig' %}
+{{ environment.dispatcher.dispatch('users.send.message.modal.wnd') }}
 {% include '@users/partials/users-report-modal.twig' %}

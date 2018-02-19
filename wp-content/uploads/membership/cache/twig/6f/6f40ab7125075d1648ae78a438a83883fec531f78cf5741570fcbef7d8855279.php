@@ -34,18 +34,42 @@ class __TwigTemplate_e332b76b05f1d087400b0f48a0b8b4e9526cb1a331e064e1ecc4dcad986
                 <textarea rows=\"5\"></textarea>
             </div>
         </div>
-    </div>
+\t\t";
+        // line 13
+        if ((($context["useAttachment"] ?? null) == 1)) {
+            // line 14
+            echo "\t\t\t<div class=\"mbs-all-attachment-list\"></div>
+\t\t";
+        }
+        // line 16
+        echo "\t</div>
     <div class=\"actions\">
-        <button class=\"ui button mini secondary cancel\">";
-        // line 15
+\t\t";
+        // line 18
+        if ((($context["useAttachment"] ?? null) == 1)) {
+            // line 19
+            echo "\t\t\t<button class=\"mbs-add-attachment ui button mini\"><span class=\"mbs-invisible\">_</span><i class=\"icon attach\"></i></button>
+\t\t";
+        }
+        // line 21
+        echo "        <button class=\"ui button mini secondary cancel\">";
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Cancel")), "html", null, true);
         echo "</button>
-        <button class=\"ui positive mini primary button\">";
-        // line 16
+        <button class=\"ui positive mini primary button mbsAttMessSendBtn\">";
+        // line 22
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Send")), "html", null, true);
         echo "</button>
     </div>
-</div>";
+</div>
+";
+        // line 25
+        if ((($context["useAttachment"] ?? null) == 1)) {
+            // line 26
+            echo "\t";
+            echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["environment"] ?? null), "dispatcher", array()), "dispatch", array(0 => "users.send.message.attachment.template"), "method"), "html", null, true);
+            echo "
+";
+        }
     }
 
     public function getTemplateName()
@@ -60,7 +84,7 @@ class __TwigTemplate_e332b76b05f1d087400b0f48a0b8b4e9526cb1a331e064e1ecc4dcad986
 
     public function getDebugInfo()
     {
-        return array (  45 => 16,  41 => 15,  32 => 9,  24 => 4,  19 => 1,);
+        return array (  68 => 26,  66 => 25,  60 => 22,  55 => 21,  51 => 19,  49 => 18,  45 => 16,  41 => 14,  39 => 13,  32 => 9,  24 => 4,  19 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */

@@ -15,9 +15,9 @@
 							<h3>{{ field.section }}</h3>
 							{% set sections = sections|merge([field.section]) %}
 						{% endif %}
-						
+
 						<div class="field" data-name="{{ field.name }}">
-							<label>{{ field.label }}</label>
+							<glabel>{{ field.label }} {% if field.required and field.asterisk is defined and field.asterisk == true %}<span class="gg-required-field" style="color: {{ settings['design']['general']['asterisk-color'] }};">*</span>{% endif %} </glabel>
 							
 							{% if field.type == 'text' %}
 								<input type="text" name="{{ field.name }}">
@@ -143,6 +143,8 @@
 				<div class="mp-action-buttons">
 					<button class="registration-submit ui button mini primary" type="submit" value="">{{ settings.design.auth['registration-primary-button-text'] }}</button>
 				</div>
+
+				<input type="hidden" id="_wpnonce" name="_wpnonce" value="{{ nonce }}" />
 			</form>
 		</div>
 	</div>

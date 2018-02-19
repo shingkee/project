@@ -425,6 +425,9 @@ select[disabled].sc-input {
 	border-bottom: 1px solid #ccc;
 }
 
+.sc-table.roles tr:hover {
+    background-color: #f6f7f7;
+}
 .sc-table tr:hover {
 	background-color: #f3f3f3;
 }
@@ -554,3 +557,122 @@ select[disabled].sc-input {
 .ml-auto { margin-left: auto }
 .mr-auto { margin-right: auto }
 .mx-auto { margin-left: auto; margin-right: auto; }
+
+.mbsCloseTutorial {
+	float: left!important;
+}
+.mbsThinCol {
+	width: auto !important;
+	min-height: 40px;
+}
+.main-container .mp-option .mp-option-controls {
+	padding-top: 0px;
+	height: 40px;
+}
+.mbsThinCol .mp-option-label span {
+	display: inline;
+}
+.mbsThinCol .mp-option-helper {
+	float: none;
+	display: inline;
+	vertical-align: middle;
+	margin-left: 20px;
+}
+.mbsThinCol .mp-option-label {
+	width: 300px;
+	margin: 10px 0 0;
+}
+.mbsMailsMenuTabNotification .mp-option:not(.mp-option-setting) .mbsThinCol .mp-option-label,
+.mbsMailsMenuTab .mp-option:not(.mp-option-setting) .mbsThinCol .mp-option-label {
+	align-items: center;
+	margin: 7px 0 0;
+}
+.mbsGroupTabMenu .mbsThinCol .mp-option-label,
+.mbsProfileTabMenu .mbsThinCol .mp-option-label,
+.sc-tab-content[data-tab="seo"] .mbsThinCol .mp-option-label,
+.sc-tab-content[data-tab="uploads"] .mbsThinCol .mp-option-label,
+.sc-tab-content[data-tab="pages"] .mbsThinCol .mp-option-label {
+	margin: 7px 0 0;
+}
+.sc-tab-content[data-tab="groups"] .mbsThinCol .mp-option-label {
+	margin: 5px 0 0;
+}
+.mbsGroupTabMenu .mp-option-sizes-input,
+.mbsProfileTabMenu .mp-option-sizes-input,
+.sc-tab-content[data-tab="uploads"] .mp-option-sizes-input {
+	margin: 0;
+}
+.sc-tabs .save-settings {
+	margin-top: 10px;
+	margin-left: 10px;
+	font-size: 1em;
+}
+#max-file-size-mb .sc-input,
+#image-quality .sc-input {
+	width: 90px;
+}
+#blocked-ip .sc-input {
+	width: 400px;
+}
+
+.sc-tab-content[data-tab="seo"] .mp-option .mp-option-input {
+	max-width: initial;
+}
+.sc-tab-content[data-tab="seo"] .sc-input {
+	width: 400px;
+}
+.mbsMailsMenuTabNotification .mbsThinCol .mp-option-helper,
+.mbsMailsMenuTab .mbsThinCol .mp-option-helper {
+	margin: 0 0 0 20px;
+}
+#profile-description .mbsThinCol .mp-option-helper {
+	margin-left: 10px;
+}
+#mbsSmileButtonSettRow .mbs-cwib-check-block {
+	margin: 0;
+}
+#mbsGroupCategoryNameLabel {
+    font-weight: bold;
+    margin-right: 20px;
+}
+#mbsGroupCategoryName {
+	min-width: 300px;
+	width: 300px;
+	display: inline-block;
+	vertical-align: middle;
+}
+#mbsSaveNewGroupCategory {
+	display: inline-block;
+	vertical-align: middle;
+	margin: 0 0 0 20px;
+}
+#mbsGroupCategoryTbl {
+
+}
+#mbsGroupCategoryTbl tr td:nth-of-type(1) {
+    text-align: center;
+}
+#mbsGroupCategoryTbl tr td:nth-of-type(3) {
+	text-align: right;
+}
+#mbsGroupCategoryTbl tr th:nth-of-type(1) {
+    width: 70px;
+}
+#mbsGroupCategoryTbl tr th:nth-of-type(3) {
+    width:100px;
+}
+.mbsGroupCategoryWrapper {
+    margin: 0 0 20px;
+}
+#mbsCancelNewGroupCategory {
+    display: none;
+}
+.sc-input.mbs-act-link-img-preview {
+	width: 200px;
+}
+#activityTypesFriendPostInFrontendOn .mp-option-label,
+#activityTypesFriendPostOn .mp-option-label {
+	display: inline-block;
+	margin: 0;
+	padding-left: 30px;
+}

@@ -2,17 +2,24 @@
 {% import '@base/macros/options.twig' as options %}
 
 {% block mainHeader %}
-
+	<div class="sc-header">
+		<h2>{{ translate('Roles') }}</h2>
+	</div>
 {% endblock %}
 
 {% block head %}
-	{#
 	<div class="sc-tabs">
-		<a href="#" class="tab" data-target="roles">
-			<i class="fa fa-list-alt"></i>{{ translate('Roles') }}
+		<a href="#" class="tab active" data-target="roles">
+			<i class="fa fa-desktop"></i>{{ translate('General') }}
 		</a>
+		<a href="#" class="tab active" data-target="groups">
+			<i class="fa fa-group"></i>{{ translate('Group invites') }}
+		</a>
+		<button data-save-settings class="save-settings sc-button icon-button primary">
+			<i class="fa fa-save"></i>
+			<span>{{ translate('Save Settings') }}</span>
+		</button>
 	</div>
-	#}
 {% endblock %}
 
 {% block main %}
@@ -32,19 +39,18 @@
 	
 	<div class="sc-tabs-container">
 		<div class="sc-tab-content active" data-tab="roles">
-			<h2 class="sc-header">{{ translate('Roles') }}</h2>
 			<button class="sc-button primary add-new-role">{{ translate('Add new role') }}</button>
 			<div class="roles-table-wrap">
 				<table class="sc-table roles">
 					<tr>
-						<th>{{ translate('Role Name') }}</th>
+						<th style="width: 320px;">{{ translate('Role Name') }}</th>
 						{% for role in roles %}
 							<th data-id="{{ role.id }}">
 								<div>
 									<input style="max-width: calc(100% - 30px);" type="text" class="sc-input" name="name" value="{{ role.name }}">
 									{% if role.type != '__guest__' %}
 										<div style="margin: 0 10px; display: inline; cursor: pointer" class="remove-role">
-											<i class="fa fa-remove"></i>
+											<i class="fa fa-trash"></i>
 										</div>
 									{% endif %}
 								</div>
@@ -98,11 +104,11 @@
 						{% for role in roles %}
 							<td>
 								<label class="sc-checkbox">
-									<input type="checkbox" value="true" name="edit-activities"
+									<input type="checkbox" value="true" name="edit-activity"
 											{% if role.permissions['edit-activity'] == 'true' %}
 												checked="checked"
 											{% endif %}
-											{% if role.type == '__guest__' %}
+											{% if role.type in ['__guest__', 'administrator'] %}
 												disabled="true"
 											{% endif %}
 									>
@@ -383,6 +389,89 @@
 			<div class="remove-role-template" style="display:none;">
 				<div>{{ translate('Are you sure you want to delete this role?') }}</div>
 			</div>
+		</div>
+
+		<div class="sc-tab-content" data-tab="groups">
+			{% if baseSettings['main']['groups'] == 'true' %}
+				<div class="mp-options">
+					<div class="row">
+						<div class="col-md-12">
+
+							<div class="mp-option" id="inviting-type">
+								<div class="row">
+									<div class="col-md-4 mbsThinCol">
+										<div class="mp-option-label inviting-type-label">
+											<span title="{{ translate('Who can invite') }}">{{ translate('Who can invite') }}</span>
+										</div>
+									</div>
+									<div class="col-md-8">
+										<div class="mp-option-controls">
+											{% for radio in _types %}
+												<label class="sc-radio">
+													<input
+															type="radio"
+															name="groups[{{ radio.name }}]"
+															value="{{ radio.value }}"
+															{% if radio.checked %}
+																checked
+															{% endif %}
+													>
+													{{ radio.label }}
+													<div class="sc-radio-state"></div>
+												</label>
+											{% endfor %}
+										</div>
+										<div class="mp-option-select inviting-type-roles">
+											<select class="sc-input" name="groups[inviting-type-roles][]" multiple>
+												{% for option in _roles %}
+													<option value="{{ option.value }}"
+															{% if option.selected %}
+																selected
+															{% endif %}
+															{% if option.disabled %}
+																disabled
+															{% endif %}
+													>{{ option.title }}</option>
+												{% endfor %}
+											</select>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div class="mp-option" id="roles-to-invite">
+								<div class="row">
+									<div class="col-md-4 mbsThinCol">
+										<div class="mp-option-label">
+											<span title="{{ translate('Who can be invited') }}">{{ translate('Who can be invited') }}</span>
+										</div>
+									</div>
+									<div class="col-md-3">
+										<select class="sc-input" name="groups[roles-to-invite]">
+											<option value="everyone"
+													{% if groupsSettings['roles-to-invite'] == 'everyone' %}
+														selected
+													{% endif %}
+											>{{ translate('Everyone') }}</option>
+											{% if baseSettings['main']['friends'] == 'true' %}
+												<option value="friends-only"
+														{% if groupsSettings['roles-to-invite'] == 'friends-only' %}
+															selected
+														{% endif %}
+												>{{ translate('Friends only') }}</option>
+											{% endif %}
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			{% else %}
+				<div>
+					<span>{{ translate('Groups option is Turn Off, you can turn it On on the Main settings tab or click <a href="%s">here</a>.')|format(mainSettingsLink)|raw }}</span>
+				</div>
+			{% endif %}
 		</div>
 	</div>
 

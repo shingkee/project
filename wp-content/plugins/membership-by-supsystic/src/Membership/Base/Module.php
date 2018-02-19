@@ -40,7 +40,7 @@ class Membership_Base_Module extends Rsc_Mvc_Module {
 		$this->registerThemeTemplatesPath();
 		add_action('admin_menu', array($this, 'registerSubMenuItems'));
 		add_action('admin_head', array($this, 'highlightAdminSubMenu'));
-//		$this->registerSubMenuItems();
+		//$this->registerSubMenuItems();
 
 		$this->getModule('routes')->registerOnRequestAction(
 			array(
@@ -62,6 +62,11 @@ class Membership_Base_Module extends Rsc_Mvc_Module {
                 'guest' => true,
                 'handler' => array($this->getController(), 'uploadFile')
             ),
+			'base.uploadAnyFile' => array(
+				'method' => 'post',
+				'guest' => true,
+				'handler' => array($this->getController(), 'uploadAnyFile')
+			),
             'photos.get' => array(
                 'method' => 'get',
                 'guest' => true,
@@ -71,7 +76,11 @@ class Membership_Base_Module extends Rsc_Mvc_Module {
                 'method' => 'get',
                 'guest' => true,
                 'handler' => array($this->getController(), 'getNonce')
-            )
+            ),
+			'base.getAttachmentFiles' => array(
+				'method' => 'post',
+				'handler' => array($this->getController(), 'getAttachmentFiles'),
+			),
 		));
 
 		$assetsModule = $this->getModule('assets');
@@ -479,12 +488,12 @@ class Membership_Base_Module extends Rsc_Mvc_Module {
 				'order' => 30,
 				'module' => 'roles',
 			),
-			array(
-				'title' => $this->translate('Groups'),
-				'fa_icon' => 'fa-group',
-				'order' => 40,
-				'module' => 'groups',
-			),
+//			array(
+//				'title' => $this->translate('Groups'),
+//				'fa_icon' => 'fa-group',
+//				'order' => 40,
+//				'module' => 'groups',
+//			),
 			array(
 				'title' => $this->translate('Mails'),
 				'fa_icon' => 'fa-envelope',
@@ -497,12 +506,12 @@ class Membership_Base_Module extends Rsc_Mvc_Module {
 				'order' => 70,
 				'module' => 'design',
 			),
-			array(
-				'title' => $this->translate('Reports'),
-				'fa_icon' => 'fa-flag',
-				'order' => 80,
-				'module' => 'reports',
-			)
+//			array(
+//				'title' => $this->translate('Reports'),
+//				'fa_icon' => 'fa-flag',
+//				'order' => 80,
+//				'module' => 'reports',
+//			)
 		);
 
 		if ($config->get('addons', false)) {
@@ -517,7 +526,7 @@ class Membership_Base_Module extends Rsc_Mvc_Module {
 		$subMenus = $this->getEnvironment()->getDispatcher()->apply('adminAreaMenus', array($subMenus));
 		uasort( $subMenus, array($this, 'sortAdminAreaMenusClb') );
 		foreach ($subMenus as $i => $subMenu) {
-			$subMenus[ $i ]['slug'] = $menuUrl;
+			$subMenus[ $i ]['slug'] = 'admin.php?page='. $menuUrl;
 			if(!isset($subMenu['is_main']) || !$subMenu['is_main']) {
 				$subMenus[ $i ]['slug'] .= '&module='. $subMenu['module'];
 				if(isset($subMenu['action']) && $subMenu['action']) {

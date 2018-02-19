@@ -505,7 +505,7 @@ class Membership_Activity_Model_Activity extends Membership_Base_Model_Base {
 		";
 
 		$queries[] = $this->db->prepare("a.type = 'post' AND a.user_id = '%d'", $userId);
-		$queries[] = $this->db->prepare("a.type IN ('shared_post', 'shared_related_post') AND a.user_id = '%d'", $userId);
+		$queries[] = $this->db->prepare("a.type IN ('shared_post', 'shared_related_post', 'friend_post') AND a.user_id = '%d'", $userId);
 		$queries[] = $this->db->prepare("a.type = 'related_post' AND a.target_id = '%d'", $userId);
 
 		$where = $this->db->prepare("a.type IN ('shared_group_post', 'shared_group_user_post') AND a.user_id = '%d' 
@@ -687,7 +687,7 @@ class Membership_Activity_Model_Activity extends Membership_Base_Model_Base {
 		}
 
 		$_activities = array();
-
+		$friendPostActivities = array();
 		$relatedData = array(
 			'users' => array(),
 			'groups' => array(),
@@ -744,6 +744,12 @@ class Membership_Activity_Model_Activity extends Membership_Base_Model_Base {
 				$relatedData['users'][] = $activity['user_id'];
 				$relatedData['related_activities'][] = $activity['foreign_id'];
 			}
+
+			if (strpos($activity['type'], 'friend_') !== false) {
+				$friendPostActivities[$activity['id']] = $activity['foreign_id'];
+				$relatedData['users'][] = $activity['user_id'];
+				$relatedData['related_activities'][] = $activity['foreign_id'];
+			}
 		}
 
 		$activities = $this->getDispatcher()->apply('activity.relatedDataPrepare', array($activities, &$relatedData));
@@ -788,6 +794,8 @@ class Membership_Activity_Model_Activity extends Membership_Base_Model_Base {
 		$activitiesComments = $this->getActivitiesComments($_activities, $currentUserId);
 
 		$activitiesImages = $this->getActivitiesImages($_activities);
+		$activityAttachmentFile = $this->getAttachmentFiles($_activities);
+
 		$activitiesLinks = $this->getActivitiesLinks($_activities);
 
 		foreach ($activities as $key => &$activity) {
@@ -827,6 +835,10 @@ class Membership_Activity_Model_Activity extends Membership_Base_Model_Base {
 				$activity['sharedActivity'] = $fetchedData['related_activities'][$activity['foreign_id']];
 			}
 
+			if(!empty($friendPostActivities[$activity['id']]) && !empty($fetchedData['related_activities'][$friendPostActivities[$activity['id']]])) {
+				$activity['friendPost'] = $fetchedData['related_activities'][$friendPostActivities[$activity['id']]];
+			}
+
 			if (isset($activitiesLikes[$activity['id']])) {
                 $activity['likes'] = $activitiesLikes[$activity['id']];
 			}
@@ -841,6 +853,10 @@ class Membership_Activity_Model_Activity extends Membership_Base_Model_Base {
 
 			if (isset($activitiesImages[$activity['id']])) {
                 $activity['images'] = $activitiesImages[$activity['id']];
+			}
+
+			if(isset($activityAttachmentFile[$activity['id']])) {
+				$activity['attachmentFiles'] = $activityAttachmentFile[$activity['id']];
 			}
 
 			if (isset($activitiesLinks[$activity['id']])) {
@@ -887,10 +903,12 @@ class Membership_Activity_Model_Activity extends Membership_Base_Model_Base {
 		if(count($aiIds)) {
 			$placeHolders = implode(', ', array_pad(array(), count($aiIds), "'%d'"));
 			$removeQuery = $this->db->prepare($this->preparePrefix(
-				'DELETE FROM {prefix}activity_images ai
-				WHERE ai.id in (' . $placeHolders . ')'
+				'DELETE FROM {prefix}activity_images 
+				WHERE id in (' . $placeHolders . ')'
 				), $aiIds);
+
 			$this->db->query($removeQuery);
+
 		}
 	}
 
@@ -1227,24 +1245,22 @@ class Membership_Activity_Model_Activity extends Membership_Base_Model_Base {
 
     public function searchInActivities($search, $type, $currentUserId = null, $limit, $lastActivityId = null) {
 
-	    if ($type == 'hash') {
+		if ($type == 'hash') {
+			$tags = array();
+			if(preg_match_all('/(?:^|\s)(#[a-z\d-]+)/', $search, $matches)) {
+				foreach ($matches as $tag) {
+					$tags[] = $this->db->prepare('%s', str_replace('#', '', $tag));
+				}
+			} else {
+				return array();
+			}
 
-		    $tags = array();
-
-		    if (preg_match_all('/(?:^|\s)(#[a-z\d-]+)/', $search, $matches)) {
-			    foreach ($matches as $tag) {
-				    $tags[] = $this->db->prepare('%s', str_replace('#', '', $tag));
-			    }
-		    } else {
-			    return array();
-		    }
-
-		    $tags = implode(',', $tags);
-		    $searchQuery = "AND a.id IN (SELECT activity_id FROM {prefix}activity_tags WHERE tag IN ({$tags}))";
-	    } else {
-		    $regexp = $this->db->prepare('%s', $search);
-		    $searchQuery = "AND a.data REGEXP $regexp AND a.created_at >= DATE(NOW() - INTERVAL 30 DAY) ";
-	    }
+			$tags = implode(',', $tags);
+			$searchQuery = "AND a.id IN (SELECT activity_id FROM {prefix}activity_tags WHERE tag IN ({$tags}))";
+		} else {
+			$regexp = $this->db->prepare('%s', $search);
+			$searchQuery = "AND a.data REGEXP $regexp ";
+		}
 
 	    $query = $this->buildActivitySelectQuery(
 
@@ -1584,6 +1600,90 @@ class Membership_Activity_Model_Activity extends Membership_Base_Model_Base {
 	}
 
 	public function getActivitiesByGroupId($id){
-	    return $this->getActivity(['target_id' => $id]);
+	    return $this->getActivity(array('target_id' => $id));
     }
+
+	public function addAttachmentFiles($activityId, array $attachmentIds) {
+		$attachmentTable = $this->getPrefix() . 'activity_attachments';
+		$activityId = (int) $activityId;
+
+		$arrCount = count($attachmentIds);
+		if($arrCount) {
+			$queryValStr = array_fill(0, $arrCount, "('" . $activityId . "', %s)");
+			$queryStr = "INSERT INTO " . $attachmentTable . " (`activity_id`, `attachment_all_id`) VALUES" . implode(',', $queryValStr);
+
+			$query = $this->db->prepare($queryStr, $attachmentIds);
+			$this->db->query($query);
+			return true;
+		}
+		return false;
+	}
+
+	public function getAttachmentFiles(array $acitivityIds) {
+		$resAttArr = array();
+		$attachmentTable = $this->getPrefix() . 'activity_attachments';
+
+		$arrCount = count($acitivityIds);
+		if($arrCount) {
+			$query = "SELECT aatt.activity_id, aall.`source`, aatt.attachment_all_id
+				FROM " . $this->getPrefix() . "activity_attachments aatt
+				INNER JOIN " . $this->getPrefix() . "attachments_all aall
+					ON aatt.attachment_all_id = aall.id
+				WHERE aall.is_saved = 1
+				AND aatt.activity_id in (" . implode(',', array_fill(0, $arrCount, '%s')) . ")";
+
+			$query = $this->db->prepare($query, $acitivityIds);
+			$dbResult = $this->db->get_results($query, ARRAY_A);
+
+			if(count($dbResult)) {
+				foreach($dbResult as $oneAtt) {
+					$explodedArr = explode('|||', $oneAtt['source']);
+					$fileNameArr = array();
+					if(is_array($explodedArr) && !empty($explodedArr)) {
+						if(count($explodedArr) == 1) {
+							$fileNameArr['url'] = $explodedArr[0];
+						} else {
+							$fileNameArr['name'] = $explodedArr[0];
+							$fileNameArr['url'] = $explodedArr[1];
+						}
+					}
+					$resAttArr[$oneAtt['activity_id']][] = array(
+						'file_info' => $fileNameArr,
+						'attachment_all_id' => $oneAtt['attachment_all_id'],
+					);
+				}
+			}
+		}
+
+		return $resAttArr;
+	}
+
+	public function getActivityAttachmentIds($activityId) {
+		$query = $this->db->prepare(
+			"SELECT attachment_all_id FROM " . $this->getPrefix() . "activity_attachments WHERE activity_id = %s",
+			array($activityId)
+		);
+
+		$resArr = array();
+		$dbRes = $this->db->get_results($query, ARRAY_A);
+		if(count($dbRes)) {
+			foreach($dbRes as $oneRes) {
+				$resArr[] = $oneRes['attachment_all_id'];
+			}
+		}
+		return $resArr;
+	}
+
+	public function removeActivityAttachmentsBy($activityId, array $attachmentIds) {
+		$activityId = (int) $activityId;
+		if(count($attachmentIds)) {
+			$attachCodes = implode(',', array_fill(0, count($attachmentIds), '%s'));
+			$remQuery = "DELETE FROM " . $this->getPrefix() . "activity_attachments
+				WHERE activity_id = '" . $activityId . "' AND attachment_all_id in (" . $attachCodes . ")";
+			$remQuery = $this->db->prepare($remQuery, $attachmentIds);
+
+			$this->db->query($remQuery);
+		}
+		return true;
+	}
 }

@@ -3,13 +3,16 @@
 class Membership_Auth_Controller extends Membership_Base_Controller {
 
 	public function registrationShortcodeHandler($attr, $content) {
-
+		$settings = $this->getModel('settings', 'users')->getSettings();
 		$usersModule = $this->getModule('users');
 		$fieldsModel = $usersModule->getModel('fields');
 		$fields = $fieldsModel->getRegistrationFields();
+		$fieldsModel->prepareDefaultRoleForRegistration($settings, $fields);
 
 		$validationRules = $fieldsModel->getFieldsValidationRules($fields);
 		$dependencies = $fieldsModel->loadFieldsAssets($fields);
+
+		$nonce = wp_create_nonce( 'registration' );
 
 		$this->getModule('assets')->enqueueAssets(
 			$dependencies['styles'],
@@ -22,13 +25,22 @@ class Membership_Auth_Controller extends Membership_Base_Controller {
 			array(
 				'fields' => $fields,
 				'validationRules' => $validationRules,
-				'usersCanRegister' => intval(get_option('users_can_register'))
+				'usersCanRegister' => intval(get_option('users_can_register')),
+				'nonce' => $nonce
 			)
 		);
 	}
 
-	public function registrationHandler(Rsc_Http_Parameters $parameters) {
+	public function getNonceHandler() {
+		$nonce = wp_create_nonce( 'registration' );
+		$response = array(
+			'success' => true,
+			'nonce' => $nonce,
+		);
+		return $this->ajax($response);
+	}
 
+	public function registrationHandler(Rsc_Http_Parameters $parameters) {
 
 		if (!intval(get_option('users_can_register'))) {
 			return $this->response('ajax', array(
@@ -43,8 +55,18 @@ class Membership_Auth_Controller extends Membership_Base_Controller {
 		$fieldsModel = $this->getModel('Fields', 'Users');
 
 		$formData = $parameters->get('formData');
-		$userFields = $fieldsModel->getRegistrationFields();
+		$nonce = $formData["_wpnonce"];
+		
+		if( ! wp_verify_nonce( $nonce, 'registration') ){
+			return $this->response('ajax', array(
+				'success' => false,
+				'errors' => array(
+					'user_email' => sprintf($this->translate('Anti Bot Protection'))
+				)
+			));
+		}
 
+		$userFields = $fieldsModel->getRegistrationFields();
 		$validation = $this->validate($formData, $fieldsModel->getFieldsValidationRules($userFields, $secretSafe = true));
 
 		if ($validation->isFail()) {
@@ -56,17 +78,24 @@ class Membership_Auth_Controller extends Membership_Base_Controller {
 
 		$wpUserFields = array();
 		$membershipFieldsData = array();
+		$notAllowedType = array('password', 'date');
 
 		foreach($userFields as $field) {
 			if (isset($formData[$field['name']])) {
-				if (isset($field['sys']) && $field['sys']) {
-					$wpUserFields[ $field['name'] ] = $formData[ $field['name'] ];
-				} else {
-					$membershipFieldsData[ $field['name'] ] = $formData[ $field['name'] ];
+				if($field['name'] != 'user_role') {
+					if(isset($field['sys']) && $field['sys'] && $field['name'] != 'country') {
+						$wpUserFields[$field['name']] = $formData[$field['name']];
+						if(!in_array($field['type'], $notAllowedType)){
+							$membershipFieldsData[$field['name']] = $formData[$field['name']];
+						}
+					} else {
+						if(!in_array($field['type'], $notAllowedType)){
+							$membershipFieldsData[$field['name']] = $formData[$field['name']];
+						}
+					}
 				}
 			}
 		}
-
 
         if (isset($wpUserFields['user_login'])) {
             $wpUserFields['user_login'] = preg_replace('/[^\w0-9]/u', '-', $wpUserFields['user_login']);
@@ -119,14 +148,25 @@ class Membership_Auth_Controller extends Membership_Base_Controller {
 
 		$rolesModel = $this->getModel('roles', 'roles');
 		$role = $rolesModel->getUserRole($userId);
+		// update wordpress user role
 		if(!empty($role['settings']['wp-role'])){
 			$userObj = new WP_User($userId);
 			if($userObj && method_exists($userObj, 'set_role')) {
 				$userObj->set_role($role['settings']['wp-role']);
 			}
 		}
+		// update membership role
+		if(!empty($formData['user_role'])) {
+			$newMmUserRoleId = (int)$formData['user_role'];
+			$isSelectedUserRoleExist = $rolesModel->isRoleExist($newMmUserRoleId);
+			// check if role exists
+			if($isSelectedUserRoleExist) {
+				$rolesModel->setUserRole($userId, $newMmUserRoleId);
+			}
+		}
 
 		$settings = $this->getModule()->getSettings();
+
 		if(!isset($settings['design']['auth']['login-after-register-enable'])
 			|| $settings['design']['auth']['login-after-register-enable'] == 1) {
 			$redirectToLoginPage = 1;
@@ -144,6 +184,8 @@ class Membership_Auth_Controller extends Membership_Base_Controller {
 				));
 			}
 		}
+
+        $picture = (isset($formData['_oauth-picture'])) ? $formData['_oauth-picture'] : null;
 
 		$responseMessage = $this->translate('Thank you for registration!');
 
@@ -181,6 +223,8 @@ class Membership_Auth_Controller extends Membership_Base_Controller {
 		if($this->_isSimpleResponse()) {
 			$response['id'] = $user->ID;
 		}
+
+        do_action('mssl_import_facebook_avatar', $picture);
 
 		return $this->ajax($response);
 	}

@@ -21,6 +21,23 @@
 								<span class="date">{{ message.created_at }}</span>
 							</div>
 							<div class="text">{{ message.message|nl2br }}</div>
+							{% if message.attachments | length %}
+								<div class="mbsMsgAttachmentWrap">
+									{% for attItem in message.attachments %}
+
+										{% set attachmentUrl = attachmentIcon %}
+										{% if attItem['is_image'] %}
+											{% set attachmentUrl = attItem['file_info']['url'] %}
+										{% endif %}
+
+										<a class="mbsMsgAttachmentOne {% if attItem['is_image'] %}mbsPopupImage{% else %}{{ mbsMsgAttachmLink }}{% endif %}"
+											href="{{ attItem['file_info']['url'] }}" target="_blank" data-attachment-id="{{ attItem['attachment_all_id'] }}" title="{{ attItem['file_info']['name'] }}">
+											<img src="{{ attachmentUrl }}" class="mbsMsgAttachmImage"/>
+											<span class="mbsMsgAttachmCaption">{{ attItem['file_info']['name'] }}</span>
+										</a>
+									{% endfor %}
+								</div>
+							{% endif %}
 						</div>
 					</div>
 				</div>

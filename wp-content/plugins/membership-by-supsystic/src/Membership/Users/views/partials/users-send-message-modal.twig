@@ -10,9 +10,18 @@
                 <textarea rows="5"></textarea>
             </div>
         </div>
-    </div>
+		{% if useAttachment == 1 %}
+			<div class="mbs-all-attachment-list"></div>
+		{% endif %}
+	</div>
     <div class="actions">
+		{% if useAttachment == 1 %}
+			<button class="mbs-add-attachment ui button mini"><span class="mbs-invisible">_</span><i class="icon attach"></i></button>
+		{% endif %}
         <button class="ui button mini secondary cancel">{{ translate('Cancel') }}</button>
-        <button class="ui positive mini primary button">{{ translate('Send') }}</button>
+        <button class="ui positive mini primary button mbsAttMessSendBtn">{{ translate('Send') }}</button>
     </div>
 </div>
+{% if useAttachment == 1 %}
+	{{ environment.dispatcher.dispatch('users.send.message.attachment.template') }}
+{% endif %}

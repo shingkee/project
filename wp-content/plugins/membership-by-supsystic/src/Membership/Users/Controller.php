@@ -7,7 +7,6 @@ class Membership_Users_Controller extends Membership_Base_Controller {
 		$fieldsModel = $this->getModel('Fields', 'Users');
 		$dateFormats = Membership_Users_Model_Fields::getDateFormats();
 
-
 		$rolesModel = $this->getModel('Roles', 'Roles');
 		$roles = $rolesModel->getRoles(true);
 		
@@ -23,7 +22,6 @@ class Membership_Users_Controller extends Membership_Base_Controller {
 
 	public function listAction(Rsc_Http_Request $request) {
 
-
 		$usersModel = $this->getModel('Profile', 'Users');
 		$search = $request->query->get('search', null);
 
@@ -32,7 +30,7 @@ class Membership_Users_Controller extends Membership_Base_Controller {
 			'withUsersExtraQuery' => false
 		);
 
-		if ($search) {
+		if (!is_null($search)) {
 			$params['search'] = $search;
 			$totalUsers = $usersModel->getUsersCount($params);
 		} else {
@@ -53,7 +51,7 @@ class Membership_Users_Controller extends Membership_Base_Controller {
 		$params['order'] = $request->query->get('order', 'desc');
 
 
-		if ($search) {
+		if (!is_null($search)) {
 			$users = $usersModel->searchUsersByName($params);
 		} else {
 			$users = $usersModel->getUsers($params);
@@ -202,8 +200,11 @@ class Membership_Users_Controller extends Membership_Base_Controller {
 	}
 
 	public function getFields(Rsc_Http_Parameters $data) {
+        /**
+         * @var $fieldsModel Membership_Users_Model_Fields
+         */
 		$fieldsModel = $this->getModel('fields', 'users');
-		$fields = $fieldsModel->getFields();
+		$fields = $fieldsModel->getFields(array('include_user_role' => array('enabled' => false)));
 
 		return $this->response('ajax', array(
 			'fields' => json_encode($fields)
@@ -345,7 +346,17 @@ class Membership_Users_Controller extends Membership_Base_Controller {
 			);
 		}
 
-		$this->getModel('fields')->updateUserFieldData($userId, $fieldName, $fieldData);
+		if($fieldName == 'user_role') {
+			$rolesModel = $this->getModel('roles', 'roles');
+			$fieldData = (int) $fieldData;
+			$isSelectedUserRoleExist = $rolesModel->isRoleExist($fieldData);
+			// check if role exists
+			if($isSelectedUserRoleExist) {
+				$rolesModel->setUserRole($userId, $fieldData);
+			}
+		} else {
+			$this->getModel('fields')->updateUserFieldData($userId, $fieldName, $fieldData);
+		}
 
 		return $this->response('ajax', array('success' => true));
 	}
@@ -590,6 +601,16 @@ class Membership_Users_Controller extends Membership_Base_Controller {
 		$password = $parameters->get('password');
 		$currentUser = wp_get_current_user();
 
+		$usersModule = $this->getModule('users');
+		$currUserInfo = $usersModule->getCurrentUser();
+		$isUserCanRemoveHisAcc = $usersModule->userCan($currUserInfo, 'can-delete-their-account');
+		if(!$isUserCanRemoveHisAcc) {
+			return $this->response('ajax', array(
+				'success' => false,
+				'message' => $this->translate('Access denied'),
+			));
+		}
+
 		if (wp_check_password($password, $currentUser->user_pass, $currentUser->ID)) {
 
 			$settings = $this->getModule()->getSettings();
@@ -612,6 +633,13 @@ class Membership_Users_Controller extends Membership_Base_Controller {
 		return $this->response('ajax', array(
 			'success' => false,
 			'message' => $this->translate('Current password was incorrect')
+		));
+	}
+
+	public function wpLogout() {
+		wp_logout();
+		return $this->response('ajax', array(
+			'success' => true,
 		));
 	}
 
@@ -840,6 +868,7 @@ class Membership_Users_Controller extends Membership_Base_Controller {
 	}
 
 	public function getFriends(Rsc_Http_Parameters $parameters) {
+
 		$usersModule = $this->getModule('users');
 		$usersModel = $this->getModel('profile');
 		$friendsModel = $this->getModel('friends');
@@ -848,7 +877,7 @@ class Membership_Users_Controller extends Membership_Base_Controller {
 		$limit = min(max($parameters->get('limit', 1), 1), 20);
 		$offsetId = $parameters->get('offsetId', null);
 		$search = $parameters->get('search', null);
-
+		
 		$requestedUser = $usersModel->getUserById(intval($userId));
 
 		if ($usersModule->currentUserHasPermission('view-friends', $requestedUser)) {
@@ -1030,26 +1059,29 @@ class Membership_Users_Controller extends Membership_Base_Controller {
 		$limit = min(max($parameters->get('limit', 0), 1), 20);
 		$offset = $parameters->get('offset', null);
 		$offsetId = $parameters->get('offsetId', null);
+		$userRoleId = (int) $parameters->get('userRoleId', null);
         $usersModel = $this->getModel('profile', 'users');
         $template = $parameters->get('template', 'users-list');
 
-		if (is_null($query) || $query == '') {
+		if($userRoleId == 0 && (is_null($query) || $query == '')) {
 			return $this->response('ajax', array('success' => false));
 		}
 
-		$users = $usersModel->searchByName(array(
+		$params = array(
 			'search' => $query,
-			'limit' => $limit,
-			'offset' => $offset,
-			'offsetId' =>$offsetId
-		));
+            'limit' => $limit,
+            'offset' => $offset,
+			'offsetId' =>$offsetId,
+			'userRoleId' => $userRoleId,
+			'searchBy' => array('username' => 1, 'lastname' => 1, 'firstname' => 1),
+		);
 
+		$users = $usersModel->getUsersIdsByParams($params);
 		if ($users) {
 			$_users = implode(', ', $users);
 			$orderBy = " ORDER BY FIELD (u.ID, $_users)";
 			$users = $usersModel->getUsersByIds(array('users' => $users, 'orderBy' => $orderBy));
 		}
-
 
 		if ($template == 'users-list') {
 			$template = '@users/partials/users-list.twig';

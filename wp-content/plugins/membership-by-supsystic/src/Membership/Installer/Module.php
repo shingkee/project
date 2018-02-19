@@ -147,6 +147,29 @@ class Membership_Installer_Module extends Membership_Base_Module {
             $dbPrefix . $installedVersionOptionName,
             $currentVersion
         );
+		// script runned once at "membership install life"
+		$this->runedAtOnce();
+	}
+
+	protected function runedAtOnce() {
+		$optionName = 'mbsRunActionAtOnceInPlugin';
+		$strVal = get_option($optionName);
+
+		$parsedArr = array();
+		if($strVal) {
+			$tempArr = json_decode($strVal, true);
+			if(is_array($tempArr) && count($tempArr)) {
+				$parsedArr = $tempArr;
+			}
+		}
+		// if not runned -> runing
+		if(empty($parsedArr['groupCreatorUpdated'])) {
+			$installerModel = $this->getModel('Installer', 'Installer');
+			$installerModel->updateUserGroupCreator();
+			$parsedArr['groupCreatorUpdated'] = 1;
+		}
+
+		update_option($optionName, json_encode($parsedArr));
 	}
 
 	public function createSettings() {
@@ -246,6 +269,8 @@ class Membership_Installer_Module extends Membership_Base_Module {
 			'users_roles',
 			'roles',
 			'links',
+			'badges',
+			'users_badges_points',
 		);
 
 		if (is_multisite() && $networkWideUninstall) {

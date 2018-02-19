@@ -46,43 +46,51 @@ class __TwigTemplate_c322c5b4c16d5c0072649b15eeb5dcbccf579bde3b2d0c37ec7adb86b4c
 \t\t<a href=\"#\" class=\"tab\" data-target=\"fields\">
 \t\t\t<i class=\"fa fa-list-alt\"></i>";
         // line 31
-        echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Registration Fields")), "html", null, true);
+        echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("User Fields")), "html", null, true);
         echo "
 \t\t</a>
-\t</div>
+\t\t";
+        // line 34
+        echo "\t\t\t";
+        // line 35
+        echo "\t\t\t";
+        // line 36
+        echo "\t\t";
+        // line 37
+        echo "\t</div>
 ";
     }
 
-    // line 36
+    // line 40
     public function block_main($context, array $blocks = array())
     {
-        // line 37
+        // line 41
         echo "
     <link rel=\"stylesheet\" type=\"text/css\" href=\"";
-        // line 38
+        // line 42
         echo twig_escape_filter($this->env, $this->env->getExtension('Membership_Base_Twig')->getAssetsPath("base", "lib/cropper/cropper.min.css"), "html", null, true);
         echo "\">
     <script async type=\"text/javascript\" src=\"";
-        // line 39
+        // line 43
         echo twig_escape_filter($this->env, $this->env->getExtension('Membership_Base_Twig')->getAssetsPath("base", "lib/cropper/cropper.min.js"), "html", null, true);
         echo "\"></script>
 
 \t";
-        // line 41
+        // line 45
         $context["f"] = $this;
-        // line 42
+        // line 46
         echo "\t<div class=\"sc-tabs-container\">
-\t\t<div class=\"sc-tab-content active\" data-tab=\"main\">
+\t\t<div class=\"sc-tab-content mbsProfileTabMenu active\" data-tab=\"main\">
 \t\t\t
 \t\t\t<div class=\"sc-header\">
 \t\t\t\t<h2>";
-        // line 46
+        // line 50
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Profile")), "html", null, true);
         echo "</h2>
 \t\t\t\t<button data-save-settings class=\"save-settings sc-button icon-button primary\">
 \t\t\t\t\t<i class=\"fa fa-save\"></i>
 \t\t\t\t\t<span>";
-        // line 49
+        // line 53
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Save Settings")), "html", null, true);
         echo "</span>
 \t\t\t\t</button>
@@ -93,57 +101,57 @@ class __TwigTemplate_c322c5b4c16d5c0072649b15eeb5dcbccf579bde3b2d0c37ec7adb86b4c
 \t\t\t\t\t<div class=\"col-md-12\">
 \t\t\t\t\t
 \t\t\t\t\t";
-        // line 57
+        // line 61
         $context["_roles"] = array();
-        // line 58
+        // line 62
         echo "\t
 \t\t\t\t\t";
-        // line 59
+        // line 63
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["roles"] ?? null));
         foreach ($context['_seq'] as $context["value"] => $context["role"]) {
-            // line 60
+            // line 64
             echo "\t\t\t\t\t\t";
-            $context["_roles"] = twig_array_merge(($context["_roles"] ?? null), array(0 => array("title" => $this->getAttribute(            // line 61
-$context["role"], "name", array()), "value" => $this->getAttribute(            // line 62
-$context["role"], "id", array()), "selected" => ($this->getAttribute(            // line 63
+            $context["_roles"] = twig_array_merge(($context["_roles"] ?? null), array(0 => array("title" => $this->getAttribute(            // line 65
+$context["role"], "name", array()), "value" => $this->getAttribute(            // line 66
+$context["role"], "id", array()), "selected" => ($this->getAttribute(            // line 67
 ($context["settings"] ?? null), "default-role", array(), "array") == $this->getAttribute($context["role"], "id", array())))));
-            // line 65
+            // line 69
             echo "\t\t\t\t\t";
         }
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['value'], $context['role'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 66
+        // line 70
         echo "
 \t\t\t\t\t";
-        // line 67
-        echo $context["options"]->getselectRow(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Default User role")),         // line 68
-($context["_roles"] ?? null), "default-role", "default-role");
         // line 71
+        echo $context["options"]->getselectRow(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Default User role")),         // line 72
+($context["_roles"] ?? null), "default-role", "default-role", null, array("mbsThinCol" => 1));
+        // line 77
         echo "
 
 \t\t\t\t\t";
-        // line 73
-        echo $context["options"]->getradioRow(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Use Profile Avatar")), array(0 => array("label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Yes")), "name" => "use-avatar", "value" => "yes", "checked" => ($this->getAttribute(        // line 78
-($context["settings"] ?? null), "use-avatar", array(), "array") == "yes")), 1 => array("label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("No")), "name" => "use-avatar", "value" => "no", "checked" => ($this->getAttribute(        // line 84
-($context["settings"] ?? null), "use-avatar", array(), "array") == "no"))), "use-avatar");
-        // line 87
+        // line 79
+        echo $context["options"]->getradioRow(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Use Profile Avatar")), array(0 => array("label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Yes")), "name" => "use-avatar", "value" => "yes", "checked" => ($this->getAttribute(        // line 84
+($context["settings"] ?? null), "use-avatar", array(), "array") == "yes")), 1 => array("label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("No")), "name" => "use-avatar", "value" => "no", "checked" => ($this->getAttribute(        // line 90
+($context["settings"] ?? null), "use-avatar", array(), "array") == "no"))), "use-avatar", null, null, array("mbsThinCol" => 1));
+        // line 94
         echo "
 
 \t\t\t\t\t";
-        // line 89
-        echo $context["options"]->getradioRow(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Use Profile Gravatar")), array(0 => array("label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Yes")), "name" => "use-gravatar", "value" => "yes", "checked" => ($this->getAttribute(        // line 94
-($context["settings"] ?? null), "use-gravatar", array(), "array") == "yes")), 1 => array("label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("No")), "name" => "use-gravatar", "value" => "no", "checked" => ($this->getAttribute(        // line 100
-($context["settings"] ?? null), "use-gravatar", array(), "array") == "no"))), "use-gravatar");
-        // line 103
+        // line 96
+        echo $context["options"]->getradioRow(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Use Profile Gravatar")), array(0 => array("label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Yes")), "name" => "use-gravatar", "value" => "yes", "checked" => ($this->getAttribute(        // line 101
+($context["settings"] ?? null), "use-gravatar", array(), "array") == "yes")), 1 => array("label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("No")), "name" => "use-gravatar", "value" => "no", "checked" => ($this->getAttribute(        // line 107
+($context["settings"] ?? null), "use-gravatar", array(), "array") == "no"))), "use-gravatar", null, null, array("mbsThinCol" => 1));
+        // line 111
         echo "
 
 \t\t\t\t\t<div class=\"mp-option\" id=\"avatar-size\">
 \t\t\t\t\t\t<div class=\"row\">
-\t\t\t\t\t\t\t<div class=\"col-md-4\">
+\t\t\t\t\t\t\t<div class=\"col-md-4 mbsThinCol\">
 \t\t\t\t\t\t\t\t";
-        // line 108
+        // line 116
         echo $context["options"]->getlabel(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Profile Avatar Size")));
         echo "
 \t\t\t\t\t\t\t</div>
@@ -151,14 +159,14 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t<div class=\"mp-option-sizes-input\">
 \t\t\t\t\t\t\t\t\t<div class=\"mp-option-input\">
 \t\t\t\t\t\t\t\t\t\t<input class=\"sc-input\" value=\"";
-        // line 113
+        // line 121
         echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["settings"] ?? null), "avatar-size", array(), "array"), "width", array()), "html", null, true);
         echo "\" name=\"avatar-size[width]\">
 \t\t\t\t\t\t\t\t\t</div>
 \t\t\t\t\t\t\t\t\t<span>x</span>
 \t\t\t\t\t\t\t\t\t<div class=\"mp-option-input\">
 \t\t\t\t\t\t\t\t\t\t<input class=\"sc-input\" value=\"";
-        // line 117
+        // line 125
         echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["settings"] ?? null), "avatar-size", array(), "array"), "height", array()), "html", null, true);
         echo "\" name=\"avatar-size[height]\">
 \t\t\t\t\t\t\t\t\t</div>
@@ -169,9 +177,9 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 
 \t\t\t\t\t<div class=\"mp-option\" id=\"avatar-large-size\">
 \t\t\t\t\t\t<div class=\"row\">
-\t\t\t\t\t\t\t<div class=\"col-md-4\">
+\t\t\t\t\t\t\t<div class=\"col-md-4 mbsThinCol\">
 \t\t\t\t\t\t\t\t";
-        // line 127
+        // line 135
         echo $context["options"]->getlabel(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Avatar Thumbnail Large Size")));
         echo "
 \t\t\t\t\t\t\t</div>
@@ -179,14 +187,14 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t<div class=\"mp-option-sizes-input\">
 \t\t\t\t\t\t\t\t\t<div class=\"mp-option-input\">
 \t\t\t\t\t\t\t\t\t\t<input class=\"sc-input\" value=\"";
-        // line 132
+        // line 140
         echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["settings"] ?? null), "avatar-large-size", array(), "array"), "width", array()), "html", null, true);
         echo "\" name=\"avatar-large-size[width]\">
 \t\t\t\t\t\t\t\t\t</div>
 \t\t\t\t\t\t\t\t\t<span>x</span>
 \t\t\t\t\t\t\t\t\t<div class=\"mp-option-input\">
 \t\t\t\t\t\t\t\t\t\t<input class=\"sc-input\" value=\"";
-        // line 136
+        // line 144
         echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["settings"] ?? null), "avatar-large-size", array(), "array"), "height", array()), "html", null, true);
         echo "\" name=\"avatar-large-size[height]\">
 \t\t\t\t\t\t\t\t\t</div>
@@ -197,9 +205,9 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 
 \t\t\t\t\t<div class=\"mp-option\" id=\"avatar-medium-size\">
 \t\t\t\t\t\t<div class=\"row\">
-\t\t\t\t\t\t\t<div class=\"col-md-4\">
+\t\t\t\t\t\t\t<div class=\"col-md-4 mbsThinCol\">
 \t\t\t\t\t\t\t\t";
-        // line 146
+        // line 154
         echo $context["options"]->getlabel(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Avatar Thumbnail Medium Size")));
         echo "
 \t\t\t\t\t\t\t</div>
@@ -207,14 +215,14 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t<div class=\"mp-option-sizes-input\">
 \t\t\t\t\t\t\t\t\t<div class=\"mp-option-input\">
 \t\t\t\t\t\t\t\t\t\t<input class=\"sc-input\" value=\"";
-        // line 151
+        // line 159
         echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["settings"] ?? null), "avatar-medium-size", array(), "array"), "width", array()), "html", null, true);
         echo "\" name=\"avatar-medium-size[width]\">
 \t\t\t\t\t\t\t\t\t</div>
 \t\t\t\t\t\t\t\t\t<span>x</span>
 \t\t\t\t\t\t\t\t\t<div class=\"mp-option-input\">
 \t\t\t\t\t\t\t\t\t\t<input class=\"sc-input\" value=\"";
-        // line 155
+        // line 163
         echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["settings"] ?? null), "avatar-medium-size", array(), "array"), "height", array()), "html", null, true);
         echo "\" name=\"avatar-medium-size[height]\">
 \t\t\t\t\t\t\t\t\t</div>
@@ -225,9 +233,9 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 
 \t\t\t\t\t<div class=\"mp-option\" id=\"avatar-small-size\">
 \t\t\t\t\t\t<div class=\"row\">
-\t\t\t\t\t\t\t<div class=\"col-md-4\">
+\t\t\t\t\t\t\t<div class=\"col-md-4 mbsThinCol\">
 \t\t\t\t\t\t\t\t";
-        // line 165
+        // line 173
         echo $context["options"]->getlabel(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Avatar Thumbnail Small Size")));
         echo "
 \t\t\t\t\t\t\t</div>
@@ -235,14 +243,14 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t<div class=\"mp-option-sizes-input\">
 \t\t\t\t\t\t\t\t\t<div class=\"mp-option-input\">
 \t\t\t\t\t\t\t\t\t\t<input class=\"sc-input\" value=\"";
-        // line 170
+        // line 178
         echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["settings"] ?? null), "avatar-small-size", array(), "array"), "width", array()), "html", null, true);
         echo "\" name=\"avatar-small-size[width]\">
 \t\t\t\t\t\t\t\t\t</div>
 \t\t\t\t\t\t\t\t\t<span>x</span>
 \t\t\t\t\t\t\t\t\t<div class=\"mp-option-input\">
 \t\t\t\t\t\t\t\t\t\t<input class=\"sc-input\" value=\"";
-        // line 174
+        // line 182
         echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["settings"] ?? null), "avatar-small-size", array(), "array"), "height", array()), "html", null, true);
         echo "\" name=\"avatar-small-size[height]\">
 \t\t\t\t\t\t\t\t\t</div>
@@ -253,15 +261,15 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t
 
                     ";
-        // line 182
+        // line 190
         $context["defaultAvatar"] = $this->env->getExtension('Membership_Base_Twig')->getAssetsPath("users", "images/user.jpg", false);
-        // line 183
+        // line 191
         echo "
 \t\t\t\t\t<div class=\"mp-option\" id=\"default-avatar\">
 \t\t\t\t\t\t<div class=\"row\">
-\t\t\t\t\t\t\t<div class=\"col-md-4\">
+\t\t\t\t\t\t\t<div class=\"col-md-4 mbsThinCol\">
 \t\t\t\t\t\t\t\t";
-        // line 187
+        // line 195
         echo $context["options"]->getlabel(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Default Avatar Image")));
         echo "
 \t\t\t\t\t\t\t</div>
@@ -269,23 +277,23 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t<div class=\"mp-default-image\">
 \t\t\t\t\t\t\t\t\t<img style=\"max-width:50px;max-height: 50px;\"
 \t\t\t\t\t\t\t\t\t\tsrc=\"";
-        // line 192
+        // line 200
         echo twig_escape_filter($this->env, $this->getAttribute(($context["settings"] ?? null), "default-avatar", array(), "array"), "html", null, true);
         echo "\"
 \t\t\t\t\t\t\t\t\t>
 \t\t\t\t\t\t\t\t\t<button class=\"mp-option-button sc-button primary mp-change\">";
-        // line 194
+        // line 202
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Change")), "html", null, true);
         echo "</button>
 \t\t\t\t\t\t\t\t\t<button class=\"mp-option-button sc-button primary mp-set-to-default\"
 \t\t\t\t\t\t\t\t\t\t";
-        // line 196
+        // line 204
         if (((($context["defaultAvatar"] ?? null) == $this->getAttribute(($context["settings"] ?? null), "default-avatar", array(), "array")) || (($context["defaultAvatar"] ?? null) == $this->getAttribute(($context["settings"] ?? null), "default-avatar-source", array(), "array")))) {
-            // line 197
+            // line 205
             echo "\t\t\t\t\t\t\t\t\t\t\tstyle=\"display: none\" 
 \t\t\t\t\t\t\t\t\t\t";
         }
-        // line 199
+        // line 207
         echo "\t\t\t\t\t\t\t\t\t>";
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Set to default")), "html", null, true);
         echo "</button>
@@ -293,7 +301,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t\t\ttype=\"hidden\"
 \t\t\t\t\t\t\t\t\t\tname=\"default-avatar\"
 \t\t\t\t\t\t\t\t\t\tvalue=\"";
-        // line 203
+        // line 211
         echo twig_escape_filter($this->env, $this->getAttribute(($context["settings"] ?? null), "default-avatar", array(), "array"), "html", null, true);
         echo "\"
 \t\t\t\t\t\t\t\t\t>
@@ -301,7 +309,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
                                             type=\"hidden\"
                                             name=\"default-avatar-large\"
                                             value=\"";
-        // line 208
+        // line 216
         echo twig_escape_filter($this->env, $this->getAttribute(($context["settings"] ?? null), "default-avatar-large", array(), "array"), "html", null, true);
         echo "\"
                                     >
@@ -309,7 +317,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
                                             type=\"hidden\"
                                             name=\"default-avatar-medium\"
                                             value=\"";
-        // line 213
+        // line 221
         echo twig_escape_filter($this->env, $this->getAttribute(($context["settings"] ?? null), "default-avatar-medium", array(), "array"), "html", null, true);
         echo "\"
                                     >
@@ -317,7 +325,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
                                             type=\"hidden\"
                                             name=\"default-avatar-small\"
                                             value=\"";
-        // line 218
+        // line 226
         echo twig_escape_filter($this->env, $this->getAttribute(($context["settings"] ?? null), "default-avatar-small", array(), "array"), "html", null, true);
         echo "\"
                                     >
@@ -328,11 +336,11 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
                                             data-default-height-input-name=\"avatar-size[height]\"
                                             data-default-crop-input-name=\"default-avatar-crop-data\"
                                             data-default-image=\"";
-        // line 226
+        // line 234
         echo twig_escape_filter($this->env, ($context["defaultAvatar"] ?? null), "html", null, true);
         echo "\"
                                             value=\"";
-        // line 227
+        // line 235
         echo twig_escape_filter($this->env, $this->getAttribute(($context["settings"] ?? null), "default-avatar-source", array(), "array"), "html", null, true);
         echo "\"
                                     >
@@ -340,7 +348,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
                                             type=\"hidden\"
                                             name=\"default-avatar-crop-data\"
                                             value=\"";
-        // line 232
+        // line 240
         echo twig_escape_filter($this->env, $this->getAttribute(($context["settings"] ?? null), "default-avatar-crop-data", array(), "array"), "html", null, true);
         echo "\"
                                     >
@@ -351,18 +359,18 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 
 
 \t\t\t\t\t";
-        // line 240
-        echo $context["options"]->getradioRow(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Use Profile Cover")), array(0 => array("label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Yes")), "name" => "use-cover", "value" => "yes", "checked" => ($this->getAttribute(        // line 245
-($context["settings"] ?? null), "use-cover", array(), "array") == "yes")), 1 => array("label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("No")), "name" => "use-cover", "value" => "no", "checked" => ($this->getAttribute(        // line 251
-($context["settings"] ?? null), "use-cover", array(), "array") == "no"))), "use-cover");
-        // line 254
+        // line 248
+        echo $context["options"]->getradioRow(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Use Profile Cover")), array(0 => array("label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Yes")), "name" => "use-cover", "value" => "yes", "checked" => ($this->getAttribute(        // line 253
+($context["settings"] ?? null), "use-cover", array(), "array") == "yes")), 1 => array("label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("No")), "name" => "use-cover", "value" => "no", "checked" => ($this->getAttribute(        // line 259
+($context["settings"] ?? null), "use-cover", array(), "array") == "no"))), "use-cover", null, null, array("mbsThinCol" => 1));
+        // line 263
         echo "
 
 \t\t\t\t\t<div class=\"mp-option\" id=\"cover-size\">
 \t\t\t\t\t\t<div class=\"row\">
-\t\t\t\t\t\t\t<div class=\"col-md-4\">
+\t\t\t\t\t\t\t<div class=\"col-md-4 mbsThinCol\">
 \t\t\t\t\t\t\t\t";
-        // line 259
+        // line 268
         echo $context["options"]->getlabel(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Profile Cover Size")));
         echo "
 \t\t\t\t\t\t\t</div>
@@ -370,14 +378,14 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t<div class=\"mp-option-sizes-input\">
 \t\t\t\t\t\t\t\t\t<div class=\"mp-option-input\">
 \t\t\t\t\t\t\t\t\t\t<input class=\"sc-input\" value=\"";
-        // line 264
+        // line 273
         echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["settings"] ?? null), "cover-size", array(), "array"), "width", array()), "html", null, true);
         echo "\" name=\"cover-size[width]\">
 \t\t\t\t\t\t\t\t\t</div>
 \t\t\t\t\t\t\t\t\t<span>x</span>
 \t\t\t\t\t\t\t\t\t<div class=\"mp-option-input\">
 \t\t\t\t\t\t\t\t\t\t<input class=\"sc-input\" value=\"";
-        // line 268
+        // line 277
         echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["settings"] ?? null), "cover-size", array(), "array"), "height", array()), "html", null, true);
         echo "\" name=\"cover-size[height]\">
 \t\t\t\t\t\t\t\t\t</div>
@@ -388,9 +396,9 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 
 \t\t\t\t\t<div class=\"mp-option\" id=\"cover-small-size\">
 \t\t\t\t\t\t<div class=\"row\">
-\t\t\t\t\t\t\t<div class=\"col-md-4\">
+\t\t\t\t\t\t\t<div class=\"col-md-4 mbsThinCol\">
 \t\t\t\t\t\t\t\t";
-        // line 278
+        // line 287
         echo $context["options"]->getlabel(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Cover Thumbnail Medium Size")));
         echo "
 \t\t\t\t\t\t\t</div>
@@ -398,14 +406,14 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t<div class=\"mp-option-sizes-input\">
 \t\t\t\t\t\t\t\t\t<div class=\"mp-option-input\">
 \t\t\t\t\t\t\t\t\t\t<input class=\"sc-input\" value=\"";
-        // line 283
+        // line 292
         echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["settings"] ?? null), "cover-medium-size", array(), "array"), "width", array()), "html", null, true);
         echo "\" name=\"cover-medium-size[width]\">
 \t\t\t\t\t\t\t\t\t</div>
 \t\t\t\t\t\t\t\t\t<span>x</span>
 \t\t\t\t\t\t\t\t\t<div class=\"mp-option-input\">
 \t\t\t\t\t\t\t\t\t\t<input class=\"sc-input\" value=\"";
-        // line 287
+        // line 296
         echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["settings"] ?? null), "cover-medium-size", array(), "array"), "height", array()), "html", null, true);
         echo "\" name=\"cover-medium-size[height]\">
 \t\t\t\t\t\t\t\t\t</div>
@@ -416,9 +424,9 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 
 \t\t\t\t\t<div class=\"mp-option\" id=\"cover-small-size\">
 \t\t\t\t\t\t<div class=\"row\">
-\t\t\t\t\t\t\t<div class=\"col-md-4\">
+\t\t\t\t\t\t\t<div class=\"col-md-4 mbsThinCol\">
 \t\t\t\t\t\t\t\t";
-        // line 297
+        // line 306
         echo $context["options"]->getlabel(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Cover Thumbnail Small Size")));
         echo "
 \t\t\t\t\t\t\t</div>
@@ -426,14 +434,14 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t<div class=\"mp-option-sizes-input\">
 \t\t\t\t\t\t\t\t\t<div class=\"mp-option-input\">
 \t\t\t\t\t\t\t\t\t\t<input class=\"sc-input\" value=\"";
-        // line 302
+        // line 311
         echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["settings"] ?? null), "cover-small-size", array(), "array"), "width", array()), "html", null, true);
         echo "\" name=\"cover-small-size[width]\">
 \t\t\t\t\t\t\t\t\t</div>
 \t\t\t\t\t\t\t\t\t<span>x</span>
 \t\t\t\t\t\t\t\t\t<div class=\"mp-option-input\">
 \t\t\t\t\t\t\t\t\t\t<input class=\"sc-input\" value=\"";
-        // line 306
+        // line 315
         echo twig_escape_filter($this->env, $this->getAttribute($this->getAttribute(($context["settings"] ?? null), "cover-small-size", array(), "array"), "height", array()), "html", null, true);
         echo "\" name=\"cover-small-size[height]\">
 \t\t\t\t\t\t\t\t\t</div>
@@ -443,15 +451,15 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t</div>
 
                     ";
-        // line 313
+        // line 322
         $context["defaultCover"] = $this->env->getExtension('Membership_Base_Twig')->getAssetsPath("users", "images/user-cover.jpg", false);
-        // line 314
+        // line 323
         echo "
 \t\t\t\t\t<div class=\"mp-option\" id=\"default-cover\">
 \t\t\t\t\t\t<div class=\"row\">
-\t\t\t\t\t\t\t<div class=\"col-md-4\">
+\t\t\t\t\t\t\t<div class=\"col-md-4 mbsThinCol\">
 \t\t\t\t\t\t\t\t";
-        // line 318
+        // line 327
         echo $context["options"]->getlabel(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Default Cover Image")));
         echo "
 \t\t\t\t\t\t\t</div>
@@ -459,23 +467,23 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t<div class=\"mp-default-image\" data-modal=\"#cover-modal\" data-width=\"\" data-height=\"\">
 \t\t\t\t\t\t\t\t\t<img style=\"max-width:50px;max-height: 50px;\"
 \t\t\t\t\t\t\t\t\t\tsrc=\"";
-        // line 323
+        // line 332
         echo twig_escape_filter($this->env, $this->getAttribute(($context["settings"] ?? null), "default-cover", array(), "array"), "html", null, true);
         echo "\"
 \t\t\t\t\t\t\t\t\t>
 \t\t\t\t\t\t\t\t\t<button class=\"mp-option-button sc-button primary mp-change\">";
-        // line 325
+        // line 334
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Change")), "html", null, true);
         echo "</button>
 \t\t\t\t\t\t\t\t\t<button class=\"mp-option-button sc-button primary mp-set-to-default\"
 \t\t\t\t\t\t\t\t\t\t";
-        // line 327
+        // line 336
         if (((($context["defaultCover"] ?? null) == $this->getAttribute(($context["settings"] ?? null), "default-cover", array(), "array")) || (($context["defaultCover"] ?? null) == $this->getAttribute(($context["settings"] ?? null), "default-cover-source", array(), "array")))) {
-            // line 328
+            // line 337
             echo "\t\t\t\t\t\t\t\t\t\t\tstyle=\"display: none\" 
 \t\t\t\t\t\t\t\t\t\t";
         }
-        // line 330
+        // line 339
         echo "\t\t\t\t\t\t\t\t\t>";
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Set to default")), "html", null, true);
         echo "</button>
@@ -483,7 +491,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t\t\ttype=\"hidden\"
 \t\t\t\t\t\t\t\t\t\tname=\"default-cover\"
 \t\t\t\t\t\t\t\t\t\tvalue=\"";
-        // line 334
+        // line 343
         echo twig_escape_filter($this->env, $this->getAttribute(($context["settings"] ?? null), "default-cover", array(), "array"), "html", null, true);
         echo "\"
 \t\t\t\t\t\t\t\t\t>
@@ -491,7 +499,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
                                             type=\"hidden\"
                                             name=\"default-cover-medium\"
                                             value=\"";
-        // line 339
+        // line 348
         echo twig_escape_filter($this->env, $this->getAttribute(($context["settings"] ?? null), "default-cover-medium", array(), "array"), "html", null, true);
         echo "\"
                                     >
@@ -499,7 +507,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
                                             type=\"hidden\"
                                             name=\"default-cover-small\"
                                             value=\"";
-        // line 344
+        // line 353
         echo twig_escape_filter($this->env, $this->getAttribute(($context["settings"] ?? null), "default-cover-small", array(), "array"), "html", null, true);
         echo "\"
                                     >
@@ -507,14 +515,14 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
                                             type=\"hidden\"
                                             name=\"default-cover-source\"
                                             data-default-image=\"";
-        // line 349
+        // line 358
         echo twig_escape_filter($this->env, ($context["defaultCover"] ?? null), "html", null, true);
         echo "\"
                                             data-default-width-input-name=\"cover-size[width]\"
                                             data-default-height-input-name=\"cover-size[height]\"
                                             data-default-crop-input-name=\"default-cover-crop-data\"
                                             value=\"";
-        // line 353
+        // line 362
         echo twig_escape_filter($this->env, $this->getAttribute(($context["settings"] ?? null), "default-cover-source", array(), "array"), "html", null, true);
         echo "\"
                                     >
@@ -522,7 +530,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
                                             type=\"hidden\"
                                             name=\"default-cover-crop-data\"
                                             value=\"";
-        // line 358
+        // line 367
         echo twig_escape_filter($this->env, $this->getAttribute(($context["settings"] ?? null), "default-cover-crop-data", array(), "array"), "html", null, true);
         echo "\"
                                     >
@@ -533,43 +541,44 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 
 
 \t\t\t\t\t";
-        // line 366
-        $context["permalinks"] = array(0 => array("value" => "username", "title" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Username")), "selected" => ($this->getAttribute(        // line 370
-($context["settings"] ?? null), "permalink-base", array(), "array") == "username")), 1 => array("value" => "id", "title" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("User ID")), "selected" => ($this->getAttribute(        // line 375
+        // line 375
+        $context["permalinks"] = array(0 => array("value" => "username", "title" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Username")), "selected" => ($this->getAttribute(        // line 379
+($context["settings"] ?? null), "permalink-base", array(), "array") == "username")), 1 => array("value" => "id", "title" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("User ID")), "selected" => ($this->getAttribute(        // line 384
 ($context["settings"] ?? null), "permalink-base", array(), "array") == "id")));
-        // line 378
+        // line 387
         echo "
 \t\t\t\t\t";
-        // line 379
-        echo $context["options"]->getselectRow(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Profile Permalink Base")),         // line 380
-($context["permalinks"] ?? null), "permalink-base", "permalink-base");
-        // line 383
+        // line 388
+        echo $context["options"]->getselectRow(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Profile Permalink Base")),         // line 389
+($context["permalinks"] ?? null), "permalink-base", "permalink-base", null, array("mbsThinCol" => 1));
+        // line 394
         echo "
 
 
 \t\t\t\t\t";
-        // line 386
-        $context["displayNames"] = array(0 => array("value" => "username", "title" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Username")), "selected" => ($this->getAttribute(        // line 390
-($context["settings"] ?? null), "display-name", array(), "array") == "username")), 1 => array("value" => "firstname-lastname", "title" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("First Name Last Name")), "selected" => ($this->getAttribute(        // line 395
-($context["settings"] ?? null), "display-name", array(), "array") == "firstname-lastname")), 2 => array("value" => "lastname-firstname", "title" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Last Name First Name")), "selected" => ($this->getAttribute(        // line 400
-($context["settings"] ?? null), "display-name", array(), "array") == "lastname-firstname")));
-        // line 403
+        // line 397
+        $context["displayNames"] = array(0 => array("value" => "username", "title" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Username")), "selected" => ($this->getAttribute(        // line 401
+($context["settings"] ?? null), "display-name", array(), "array") == "username")), 1 => array("value" => "firstname-lastname", "title" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("First Name Last Name")), "selected" => ($this->getAttribute(        // line 406
+($context["settings"] ?? null), "display-name", array(), "array") == "firstname-lastname")), 2 => array("value" => "lastname-firstname", "title" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Last Name First Name")), "selected" => ($this->getAttribute(        // line 411
+($context["settings"] ?? null), "display-name", array(), "array") == "lastname-firstname")), 3 => array("value" => "nickname", "title" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Nickname ")), "selected" => ($this->getAttribute(        // line 416
+($context["settings"] ?? null), "display-name", array(), "array") == "nickname")));
+        // line 419
         echo "
 \t\t\t\t\t";
-        // line 404
-        echo $context["options"]->getselectRow(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("User Display Name")),         // line 405
-($context["displayNames"] ?? null), "display-name", "display-name");
-        // line 408
+        // line 420
+        echo $context["options"]->getselectRow(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("User Display Name")),         // line 421
+($context["displayNames"] ?? null), "display-name", "display-name", null, array("mbsThinCol" => 1));
+        // line 426
         echo "
 
 \t\t\t
 \t\t\t\t\t";
-        // line 411
-        echo $context["options"]->getradioRow(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Registration Confirmation")), array(0 => array("value" => "auto", "label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Auto")), "name" => "registration-confirmation", "checked" => ($this->getAttribute(        // line 416
-($context["settings"] ?? null), "registration-confirmation", array(), "array") == "auto")), 1 => array("value" => "email-confirmation", "label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Email confirmation")), "name" => "registration-confirmation", "checked" => ($this->getAttribute(        // line 422
-($context["settings"] ?? null), "registration-confirmation", array(), "array") == "email-confirmation")), 2 => array("value" => "admin-confirmation", "label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Administrator confirmation")), "name" => "registration-confirmation", "checked" => ($this->getAttribute(        // line 428
-($context["settings"] ?? null), "registration-confirmation", array(), "array") == "admin-confirmation"))), "registration-confirmation");
-        // line 431
+        // line 429
+        echo $context["options"]->getradioRow(call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Registration Confirmation")), array(0 => array("value" => "auto", "label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Auto")), "name" => "registration-confirmation", "checked" => ($this->getAttribute(        // line 434
+($context["settings"] ?? null), "registration-confirmation", array(), "array") == "auto")), 1 => array("value" => "email-confirmation", "label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Email confirmation")), "name" => "registration-confirmation", "checked" => ($this->getAttribute(        // line 440
+($context["settings"] ?? null), "registration-confirmation", array(), "array") == "email-confirmation")), 2 => array("value" => "admin-confirmation", "label" => call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Administrator confirmation")), "name" => "registration-confirmation", "checked" => ($this->getAttribute(        // line 446
+($context["settings"] ?? null), "registration-confirmation", array(), "array") == "admin-confirmation"))), "registration-confirmation", null, null, array("mbsThinCol" => 1));
+        // line 450
         echo "
 
 \t\t\t\t\t\t
@@ -586,21 +595,21 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t<button data-save-settings class=\"save-fields sc-button icon-button primary\">
 \t\t\t\t\t\t\t\t<i class=\"fa fa-save\"></i>
 \t\t\t\t\t\t\t\t<span>";
-        // line 446
+        // line 465
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Save Fields")), "html", null, true);
         echo "</span>
 \t\t\t\t\t\t\t</button>
 \t\t\t\t\t\t\t<button class=\"add-new-section sc-button icon-button primary\">
 \t\t\t\t\t\t\t\t<i class=\"fa fa-plus-circle\"></i>
 \t\t\t\t\t\t\t\t<span>";
-        // line 450
+        // line 469
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Add Section")), "html", null, true);
         echo "</span>
 \t\t\t\t\t\t\t</button>
 \t\t\t\t\t\t\t<button class=\"add-new-field sc-button icon-button primary\">
 \t\t\t\t\t\t\t\t<i class=\"fa fa-plus-circle\"></i>
 \t\t\t\t\t\t\t\t<span>";
-        // line 454
+        // line 473
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Add Field")), "html", null, true);
         echo "</span>
 \t\t\t\t\t\t\t</button>
@@ -624,7 +633,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t<td class=\"mp-field-type\">
 \t\t\t\t\t<select class=\"sc-input mp-field-types-select\" name=\"type\">
 \t\t\t\t\t\t";
-        // line 475
+        // line 494
         echo $context["f"]->getfieldsList();
         echo "
 \t\t\t\t\t</select>
@@ -651,14 +660,14 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t<button class=\"sc-button mp-field-edit-button\">
 \t\t\t\t\t\t<i class=\"fa fa-lg fa-edit\"></i>
 \t\t\t\t\t\t";
-        // line 499
+        // line 518
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Edit")), "html", null, true);
         echo "
 \t\t\t\t\t</button>
 \t\t\t\t\t<button class=\"sc-button mp-field-remove-button\">\t
 \t\t\t\t\t\t<i class=\"fa fa-lg fa-trash-o\"></i>
 \t\t\t\t\t\t";
-        // line 503
+        // line 522
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Remove")), "html", null, true);
         echo "
 \t\t\t\t\t</button>
@@ -705,7 +714,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t<div class=\"row sc-input-row\">
 \t\t\t<div class=\"col-md-4\">
 \t\t\t\t<label class=\"sc-label\">";
-        // line 547
+        // line 566
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Section Name")), "html", null, true);
         echo "</label>
 \t\t\t</div>
@@ -720,7 +729,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t<div class=\"edit-field-container\">
 \t\t\t<div class=\"protected-field-message\">
 \t\t\t\t";
-        // line 559
+        // line 578
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("This is protected field. You cannot modify its type.")), "html", null, true);
         echo "
 \t\t\t</div>
@@ -729,7 +738,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t<div class=\"col-md-6\">
 \t\t\t\t\t<div class=\"sc-input-row\">
 \t\t\t\t\t\t<label class=\"sc-label\">";
-        // line 565
+        // line 584
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Label")), "html", null, true);
         echo "</label>
 \t\t\t\t\t\t<input class=\"sc-input field-label\" type=\"text\" name=\"label\">
@@ -737,7 +746,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t</div>
 \t\t\t\t\t<div class=\"sc-input-row\">
 \t\t\t\t\t\t<label class=\"sc-label\">";
-        // line 570
+        // line 589
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Section")), "html", null, true);
         echo "</label>
 \t\t\t\t\t\t<select class=\"sc-input field-section\" name=\"section\"></select>
@@ -746,19 +755,19 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t<div class=\"col-md-6\">
 \t\t\t\t\t<div class=\"sc-input-row\">
 \t\t\t\t\t\t<label class=\"sc-label\">";
-        // line 576
+        // line 595
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Type")), "html", null, true);
         echo "</label>
 \t\t\t\t\t\t<select class=\"sc-input field-type\" name=\"type\">
 \t\t\t\t\t\t\t";
-        // line 578
+        // line 597
         echo $context["f"]->getfieldsList();
         echo "
 \t\t\t\t\t\t</select>
 \t\t\t\t\t</div>
 \t\t\t\t\t<div class=\"sc-input-row\">
 \t\t\t\t\t\t<label class=\"sc-label\">";
-        // line 582
+        // line 601
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Description")), "html", null, true);
         echo "</label>
 \t\t\t\t\t\t<input class=\"sc-input field-description\" type=\"text\" name=\"description\">
@@ -771,16 +780,16 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t<div class=\"col-md-6\">
 \t\t\t\t\t\t<div class=\"sc-input-row\">
 \t\t\t\t\t\t\t<label class=\"sc-label\">";
-        // line 592
+        // line 611
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Date Format")), "html", null, true);
         echo "</label>
 \t\t\t\t\t\t\t<select class=\"sc-input field-date-format\" name=\"date-format\">
 \t\t\t\t\t\t\t\t";
-        // line 594
+        // line 613
         $context['_parent'] = $context;
         $context['_seq'] = twig_ensure_traversable(($context["dateFormats"] ?? null));
         foreach ($context['_seq'] as $context["value"] => $context["data"]) {
-            // line 595
+            // line 614
             echo "\t\t\t\t\t\t\t\t\t<option value=\"";
             echo twig_escape_filter($this->env, $context["value"], "html", null, true);
             echo "\">";
@@ -791,7 +800,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['value'], $context['data'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 597
+        // line 616
         echo "\t\t\t\t\t\t\t</select>
 \t\t\t\t\t\t</div>
 \t\t\t\t\t</div>
@@ -806,7 +815,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t<tr class=\"mp-field-option mp-field-option-google-re-captcha-site-key\">
 \t\t\t\t\t\t\t\t\t<td class=\"mp-field-option-setting\">
 \t\t\t\t\t\t\t\t\t\t<label class=\"sc-label\">";
-        // line 610
+        // line 629
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Google ReCaptcha Site Key")), "html", null, true);
         echo "</label>
 \t\t\t\t\t\t\t\t\t</td>
@@ -815,7 +824,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-question sc-tooltip\"></i>
 \t\t\t\t\t\t\t\t\t\t\t<div class=\"tooltip_content\">
 \t\t\t\t\t\t\t\t\t\t\t\t<div>";
-        // line 616
+        // line 635
         echo $context["tooltips"]->getget("google-re-captcha-site-key");
         echo "</div>
 \t\t\t\t\t\t\t\t\t\t\t</div>
@@ -828,7 +837,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t<tr class=\"mp-field-option mp-field-option-google-re-captcha-secret-key\">
 \t\t\t\t\t\t\t\t\t<td class=\"mp-field-option-setting\">
 \t\t\t\t\t\t\t\t\t\t<label class=\"sc-label\">";
-        // line 626
+        // line 645
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Google ReCaptcha Secret Key")), "html", null, true);
         echo "</label>
 \t\t\t\t\t\t\t\t\t</td>
@@ -837,7 +846,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-question sc-tooltip\"></i>
 \t\t\t\t\t\t\t\t\t\t\t<div class=\"tooltip_content\">
 \t\t\t\t\t\t\t\t\t\t\t\t<div>";
-        // line 632
+        // line 651
         echo call_user_func_array($this->env->getFunction('translate')->getCallable(), array($context["tooltips"]->getget("google-re-captcha-secret-key")));
         echo "</div>
 \t\t\t\t\t\t\t\t\t\t\t</div>
@@ -850,7 +859,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t<tr class=\"mp-field-option mp-field-option-google-re-captcha-theme\">
 \t\t\t\t\t\t\t\t\t<td class=\"mp-field-option-setting\">
 \t\t\t\t\t\t\t\t\t\t<label class=\"sc-label\">";
-        // line 642
+        // line 661
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Google ReCaptcha Theme")), "html", null, true);
         echo "</label>
 \t\t\t\t\t\t\t\t\t</td>
@@ -859,7 +868,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-question sc-tooltip\"></i>
 \t\t\t\t\t\t\t\t\t\t\t<div class=\"tooltip_content\">
 \t\t\t\t\t\t\t\t\t\t\t\t<div>";
-        // line 648
+        // line 667
         echo call_user_func_array($this->env->getFunction('translate')->getCallable(), array($context["tooltips"]->getget("google-re-captcha-theme")));
         echo "</div>
 \t\t\t\t\t\t\t\t\t\t\t</div>
@@ -868,11 +877,11 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t\t<td class=\"mp-field-option-setting\">
 \t\t\t\t\t\t\t\t\t\t<select name=\"google-re-captcha-theme\">
 \t\t\t\t\t\t\t\t\t\t\t<option value=\"light\">";
-        // line 654
+        // line 673
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Light")), "html", null, true);
         echo "</option>
 \t\t\t\t\t\t\t\t\t\t\t<option value=\"dark\">";
-        // line 655
+        // line 674
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Dark")), "html", null, true);
         echo "</option>
 \t\t\t\t\t\t\t\t\t\t</select>
@@ -881,7 +890,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t<tr class=\"mp-field-option mp-field-option-google-re-captcha-type\">
 \t\t\t\t\t\t\t\t\t<td class=\"mp-field-option-setting\">
 \t\t\t\t\t\t\t\t\t\t<label class=\"sc-label\">";
-        // line 661
+        // line 680
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Google ReCaptcha Type")), "html", null, true);
         echo "</label>
 \t\t\t\t\t\t\t\t\t</td>
@@ -890,7 +899,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-question sc-tooltip\"></i>
 \t\t\t\t\t\t\t\t\t\t\t<div class=\"tooltip_content\">
 \t\t\t\t\t\t\t\t\t\t\t\t<div>";
-        // line 667
+        // line 686
         echo call_user_func_array($this->env->getFunction('translate')->getCallable(), array($context["tooltips"]->getget("google-re-captcha-type")));
         echo "</div>
 \t\t\t\t\t\t\t\t\t\t\t</div>
@@ -899,11 +908,11 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t\t<td class=\"mp-field-option-setting\">
 \t\t\t\t\t\t\t\t\t\t<select name=\"google-re-captcha-type\">
 \t\t\t\t\t\t\t\t\t\t\t<option value=\"audio\">";
-        // line 673
+        // line 692
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Audio")), "html", null, true);
         echo "</option>
 \t\t\t\t\t\t\t\t\t\t\t<option value=\"image\" selected=\"true\">";
-        // line 674
+        // line 693
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Image")), "html", null, true);
         echo "</option>
 \t\t\t\t\t\t\t\t\t\t</select>
@@ -912,7 +921,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t<tr class=\"mp-field-option mp-field-option-google-re-captcha-size\">
 \t\t\t\t\t\t\t\t\t<td class=\"mp-field-option-setting\">
 \t\t\t\t\t\t\t\t\t\t<label class=\"sc-label\">";
-        // line 680
+        // line 699
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Google ReCaptcha Size")), "html", null, true);
         echo "</label>
 \t\t\t\t\t\t\t\t\t</td>
@@ -921,7 +930,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t\t\t\t<i class=\"fa fa-question sc-tooltip\"></i>
 \t\t\t\t\t\t\t\t\t\t\t<div class=\"tooltip_content\">
 \t\t\t\t\t\t\t\t\t\t\t\t<div>";
-        // line 686
+        // line 705
         echo call_user_func_array($this->env->getFunction('translate')->getCallable(), array($context["tooltips"]->getget("google-re-captcha-size")));
         echo "</div>
 \t\t\t\t\t\t\t\t\t\t\t</div>
@@ -930,11 +939,11 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t\t<td class=\"mp-field-option-setting\">
 \t\t\t\t\t\t\t\t\t\t<select name=\"google-re-captcha-size\">
 \t\t\t\t\t\t\t\t\t\t\t<option value=\"compact\">";
-        // line 692
+        // line 711
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Compact")), "html", null, true);
         echo "</option>
 \t\t\t\t\t\t\t\t\t\t\t<option value=\"normal\" selected=\"true\">";
-        // line 693
+        // line 712
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Normal")), "html", null, true);
         echo "</option>
 \t\t\t\t\t\t\t\t\t\t</select>
@@ -948,31 +957,41 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 
 \t\t\t<hr>
 \t\t\t<div class=\"row field-states\">
-\t\t\t\t<div class=\"col-md-4\">
+\t\t\t\t<div class=\"col-md-3\">
 \t\t\t\t\t<label class=\"sc-checkbox\">
 \t\t\t\t\t\t<input type=\"checkbox\" name=\"registration\" value=\"true\">
 \t\t\t\t\t\t";
-        // line 708
+        // line 727
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Registration")), "html", null, true);
         echo "
 \t\t\t\t\t\t<div class=\"sc-checkbox-state\"></div>
 \t\t\t\t\t</label>
 \t\t\t\t</div>
-\t\t\t\t<div class=\"col-md-4\">
+\t\t\t\t<div class=\"col-md-3\">
 \t\t\t\t\t<label class=\"sc-checkbox\">
-\t\t\t\t\t\t<input type=\"checkbox\" name=\"required\" value=\"true\">
+\t\t\t\t\t\t<input type=\"checkbox\" name=\"required\" value=\"true\" id=\"popup-required\">
 \t\t\t\t\t\t";
-        // line 715
+        // line 734
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Required")), "html", null, true);
         echo "
 \t\t\t\t\t\t<div class=\"sc-checkbox-state\"></div>
 \t\t\t\t\t</label>
 \t\t\t\t</div>
-\t\t\t\t<div class=\"col-md-4\">
+                <div class=\"col-md-3\">
+                    <label class=\"sc-checkbox\">
+                        <input type=\"checkbox\" name=\"asterisk\" value=\"true\" id=\"popup-asterisk\">
+                        ";
+        // line 741
+        echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Asterisk")), "html", null, true);
+        echo "
+                        <div class=\"sc-checkbox-state\"></div>
+                    </label>
+                </div>
+\t\t\t\t<div class=\"col-md-3\">
 \t\t\t\t\t<label class=\"sc-checkbox\">
 \t\t\t\t\t\t<input type=\"checkbox\" name=\"enabled\" value=\"true\" checked>
 \t\t\t\t\t\t";
-        // line 722
+        // line 748
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Enabled")), "html", null, true);
         echo "
 \t\t\t\t\t\t<div class=\"sc-checkbox-state\"></div>
@@ -982,10 +1001,10 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 
 \t\t\t<div class=\"field-options-container sc-hidden\">
 \t\t\t\t<hr>
-\t\t\t\t<div class=\"row\">
+\t\t\t\t<div class=\"row mbsModalEditAddToDdOpt\">
 \t\t\t\t\t<div class=\"col-md-4\">
 \t\t\t\t\t\t<label class=\"sc-label\">";
-        // line 732
+        // line 758
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Option Name")), "html", null, true);
         echo "</label>
 \t\t\t\t\t</div>
@@ -1023,7 +1042,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 \t\t\t\t\t\t\t\t<input type=\"checkbox\" name=\"selected-options[]\" value=\"true\">
 \t\t\t\t\t\t\t\t<input type=\"radio\" name=\"selected-options[]\" value=\"true\">
 \t\t\t\t\t\t\t\t";
-        // line 767
+        // line 793
         echo twig_escape_filter($this->env, call_user_func_array($this->env->getFunction('translate')->getCallable(), array("Default Selected")), "html", null, true);
         echo "
 \t\t\t\t\t\t\t\t<div class=\"sc-checkbox-state seleceted-options-input-state\"></div>
@@ -1098,7 +1117,7 @@ $context["role"], "id", array()), "selected" => ($this->getAttribute(           
 
     public function getDebugInfo()
     {
-        return array (  1066 => 21,  1061 => 20,  1059 => 19,  1056 => 7,  1045 => 6,  1027 => 767,  989 => 732,  976 => 722,  966 => 715,  956 => 708,  938 => 693,  934 => 692,  925 => 686,  916 => 680,  907 => 674,  903 => 673,  894 => 667,  885 => 661,  876 => 655,  872 => 654,  863 => 648,  854 => 642,  841 => 632,  832 => 626,  819 => 616,  810 => 610,  795 => 597,  784 => 595,  780 => 594,  775 => 592,  762 => 582,  755 => 578,  750 => 576,  741 => 570,  733 => 565,  724 => 559,  709 => 547,  662 => 503,  655 => 499,  628 => 475,  604 => 454,  597 => 450,  590 => 446,  573 => 431,  571 => 428,  570 => 422,  569 => 416,  568 => 411,  563 => 408,  561 => 405,  560 => 404,  557 => 403,  555 => 400,  554 => 395,  553 => 390,  552 => 386,  547 => 383,  545 => 380,  544 => 379,  541 => 378,  539 => 375,  538 => 370,  537 => 366,  526 => 358,  518 => 353,  511 => 349,  503 => 344,  495 => 339,  487 => 334,  479 => 330,  475 => 328,  473 => 327,  468 => 325,  463 => 323,  455 => 318,  449 => 314,  447 => 313,  437 => 306,  430 => 302,  422 => 297,  409 => 287,  402 => 283,  394 => 278,  381 => 268,  374 => 264,  366 => 259,  359 => 254,  357 => 251,  356 => 245,  355 => 240,  344 => 232,  336 => 227,  332 => 226,  321 => 218,  313 => 213,  305 => 208,  297 => 203,  289 => 199,  285 => 197,  283 => 196,  278 => 194,  273 => 192,  265 => 187,  259 => 183,  257 => 182,  246 => 174,  239 => 170,  231 => 165,  218 => 155,  211 => 151,  203 => 146,  190 => 136,  183 => 132,  175 => 127,  162 => 117,  155 => 113,  147 => 108,  140 => 103,  138 => 100,  137 => 94,  136 => 89,  132 => 87,  130 => 84,  129 => 78,  128 => 73,  124 => 71,  122 => 68,  121 => 67,  118 => 66,  112 => 65,  110 => 63,  109 => 62,  108 => 61,  106 => 60,  102 => 59,  99 => 58,  97 => 57,  86 => 49,  80 => 46,  74 => 42,  72 => 41,  67 => 39,  63 => 38,  60 => 37,  57 => 36,  49 => 31,  43 => 28,  39 => 26,  36 => 25,  32 => 1,  30 => 4,  28 => 3,  26 => 2,  11 => 1,);
+        return array (  1085 => 21,  1080 => 20,  1078 => 19,  1075 => 7,  1064 => 6,  1046 => 793,  1008 => 758,  995 => 748,  985 => 741,  975 => 734,  965 => 727,  947 => 712,  943 => 711,  934 => 705,  925 => 699,  916 => 693,  912 => 692,  903 => 686,  894 => 680,  885 => 674,  881 => 673,  872 => 667,  863 => 661,  850 => 651,  841 => 645,  828 => 635,  819 => 629,  804 => 616,  793 => 614,  789 => 613,  784 => 611,  771 => 601,  764 => 597,  759 => 595,  750 => 589,  742 => 584,  733 => 578,  718 => 566,  671 => 522,  664 => 518,  637 => 494,  613 => 473,  606 => 469,  599 => 465,  582 => 450,  580 => 446,  579 => 440,  578 => 434,  577 => 429,  572 => 426,  570 => 421,  569 => 420,  566 => 419,  564 => 416,  563 => 411,  562 => 406,  561 => 401,  560 => 397,  555 => 394,  553 => 389,  552 => 388,  549 => 387,  547 => 384,  546 => 379,  545 => 375,  534 => 367,  526 => 362,  519 => 358,  511 => 353,  503 => 348,  495 => 343,  487 => 339,  483 => 337,  481 => 336,  476 => 334,  471 => 332,  463 => 327,  457 => 323,  455 => 322,  445 => 315,  438 => 311,  430 => 306,  417 => 296,  410 => 292,  402 => 287,  389 => 277,  382 => 273,  374 => 268,  367 => 263,  365 => 259,  364 => 253,  363 => 248,  352 => 240,  344 => 235,  340 => 234,  329 => 226,  321 => 221,  313 => 216,  305 => 211,  297 => 207,  293 => 205,  291 => 204,  286 => 202,  281 => 200,  273 => 195,  267 => 191,  265 => 190,  254 => 182,  247 => 178,  239 => 173,  226 => 163,  219 => 159,  211 => 154,  198 => 144,  191 => 140,  183 => 135,  170 => 125,  163 => 121,  155 => 116,  148 => 111,  146 => 107,  145 => 101,  144 => 96,  140 => 94,  138 => 90,  137 => 84,  136 => 79,  132 => 77,  130 => 72,  129 => 71,  126 => 70,  120 => 69,  118 => 67,  117 => 66,  116 => 65,  114 => 64,  110 => 63,  107 => 62,  105 => 61,  94 => 53,  88 => 50,  82 => 46,  80 => 45,  75 => 43,  71 => 42,  68 => 41,  65 => 40,  60 => 37,  58 => 36,  56 => 35,  54 => 34,  49 => 31,  43 => 28,  39 => 26,  36 => 25,  32 => 1,  30 => 4,  28 => 3,  26 => 2,  11 => 1,);
     }
 
     /** @deprecated since 1.27 (to be removed in 2.0). Use getSourceContext() instead */

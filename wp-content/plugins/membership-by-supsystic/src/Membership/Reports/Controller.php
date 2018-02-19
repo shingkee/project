@@ -1,27 +1,6 @@
 <?php
 class Membership_Reports_Controller extends Membership_Base_Controller {
 
-    public function indexAction(Rsc_Http_Request $request) {
-
-        $orderColumn = 'id';
-        $order = 'DESC';
-
-        if (isset($request->query['order_by'])) {
-	        $orderColumn = $request->query['order_by'];
-	        $order = $request->query['order'];
-        }
-
-        $reports = $this->getModel('reports')->get(50, 0, $orderColumn, $order);
-
-        return $this->response(
-            '@reports/backend/index.twig',
-            array(
-                'reports' => $reports,
-                'reportsUrl' => $this->generateUrl('reports'),
-            )
-        );
-    }
-
     public function createReport(Rsc_Http_Parameters $parameters) {
 
         $report = $parameters->get('message');

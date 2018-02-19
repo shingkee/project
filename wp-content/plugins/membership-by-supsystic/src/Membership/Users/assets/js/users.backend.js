@@ -136,7 +136,11 @@
 				search: $searchUsersInput.val(),
 				p: null
 			}) + '#users'
-		})
+		});
+		
+		$searchUsersInput.on('keyup', function(){
+			$searchButton.attr('disabled', false);
+		});
 
 	});
 

@@ -15,7 +15,15 @@
 		<div class="groups-tabs">
 			<div class="ui tab basic vertical segment active" data-tab="joined">
 				<div class="ui basic vertical segment form group-search-input">
-					<div class="ui fluid icon input">
+					<select name="category" class="mbsGroupsSearchCategory">
+						<option value="0">{{ translate('All categories') }}</option>
+						{% if groupCategoryList|length %}
+							{% for oneGcItem in groupCategoryList %}
+								<option value="{{ oneGcItem['id'] }}">{{ oneGcItem['name'] }}</option>
+							{% endfor %}
+						{% endif %}
+					</select>
+					<div class="ui fluid icon input mbsGroupsSearchName">
 						<input type="text" placeholder="{{ translate('Find group...') }}">
 						<i class="search icon"></i>
 					</div>
@@ -36,7 +44,15 @@
 			{% if groupInvites and isCurrentUser(requestedUser) %}
 				<div class="ui tab basic vertical segment" data-tab="invited">
 					<div class="ui basic vertical segment form group-search-input">
-						<div class="ui fluid icon input">
+						<select name="category" class="mbsGroupsSearchCategory">
+							<option value="0">{{ translate('All categories') }}</option>
+							{% if groupCategoryList|length %}
+								{% for oneGcItem in groupCategoryList %}
+									<option value="{{ oneGcItem['id'] }}">{{ oneGcItem['name'] }}</option>
+								{% endfor %}
+							{% endif %}
+						</select>
+						<div class="ui fluid icon input mbsGroupsSearchName">
 							<input type="text" placeholder="{{ translate('Find group...') }}">
 							<i class="search icon"></i>
 						</div>

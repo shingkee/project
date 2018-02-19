@@ -63,6 +63,17 @@ class Membership_Roles_Model_Roles extends Membership_Base_Model_Settings {
 		return $role;
 	}
 
+	public function isRoleExist($id) {
+		$query = $this->getQueryBuilder()
+			->select(array('*'))
+			->from($this->getTable('roles') . ' AS r')
+			->where('r.id', '=', (int) $id)
+			->build();
+
+		$role = $this->db->get_row($query, ARRAY_A);
+		return $role != null;
+	}
+
 	public function getRoleById($id) {
 		$query = $this->getQueryBuilder()
 		              ->select(array('*'))
@@ -430,5 +441,27 @@ class Membership_Roles_Model_Roles extends Membership_Base_Model_Settings {
 		// sorting by value
 		asort($resRoles);
 		return $resRoles;
+	}
+
+	public function getUserRolesForSelect($selectedRoleId = 0, $addAllRolest = true) {
+		$newUserRoles = array();
+		$userRoles = $this->getRoles();
+
+		$newUserRoles[0] = array(
+			'id' => 0,
+			'name' => $this->translate('All roles'),
+			'selected' => 0 == $selectedRoleId,
+		);
+
+		if(count($userRoles)) {
+			foreach($userRoles as $oneRole) {
+				$newUserRoles[$oneRole['id']] = array(
+					'id' => $oneRole['id'],
+					'name' => $oneRole['name'],
+					'selected' => $oneRole['id'] == $selectedRoleId,
+				);
+			}
+		}
+		return $newUserRoles;
 	}
 }

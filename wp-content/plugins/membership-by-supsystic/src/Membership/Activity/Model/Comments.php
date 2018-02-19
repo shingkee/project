@@ -145,6 +145,7 @@ class Membership_Activity_Model_Comments extends Membership_Base_Model_Base
         }
 
         $activitiesImages = $activityModel->getActivitiesImages($_comments);
+		$activityAttachmentFile = $activityModel->getAttachmentFiles($_comments);
 		$activitiesLinks = $activityModel->getActivitiesLinks($_comments);
 
 		foreach ($comments as $key => &$comment) {
@@ -157,6 +158,9 @@ class Membership_Activity_Model_Comments extends Membership_Base_Model_Base
             if (isset($activitiesImages[$comment['id']])) {
                 $comment['images'] = $activitiesImages[$comment['id']];
             }
+			if(isset($activityAttachmentFile[$comment['id']])) {
+				$comment['attachmentFiles'] = $activityAttachmentFile[$comment['id']];
+			}
 
             if (isset($activitiesLinks[$comment['id']])) {
                 $comment['link'] = $activitiesLinks[$comment['id']];

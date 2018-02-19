@@ -15,6 +15,7 @@
 				{% for section in sections %}
 					<div class="ui tab {% if loop.first %}active{% endif %}" data-tab="{{ section }}">
 						{% for field in fields %}
+
 							{% if field.section == section %}
 								<div class="ui vertical segment">
 									<div class="ui form mp-field" data-field-name="{{ field.name }}" data-field-type="{{ field.type }}">
@@ -24,7 +25,7 @@
 											</div>
 											<div class="sixteen wide mobile ten wide tablet eleven wide computer column">
 												<div class="mp-field-data">
-													{% if isCurrentUser(requestedUser) %}
+													{% if isCurrentUser(requestedUser) and field.name != 'user_login' %}
 														<button class="ui button mini primary field-edit-action"><i class="write icon"></i>{{ translate('Edit') }}</button>
 													{% endif %}
 													<p>

@@ -8,7 +8,7 @@
 	<div class="ui grid">
 		<div class="sixteen wide column">
 			<div class="ui pointing secondary menu groups-tab-items">
-				<a class="item active" data-tab="all">All groups</a>
+				<a class="item active" data-tab="all">{{ translate('All groups') }}</a>
 				{% for type, count in counts %}
 					{% if count > 0 %}
 						<a class="item" data-tab="{{ type }}">{{ groupsSectionTitles[type] }} <div class="ui mini label">{{ count }}</div></a>
@@ -28,7 +28,15 @@
 				{% for section in ['all']|merge(counts|keys) %}
 					<div class="ui tab {% if loop.first %}active{% endif %}" data-tab="{{ section }}">
 						<div class="ui basic vertical segment form group-search-input">
-							<div class="ui fluid icon input">
+							<select name="category" class="mbsGroupsSearchCategory">
+								<option value="0">{{ translate('All categories') }}</option>
+								{% if groupCategoryList|length %}
+									{% for oneGcItem in groupCategoryList %}
+										<option value="{{ oneGcItem['id'] }}">{{ oneGcItem['name'] }}</option>
+									{% endfor %}
+								{% endif %}
+							</select>
+							<div class="ui fluid icon input mbsGroupsSearchName">
 								<input type="text" placeholder="{{ translate('Find group...') }}">
 								<i class="search icon"></i>
 							</div>
@@ -51,6 +59,11 @@
 								 {% include '@groups/partials/groups-list.twig' with {'groups': groups[section]} %}
 							{% endif %}
 
+						</div>
+						<div class="ui basic vertical segment">
+							<div class="ui message no-groups" {% if groups %}style="display:none"{% endif %}>
+								<p>{{ translate('No groups to show.') }}</p>
+							</div>
 						</div>
 						<div class="ui basic segment very padded list-loader" style="display:none;">
 							<div class="ui active loader"></div>

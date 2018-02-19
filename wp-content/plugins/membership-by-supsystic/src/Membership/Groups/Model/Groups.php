@@ -29,6 +29,8 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 				g.id,
 				g.name,
 				g.description,
+				g.category_id,
+				gc.name AS category_name,
 				g.alias,
 				g.is_blocked AS isBlocked,
 				g.created_at,
@@ -40,12 +42,14 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 				) AS totalUsers,
 				gu.group_role AS currentUserRole,
 				gu.approved AS currentUserApproved,
+				gu.is_creator AS isCurrentUserCreator,
 				(SELECT 1 FROM {prefix}groups_followers WHERE user_id = '%d' AND group_id = g.id LIMIT 1) 
 					AS currentUserIsFollowing
 			FROM {prefix}groups AS g
 			LEFT JOIN {prefix}groups_users AS gu ON (gu.group_id = g.id AND gu.user_id = %d)
 			LEFT JOIN {prefix}groups_settings AS gs ON (gs.group_id = g.id)
 			LEFT JOIN {prefix}groups_blacklists AS gb ON (gb.group_id = g.id AND gb.user_id = %d)
+			LEFT JOIN {prefix}groups_category AS gc ON (gc.id = g.category_id)
 		");
 
 		if (is_array($value)) {
@@ -227,6 +231,7 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 			->set(array(
 				'name' => '%s',
 				'description' => '%s',
+				'category_id' => '%s',
 			))
 			->where('id', '=', '%d');
 			
@@ -234,6 +239,7 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 			$this->db->prepare($query, array(
 				$data['name'],
 				$data['description'],
+				$data['category_id'],
 				$groupId,
 			))
 		);
@@ -326,9 +332,15 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 		}
 
 		if ($results) {
+			// get users info for current group
+			$usersGroupInfo = $this->getGroupUsersInfo($users, $groupId);
+
 			$users = $this->getModel('profile', 'users')->getUsersByIds(array('users' => $users));
 			foreach ($users as &$user) {
 				$user['groupRole'] = $status;
+				if(!empty($usersGroupInfo[$user['id']])) {
+					$user['groupInfo'] = $usersGroupInfo[$user['id']];
+				}
 			}
 		}
 
@@ -336,6 +348,7 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 	}
 
 	public function getUsersToInvite($groupId = null, $userId, $limit, $offsetId = null, $search = null) {
+
 		$usersModel = $this->getModel('profile', 'users');
 		$andWhereSql = '';
 
@@ -378,10 +391,10 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 			if ($groupId) {
 				$andWhere = $this->db->prepare(
 					$this->preparePrefix("
-						AND user_id NOT IN (
+						AND search.user_id NOT IN (
 							SELECT user_id FROM {prefix}groups_invites
 							WHERE group_id = '%d'
-							UNION DISTINCT 
+							UNION DISTINCT
 							SELECT user_id FROM {prefix}groups_users
 							WHERE group_id = '%d'
 						)
@@ -395,6 +408,7 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 				'offsetId' => $offsetId,
 				'andWhere' => $andWhere
 			));
+
 		}
 
 		$users = array();
@@ -429,9 +443,13 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 
 		if (in_array('approved', $roles)) {
 			$query[] = $this->db->prepare("
-				(SELECT COUNT(user_id)
+				(SELECT COUNT(gu.user_id)
 					FROM {prefix}groups_users AS gu
-					WHERE group_id = '%d' AND approved = 1 AND user_id NOT IN
+					LEFT JOIN {prefix}users_statuses us 
+						ON us.user_id = gu.user_id 
+					WHERE group_id = '%d' AND approved = 1
+					AND us.user_status = 0 
+					AND gu.user_id NOT IN
 						(SELECT user_id
 						FROM {prefix}groups_blacklists AS bl
 						WHERE gu.group_id = bl.group_id)
@@ -441,9 +459,13 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 
 		if (in_array('unapproved', $roles)) {
 			$query[] = $this->db->prepare("
-				(SELECT COUNT(user_id)
+				(SELECT COUNT(gu.user_id)
 					FROM {prefix}groups_users AS gu
-					WHERE group_id = '%d' AND approved = 0 AND user_id NOT IN
+					LEFT JOIN {prefix}users_statuses us 
+						ON us.user_id = gu.user_id 
+					WHERE group_id = '%d' AND approved = 0 
+					AND us.user_status = 0 
+					AND gu.user_id NOT IN
 						(SELECT user_id
 						FROM {prefix}groups_blacklists AS bl
 						WHERE gu.group_id = bl.group_id)
@@ -453,15 +475,24 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 
 		if (in_array('invited', $roles)) {
 			$query[] = $this->db->prepare("
-				(SELECT COUNT(user_id) FROM {prefix}groups_invites 
-					WHERE group_id = '%d') as invited
+				(SELECT COUNT(gi.user_id) 
+					FROM {prefix}groups_invites gi
+					LEFT JOIN {prefix}users_statuses us 
+						ON us.user_id = gi.user_id 
+					WHERE group_id = '%d'
+					AND us.user_status = 0
+				) as invited
 			", $groupId);
 		}
 
 		if (in_array('blocked', $roles)) {
 			$query[] = $this->db->prepare("
-				(SELECT COUNT(user_id) FROM {prefix}groups_blacklists
-					WHERE group_id = '%d') as blocked
+				(SELECT COUNT(gb.user_id) 
+					FROM {prefix}groups_blacklists gb
+					LEFT JOIN {prefix}users_statuses us 
+						ON us.user_id = gb.user_id 
+					WHERE gb.group_id = '%d'
+				) as blocked
 			", $groupId);
 		}
 
@@ -484,7 +515,6 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 	}
 
 	public function createGroup($data) {
-
 		if ($this->getGroupIdByAlias($data['alias'])) {
 			$aliasIds = $this->getGroupAliasIds($data['alias']);
 			$maxAliasId = 0;
@@ -501,8 +531,8 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
         $currentDateTime = $this->getCurrentDateInUTC();
 		$query = $this->getQueryBuilder()
 			->insertInto($this->getTable('groups'))
-			->fields(array('name', 'description', 'alias', 'created_at', 'updated_at'))
-			->values(array('%s', '%s', '%s', '%s', '%s'));
+			->fields(array('name', 'description', 'category_id', 'alias', 'created_at', 'updated_at'))
+			->values(array('%s', '%s', '%s', '%s', '%s', '%s'));
 		$data[] = $currentDateTime;
         $data[] = $currentDateTime;
 		
@@ -606,15 +636,15 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 		$this->db->query($this->db->prepare($query, array($groupId)));
 	}
 
-	public function addUserToGroup($groupId, $userId, $groupRole, $approved) {
+	public function addUserToGroup($groupId, $userId, $groupRole, $approved, $isCreator = 0) {
 
 		$query = $this->preparePrefix("
-			INSERT INTO {prefix}groups_users (`group_id`, `group_role`, `user_id`, `approved`)
-			VALUES ('%d', '%s', '%d', '%d');
+			INSERT INTO {prefix}groups_users (`group_id`, `group_role`, `user_id`, `approved`, `is_creator`)
+			VALUES ('%d', '%s', '%d', '%d', '%d');
 		");
 
 		return $this->db->query(
-			$this->db->prepare($query, array($groupId, $groupRole, $userId, $approved))
+			$this->db->prepare($query, array($groupId, $groupRole, $userId, $approved, $isCreator))
 		);
 	}
 
@@ -630,8 +660,8 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 		);
 	}
 
-	public function setGroupAdmin($groupId, $userId) {
-		return $this->addUserToGroup($groupId, $userId, 'administrator', true);
+	public function setGroupAdmin($groupId, $userId, $isGroupCreator = 0) {
+		return $this->addUserToGroup($groupId, $userId, 'administrator', true, $isGroupCreator);
 	}
 
 
@@ -700,7 +730,7 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 		);
 	}
 
-	public function getUserGroups($userId, $type, $limit, $offsetId = null, $search = null)
+	public function getUserGroups($userId, $type, $limit, $offsetId = null, $search = null, $categoryId = null)
 	{
 		$queryParams = array($userId);
 
@@ -710,6 +740,21 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 					SELECT gu.group_id, g.name 
 					FROM {prefix}groups_users AS gu
 					LEFT JOIN {prefix}groups AS g ON (gu.group_id = g.id)
+					WHERE user_id = '%d' AND gu.approved = '1'
+				");
+				break;
+			case 'joined-ordered-by-activity':
+				$query = $this->preparePrefix("
+					SELECT gu.group_id, g.name
+					FROM {prefix}groups_users AS gu
+					LEFT JOIN {prefix}groups AS g ON (gu.group_id = g.id)
+					LEFT JOIN (
+						SELECT max(id) as max_id, object_id
+						FROM {prefix}activity
+						WHERE type = 'group_post' 
+						AND status = 'active'
+						GROUP BY object_id
+					) as a ON (a.object_id = g.id)
 					WHERE user_id = '%d' AND gu.approved = '1'
 				");
 				break;
@@ -748,10 +793,21 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 			$query .= " AND g.name LIKE CONCAT('%%', '%s', '%%')";
 			$queryParams[] = $search;
 		}
+		if($categoryId) {
+			$query .= " AND g.category_id = '%s'";
+			$queryParams[] = $categoryId;
+		}
 
 		$queryParams[] = $limit;
 
-		$query .= " ORDER BY g.id DESC LIMIT %d";
+		if($type == 'joined-ordered-by-activity') {
+			$query .= " ORDER BY max_id DESC, g.id DESC LIMIT %d";
+		} else {
+			$query .= " ORDER BY g.id DESC LIMIT %d";
+		}
+
+//		var_dump($query);
+//		exit();
 
 		$results = $this->db->get_col(
 			$this->db->prepare($query, $queryParams)
@@ -761,12 +817,31 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 
 		if ($results) {
 			$groups = $this->getGroupsByIds($results, get_current_user_id());
+			// reordering groups array
+			if($type == 'joined-ordered-by-activity') {
+				$newGroupsWithOrder = array();
+				if(count($groups)) {
+					foreach($results as $oneIndex) {
+						if(isset($groups[$oneIndex])) {
+							$newGroupsWithOrder[$oneIndex] = $groups[$oneIndex];
+						}
+					}
+					$groups = $newGroupsWithOrder;
+				}
+			}
 		}
+
+//		echo "<pre>";
+//		print_r($results);
+//		// print_r($newGroupsWithOrder);
+//		print_r($groups);
+//		echo "</pre>";
+//		exit();
 
 		return array_values($groups);
 	}
 
-	public function getGroups($currentUserId, $limit, $offsetId = null, $search = null) {
+	public function getGroups($currentUserId, $limit, $offsetId = null, $search = null, $categoryId = null) {
 
 		$queryParams = array($currentUserId);
 
@@ -779,6 +854,10 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 		if ($search) {
 			$whereQuery .= " AND g.name LIKE CONCAT('%%', '%s', '%%')";
 			$queryParams[] = $search;
+		}
+		if($categoryId) {
+			$whereQuery .= " AND g.category_id = '%s'";
+			$queryParams[] = $categoryId;
 		}
 
 		$query = $this->preparePrefix("
@@ -861,5 +940,27 @@ class Membership_Groups_Model_Groups extends Membership_Base_Model_Base
 		}
 
 		return $groups;
+	}
+
+	public function getGroupUsersInfo(array $userIds, $groupId) {
+
+		$groupId = (int) $groupId;
+		$userParamStr = array_fill(0, count($userIds), '%d');
+
+		$query = $this->preparePrefix("SELECT DISTINCT `group_role`, `user_id`, `is_creator` FROM `{prefix}groups_users` WHERE group_id = " . $groupId. " AND user_id IN (" . implode(',', $userParamStr) . ')');
+
+		$queryRes = $this->db->get_results(
+			$this->db->prepare($query, $userIds),
+			ARRAY_A
+		);
+
+		$funcRes = array();
+		if(count($queryRes)) {
+			foreach($queryRes as $oneUserInfo) {
+				$funcRes[$oneUserInfo['user_id']] = $oneUserInfo;
+			}
+		}
+
+		return $funcRes;
 	}
 }

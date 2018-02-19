@@ -1,7 +1,7 @@
 <div class="mp-option mp-page-option mp-page-contact-form" data-page-slug="contact_form">
 	{% if contactFormPresets %}
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-4 mbsThinCol">
 			<div class="mp-option-label">
 				<span title="{{ translate('Contact Us') }}">{{ translate('Contact Us') }}</span>
 			</div>
@@ -22,8 +22,8 @@
 	</div>
 	{# need to repeat all this magic for "correct select input width" #}
 	<div class="row" id="contact-form-preset-row">
-		<div class="col-md-4">
-			<div class="mp-option-label" style="text-align: right; width: 100%; margin-top: 7px;">
+		<div class="col-md-4 mbsThinCol">
+			<div class="mp-option-label" style="text-align: right; width: 300px; margin-top: 10px;">
 				<div class="mpp-tooltip tooltip">
 					<i class="fa fa-question sc-tooltip"></i>
 					<div class="tooltip_content">
@@ -33,7 +33,7 @@
 			</div>
 		</div>
 		<div class="col-md-8">
-			<div class="mp-option-input-with-button">
+			<div class="mp-option-input-with-button" style="padding-top: 5px;">
 				<div class="mp-option-select">
 					<select id="contactFormPresetSel" style="width: 165px;" name="pages[contact_form_preset]">
 						<option value="">{{ translate('Select value') }}</option>
@@ -47,26 +47,26 @@
 	</div>
 	{% elseif isPluginActive == true %}
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-4 mbsThinCol">
 			<div class="mp-option-label">
 				<span title="{{ translate('Contact Us') }}">{{ translate('Contact Us') }}</span>
 			</div>
 		</div>
 		<div class="col-md-8">
-			<div style="margin: 0.8em 0">
+			<div style="margin: 7px 0;">
 				{{ translate('You have no Contact Form for now. Create your Contact Form or Enable Membership feature for contact form which you want to use for Contact Us page.') }}
 			</div>
 		</div>
 	</div>
 	{% else %}
 	<div class="row">
-		<div class="col-md-4">
+		<div class="col-md-4 mbsThinCol">
 			<div class="mp-option-label">
 				<span title="{{ translate('Contact Us') }}">{{ translate('Contact Us') }}</span>
 			</div>
 		</div>
 		<div class="col-md-8">
-			<div style="margin: 0.8em 0">
+			<div style="margin: 7px 0;">
 				{{ translate('You need to install Contact Form by Supsystic to use this feature. ') }}
 				<a target="_blank" href="{{ pluginInstallUrl }}">{{ translate('Install') }}</a>
 				{{ translate(' plugin from your admin area, or visit it\'s official page on Wordpress.org ') }}

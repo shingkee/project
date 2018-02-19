@@ -44,12 +44,35 @@ class Membership_Installer_Model_Installer extends Membership_Base_Model_Base
         $data = $this->prepare($data);
         $data = array_filter(explode(';', $data));
         foreach ($data as $query) {
-            $query = $this->db->query(trim($query));
-            if ($query === false) {
-	            if (! current(explode(' ', $this->db->last_query)) === "ALTER") {
-		            throw new Exception('Query: ' . $this->db->last_query . ' <br>  Error: ' . $this->db->last_error);
-	            }
-            }
+			$query = trim($query);
+			if($query) {
+				$query = $this->db->query($query);
+				if ($query === false) {
+					if (! current(explode(' ', $this->db->last_query)) === "ALTER") {
+						throw new Exception('Query: ' . $this->db->last_query . ' <br>  Error: ' . $this->db->last_error);
+					}
+				}
+			}
         }
-    }
+	}
+
+	public function updateUserGroupCreator() {
+		$queryForUpdate = $this->preparePrefix("
+			UPDATE {prefix}groups_users gu SET is_creator = 1
+			WHERE gu.id IN
+			(
+				SELECT id
+				FROM (
+					SELECT MIN(id) AS id, group_id, SUM(is_creator)
+					FROM {prefix}groups_users
+					WHERE group_role = 'administrator'
+					GROUP BY group_id
+					HAVING SUM(is_creator) = 0
+				) gu1
+			)
+		");
+
+		$idArr = $this->db->query($queryForUpdate);
+		return true;
+	}
 }

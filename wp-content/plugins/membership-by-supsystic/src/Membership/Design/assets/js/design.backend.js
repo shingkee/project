@@ -112,6 +112,37 @@
 			}
 		});
 		$logoutCheckbox.trigger('change');
+
+		this.initActivityTab();
+	});
+
+	mbsDesignSettings.prototype.initActivityTab = (function() {
+		var $shareOption = $('input[type="radio"][name="activity[type][shares]"]')
+		,	$friendPostOn = $('#activityTypesFriendPostOn')
+		,	$friendPostOnInput = $('input[name="activity[type][friendPostOn]"]')
+		,	$friendPostFrontendSettOn = $('#activityTypesFriendPostInFrontendOn');
+
+		function visibilitySharesOption() {
+			if($('input[type="radio"][name="activity[type][shares]"][value="true"]:checked').length) {
+				$friendPostOn.removeClass('mbs-hidden');
+				visibilityFriendPostOnOpt();
+			} else {
+				$friendPostOn.addClass('mbs-hidden');
+				$friendPostFrontendSettOn.addClass('mbs-hidden');
+			}
+		}
+		function visibilityFriendPostOnOpt() {
+			if($friendPostOnInput.is(':checked')) {
+				$friendPostFrontendSettOn.removeClass('mbs-hidden');
+			} else {
+				$friendPostFrontendSettOn.addClass('mbs-hidden');
+			}
+		}
+
+		$friendPostOnInput.on('change', visibilityFriendPostOnOpt);
+		$shareOption.on('change', visibilitySharesOption);
+
+		visibilitySharesOption();
 	});
 
 	$(document).ready(function() {

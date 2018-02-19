@@ -115,7 +115,7 @@ class Membership_Base_Controller extends Rsc_Mvc_Controller {
 		$validation = $this->validate(array('image' => $image), array(
 			'image' => array(
 				'mimes' => array(
-					'formats' => array('jpg', 'jpeg', 'png'),
+					'formats' => array('jpg', 'jpeg', 'png', 'gif', 'ico'),
 					'message' => $this->translate('Unsupported image format')
 				),
 				'size' => array(
@@ -164,7 +164,10 @@ class Membership_Base_Controller extends Rsc_Mvc_Controller {
 		return $this->response('ajax', 
 			array(
 				'success' => true,
-				'attachment' => $attachment
+				'attachment' => $attachment,
+				'isImage' => 1,
+				'attachment_id' => $attachment['id'],
+				'file_name' => $image['name'],
 			)
 		);
 	}
@@ -231,6 +234,86 @@ class Membership_Base_Controller extends Rsc_Mvc_Controller {
             )
         );
     }
+
+	// )) its 3td method for upload
+	public function uploadAnyFile(Rsc_Http_Parameters $parameters, Rsc_Http_Request $request) {
+		$settings = $this->getModule('base')->getSettings();
+		$maxFileSize = $settings['base']['uploads']['max-file-size'];
+		$fileItem = $request->files->get('file');
+
+		if (!isset($fileItem['error']) || is_array($fileItem['error'])) {
+			return $this->response('ajax', array(
+				'success' => false,
+				'status' => 400,
+				'error' => $this->translate('File entry error!'),
+			));
+		}
+
+		$validation = $this->validate(array('file' => $fileItem), array(
+			'file' => array(
+				/*
+				'mimes' => array(
+					'formats' => array('jpg', 'jpeg', 'png'),
+					'message' => $this->translate('Unsupported file format')
+				),
+				/**/
+				'size' => array(
+					'success' => false,
+					'limit' => $maxFileSize,
+					'error' => $this->translate('Image size limit is exceeded')
+				)
+			)
+		));
+
+		if ($validation->isFail()) {
+			return $this->response('ajax', array(
+				'success' => false,
+				'status' => 400,
+				'error' => implode(',', $validation->getErrors()),
+			));
+		}
+
+		switch ($fileItem['error']) {
+			case UPLOAD_ERR_OK:
+				break;
+			case UPLOAD_ERR_NO_FILE:
+				return $this->response('ajax', array(
+					'success' => false,
+					'status' => 400,
+					'error' => $this->translate('No file is sent')
+				));
+			case UPLOAD_ERR_INI_SIZE:
+			case UPLOAD_ERR_FORM_SIZE:
+				return $this->response('ajax', array(
+					'success' => false,
+					'status' => 400,
+					'error' => $this->translate('Exceeded filesize limit.')
+				));
+			default:
+				return $this->response('ajax', array(
+					'success' => false,
+					'status' => 400,
+					'error' => $this->translate('Unknown upload error.')
+				));
+		}
+
+		$resultArr = array();
+		$attachmentAllModel = $this->getModule('base')->getModel('AttachmentAll');
+		$addRes = $attachmentAllModel->addAttachment(array(
+			'user_id' => get_current_user_id(),
+			'tmp_path' => $fileItem['tmp_name'],
+			'prev_file_name' => $fileItem['name'],
+		));
+
+		if($addRes) {
+			$resultArr = $addRes;
+			$resultArr['success'] = true;
+			$resultArr['isImage'] = 0;
+		} else {
+			$resultArr['error'] = $attachmentAllModel->errorText;
+		}
+		return $this->response('ajax', $resultArr);
+	}
 
 	public function getPhotos(Rsc_Http_Parameters $parameters) {
 		
@@ -299,7 +382,7 @@ class Membership_Base_Controller extends Rsc_Mvc_Controller {
 		$orderBy = $parameters->get('sidx');
 		$sortOrder = $parameters->get('sord');
 		$search = trim( $parameters->get('search') );
-		
+
 		$selectParams = array(
 			'fields' => $tblListModel->getSimpleFieldsList(), 
 			'order_by' => $this->_prepareTblCols( $orderBy ), 
@@ -308,9 +391,10 @@ class Membership_Base_Controller extends Rsc_Mvc_Controller {
 		);
 		
 		if(!empty($search)) {
+
 			$searchLikeFields = $tblListModel->getSearchLikeFields();
-			
 			if(!empty($searchLikeFields)) {
+
 				$selectParams['where'] = array();
 				foreach($searchLikeFields as $sf) {
 					$cond = array();
@@ -347,6 +431,9 @@ class Membership_Base_Controller extends Rsc_Mvc_Controller {
 		$selectParams['limit'] = $rowsLimit;
 		
 		$dataList = $tblListModel->getList( $selectParams );
+//		var_dump($dataList);
+
+//		exit();
 		if(!empty($dataList)) {
 			foreach($dataList as $i => $d) {
 				$dataList[ $i ] = $this->_tblListPrepareRow( $d );
@@ -430,5 +517,20 @@ class Membership_Base_Controller extends Rsc_Mvc_Controller {
 	}
 	public function getSettingsModel() {
 		throw new RuntimeException(__FUNCTION__. ' method should be re-defined in child classes');
+	}
+
+	public function getAttachmentFiles(Rsc_Http_Parameters $parameters) {
+		$attachmentArr = array();
+		$activityId = (int) $parameters->get('activity_id');
+
+		if($activityId) {
+			$activityModel = $this->getModel('activity', 'activity');
+			$attachmentArr = $activityModel->getAttachmentFiles(array($activityId));
+		}
+
+		return $this->ajax(array(
+			'attachments' => $attachmentArr,
+			'errors' => false,
+		));
 	}
 }

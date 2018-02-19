@@ -217,6 +217,10 @@
 	width: 6em;
 	display: inline-block;
 }
+.mp-modal .field-options-list .option .option-name {
+	border: none;
+	width: auto;
+}
 
 .mp-modal .option .option-name input {
 	max-width: 100%;
@@ -262,4 +266,7 @@
 
 .mp-modal .error-msg {
 	color: crimson;
+}
+.edit-field-modal {
+	max-height: 550px;
 }

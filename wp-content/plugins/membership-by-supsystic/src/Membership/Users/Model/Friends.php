@@ -94,7 +94,7 @@ class Membership_Users_Model_Friends extends Membership_Base_Model_Base
 			$usersModel = $this->getModel('profile', 'users');
 			$friends = $usersModel->getUsersByIds(array('users' => $friends));
 		}
-
+		$friends = $this->getDispatcher()->apply('badges.addBadges', array($friends));
 		return $friends;
 	}
 
@@ -175,5 +175,29 @@ class Membership_Users_Model_Friends extends Membership_Base_Model_Base
 
 		return $friendRequests;
 	}
-	
+
+	/**
+	 * get only accepted friend list
+	 * @param $userId
+	 * @return array|null|object
+	 */
+	public function getAcceptedUserFriendIds($userId, $resultAsSimpleArray = false) {
+		$querySelParams = array((int)$userId);
+		$querySelect = $this->preparePrefix(
+		"SELECT f.user_id
+			FROM {prefix}friends as f
+			WHERE f.friend_id = '%d'"
+		);
+
+		$userFriendsArr = $this->getDb()->get_results($this->db->prepare($querySelect, $querySelParams), ARRAY_A);
+
+		if($resultAsSimpleArray && count($userFriendsArr)) {
+			$newArray = array();
+			foreach($userFriendsArr as $oneFriend) {
+				$newArray[] = $oneFriend['user_id'];
+			}
+			$userFriendsArr = $newArray;
+		}
+		return $userFriendsArr;
+	}
 }

@@ -66,7 +66,7 @@ class Membership_Users_Model_Fields extends Membership_Base_Model_Settings {
 		$fields = array();
 
 		foreach ($_fields as $field) {
-			if ($field['enabled'] && ($field['registration'] || $field['required'])) {
+			if ($field['enabled'] && (!empty($field['registration']) || !empty($field['required']))) {
 				$fields[] = $field;
 			}
 		}
@@ -103,6 +103,7 @@ class Membership_Users_Model_Fields extends Membership_Base_Model_Settings {
 	}
 
 	private function getSystemFields( $params = array() ) {
+
 		$params['exclude_password'] = isset($params['exclude_password']) ? $params['exclude_password'] : false;
 		// Add here all fields, that is included by WP in user profile by default
 		$res = array(
@@ -166,20 +167,60 @@ class Membership_Users_Model_Fields extends Membership_Base_Model_Settings {
                 );
 		    }
 
-		    $res[] = array(
+		    $userRoleParam = array(
                 'name' => 'user_role',
                 'label' => $this->environment->translate('Role'),
                 'enabled' => true,
                 'required' => true,
                 'type' => 'drop',
                 'options' => $rolesOptions,
-                'data' => array($params['user_role_value'])
+                'data' => isset($params['user_role_value']) ? array($params['user_role_value']) : null,
             );
-        }
+			// set default field params for register page
+			if(isset($params['include_user_role']['enabled']) && $params['include_user_role']['enabled'] === false) {
+				$userRoleParam['enabled'] = false;
+				$userRoleParam['section'] = 'Main';
+				// $userRoleParam['description'] = $this->environment->translate('User Role List');
+				$userRoleParam['registration'] = true;
+				$userRoleParam['asterisk'] = false;
+				// remove data for correct in registration ("checked" parameter)
+				unset($userRoleParam['data']);
+			}
+			$res[] = $userRoleParam;
+		}
+
+		$countries = $this->getModel('countries', 'users')->getCountries();
+		$countryOptions = array();
+		foreach ($countries as $country) {
+			$aliasPrepare = mb_convert_encoding($country, 'UTF-8' );
+			$alias = strtolower($this->getModule('base')->translateCyrillicToLatin(
+				preg_replace('/[^\w0-9]/u', '_', $aliasPrepare)
+			));
+			$countryOptions[] = array(
+				'id' => $alias,
+				'name' => $country
+			);
+		}
+		$countryParam = array(
+			'name' => 'country',
+			'label' => $this->environment->translate('Country'),
+			'enabled' => true,
+			'required' => false,
+			'type' => 'drop',
+			'options' => $countryOptions,
+			'section' => 'Main',
+			'asterisk' => false,
+			'customValidation' => true,
+		);
+
+
 
 		foreach($res as $i => $f) {
 			$res[ $i ]['sys'] = 1;
 		}
+
+		$res[] = $countryParam;
+
 		return $res;
 	}
 
@@ -473,6 +514,7 @@ class Membership_Users_Model_Fields extends Membership_Base_Model_Settings {
 		$requestedUser = $this->getModel('Profile', 'Users')->getUserById($userId);
 
 		foreach ($allFields as $key => &$field) {
+
 			if (in_array($field['name'], $exclude)) {
 				unset($allFields[$key]);
 				continue;
@@ -484,6 +526,9 @@ class Membership_Users_Model_Fields extends Membership_Base_Model_Settings {
 				$field['data'] = null;
 			}
 
+			if ($field['name'] === 'user_login') {
+				$field['data'] = $requestedUser['user_login'];
+			}
 			if ($field['name'] === 'user_status' && isset($params['user_status_value'])) {
 				$field['data'] = array($params['user_status_value']);
 			}
@@ -510,6 +555,9 @@ class Membership_Users_Model_Fields extends Membership_Base_Model_Settings {
 					$date = strtotime($field['data']);
 					$field['data'] = date($this->convertMomentToPHPFormat($field['format']),  $date);
 				}
+			}
+			if($field['name'] == 'user_role') {
+				$field['data'] = $requestedUser['role_id'];
 			}
 		}
 
@@ -572,5 +620,25 @@ class Membership_Users_Model_Fields extends Membership_Base_Model_Settings {
 		foreach($fieldsData as $fName => $fData) {
 			$this->updateUserFieldData( $userId, $fName, $fData );
 		}
+	}
+
+	public function prepareDefaultRoleForRegistration($settings, &$fields) {
+		if(isset($settings['default-role']) && count($fields)) {
+			$settDefRoleId = (int) $settings['default-role'];
+			// find system field with name 'user_role'
+			foreach($fields as $oneFieldKey => $oneField) {
+				if(!empty($oneField['name']) && $oneField['name'] == 'user_role' &&  $oneField['type'] == 'drop') {
+					if(!empty($oneField['options']) && count($oneField['options'])) {
+						// check every user role with settings value
+						foreach($oneField['options'] as $oneUroKey => $oneUserRoleOpt) {
+							if(isset($oneUserRoleOpt['id']) && $settDefRoleId == $oneUserRoleOpt['id']) {
+								$fields[$oneFieldKey]['options'][$oneUroKey]['checked'] = 'checked';
+							}
+						}
+					}
+				}
+			}
+		}
+		return true;
 	}
 }

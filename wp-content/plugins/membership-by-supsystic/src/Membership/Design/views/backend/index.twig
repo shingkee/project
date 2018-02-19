@@ -24,16 +24,19 @@
 		<a href="#" class="tab" data-target="fonts">
 			<i class="fa fa-font"></i>{{ translate('Fonts') }}
 		</a>
+		<a href="#" class="tab active" data-target="groups">
+			<i class="fa fa-object-group"></i>{{ translate('Groups') }}
+		</a>
+		<button data-save-settings class="save-settings sc-button icon-button primary">
+			<i class="fa fa-save"></i>
+			<span>{{ translate('Save Settings') }}</span>
+		</button>
 	</div>
 {% endblock %}
 
 {% block mainHeader %}
 	<div class="sc-header">
 		<h2>{{ translate('Design') }}</h2>
-		<button data-save-settings class="save-settings sc-button icon-button primary">
-			<i class="fa fa-save"></i>
-			<span>{{ translate('Save Settings') }}</span>
-		</button>
 	</div>
 {% endblock %}
 
@@ -66,7 +69,8 @@
 							'value': 'square',
 							'checked': settings.general['avatar-style'] == 'square'
 						}], 
-						'avatar-style'
+						'avatar-style',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.radioRow(translate('Use Default Theme Colors'), 
@@ -82,7 +86,8 @@
 							'value': 'false',
 							'checked': settings.general['default-theme-colors'] == 'false'
 						}], 
-						'default-theme-colors'
+						'default-theme-colors',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					<h3>{{ translate('Buttons') }}</h3>
@@ -90,43 +95,49 @@
 					{{ options.colorRow(translate('Primary Button Color'),
 						'general[primary-button-color]',
 						settings.general['primary-button-color'],
-						'primary-button-color'
+						'primary-button-color',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.colorRow(translate('Primary Button Hover Color'),
 						'general[primary-button-hover-color]',
 						settings.general['primary-button-hover-color'],
-						'primary-button-hover-color'
+						'primary-button-hover-color',
+						null, null, {'mbsThinCol': 1}
 					) }}
 					
 					{{ options.colorRow(translate('Secondary Button Color'),
 						'general[secondary-button-color]',
 						settings.general['secondary-button-color'],
-						'secondary-button-color'
+						'secondary-button-color',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.colorRow(translate('Secondary Button Hover Color'),
 						'general[secondary-button-hover-color]',
 						settings.general['secondary-button-hover-color'],
-						'secondary-button-hover-color'
+						'secondary-button-hover-color',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.colorRow(translate('Smile Button Background Color'),
 						'general[smile-button-bg-color]',
 						settings.general['smile-button-bg-color'] | default('#fff'),
-						'smile-button-bg-color'
+						'smile-button-bg-color',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.colorRow(translate('Smile Button Hover Background Color'),
 						'general[smile-button-hover-bg-color]',
 						settings.general['smile-button-hover-bg-color'] | default('#fff'),
-						'smile-button-hover-bg-color'
+						'smile-button-hover-bg-color',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.settingRowWithInput(
 						translate('Smile button icon size'),
 						null,
-						null,
+						'mbsSmileButtonSettRow',
 						null,
 						options.input(
 							'number',
@@ -141,20 +152,23 @@
 								'class': 'mbs-selector-unit-width sc-input',
 								'name': 'general[smiles-button-icon-size-text-font-unit-select]',
 							}
-						)
+						), null
+						, {'mbsThinCol': 1}
 					)}}
 
 					<!-- 					
 					{{ options.colorRow(translate('Primary Color'),
 						'general[primary-color]',
 						settings.general['primary-color'],
-						'primary-color'
+						'primary-color',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.colorRow(translate('Secondary Color'),
 						'general[secondary-color]',
 						settings.general['secondary-color'],
-						'secondary-color'
+						'secondary-color',
+						null, null, {'mbsThinCol': 1}
 					) }} -->
 
 					<h3>{{ translate('Inputs') }}</h3>
@@ -162,43 +176,50 @@
 					{{ options.colorRow(translate('Input Border Color'),
 						'general[input-border-color]',
 						settings.general['input-border-color'],
-						'input-border-color'
+						'input-border-color',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.colorRow(translate('Input Border Focus Color'),
 						'general[input-border-focus-color]',
 						settings.general['input-border-focus-color'],
-						'input-border-focus-color'
+						'input-border-focus-color',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.colorRow(translate('Input Background Color'),
 						'general[input-background-color]',
 						settings.general['input-background-color'],
-						'input-background-color'
+						'input-background-color',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.colorRow(translate('Input Background Focus Color'),
 						'general[input-background-focus-color]',
 						settings.general['input-background-focus-color'],
-						'input-background-focus-color'
+						'input-background-focus-color',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.colorRow(translate('Input Placeholder Color'),
 						'general[input-placeholder-color]',
 						settings.general['input-placeholder-color'],
-						'input-placeholder-color'
+						'input-placeholder-color',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					<!-- {{ options.colorRow(translate('Help Icon Background Color'),
 						'general[help-icon-background-color]',
 						settings.general['help-icon-background-color'],
-						'help-icon-background-color'
+						'help-icon-background-color',
+						null, null, {'mbsThinCol': 1}
 					) }}
 					
 					{{ options.colorRow(translate('Help Icon Color'),
 						'general[help-icon-text-color]',
 						settings.general['help-icon-text-color'],
-						'help-icon-text-color'
+						'help-icon-text-color',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.radioRow(translate('Show an asterisk for required fields'), 
@@ -214,7 +235,8 @@
 							'value': 'hidden',
 							'checked': settings.general['css_visibility_asterisk'] == 'false'
 						}], 
-						'show-asterisk'
+						'show-asterisk',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.colorRow(translate('Required Asterisk Color'),
@@ -237,19 +259,20 @@
 					
 				
 					{{ options.radioRow(translate('Add logout link to menu'),
-					[{
-						'label': translate('Yes'),
-						'name': 'menu[add-logout-link]',
-						'value': 'true',
-						'checked': settings.menu['add-logout-link'] == 'true'
-					},
-					{
-						'label': translate('No'),
-						'name': 'menu[add-logout-link]',
-						'value': 'false',
-						'checked': settings.menu['add-logout-link'] == 'false'
-					}],
-					'add-logout-link'
+						[{
+							'label': translate('Yes'),
+							'name': 'menu[add-logout-link]',
+							'value': 'true',
+							'checked': settings.menu['add-logout-link'] == 'true'
+						},
+						{
+							'label': translate('No'),
+							'name': 'menu[add-logout-link]',
+							'value': 'false',
+							'checked': settings.menu['add-logout-link'] == 'false'
+						}],
+						'add-logout-link',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					<div class="row logoutMenuListRow mbs-hidden">
@@ -272,20 +295,21 @@
 						</div>
 					</div>
 
-					{{ options.radioRow(translate('Remove login and registartion links from menu when user is logged in'),
-					[{
-						'label': translate('Yes'),
-						'name': 'menu[remove-login-registration]',
-						'value': 'true',
-						'checked': settings.menu['remove-login-registration'] == 'true'
-					},
-					{
-						'label': translate('No'),
-						'name': 'menu[remove-login-registration]',
-						'value': 'false',
-						'checked': settings.menu['remove-login-registration'] == 'false'
-					}],
-					'remove-login-registration'
+					{{ options.radioRow(translate('Remove login and registration links from menu when user is logged in'),
+						[{
+							'label': translate('Yes'),
+							'name': 'menu[remove-login-registration]',
+							'value': 'true',
+							'checked': settings.menu['remove-login-registration'] == 'true'
+						},
+						{
+							'label': translate('No'),
+							'name': 'menu[remove-login-registration]',
+							'value': 'false',
+							'checked': settings.menu['remove-login-registration'] == 'false'
+						}],
+						'remove-login-registration',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 				</div>
@@ -313,7 +337,8 @@
 							'value': 'false',
 							'checked': settings.activity['show-filter'] == 'false'
 						}],
-						'activity.show-filter'
+						'activity.show-filter',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.selectRow(translate('Default Activity Filter'),
@@ -332,7 +357,8 @@
 							'value': 'site-wide',
 							'selected': settings.activity['default-filter'] == 'site-wide'
 						}],
-						'activity[default-filter]'
+						'activity[default-filter]',
+						null, null, {'mbsThinCol': 1}
 					) }}
 					
 					<h3>{{ translate('Activity types') }}</h3>
@@ -350,7 +376,8 @@
 							'value': 'false',
 							'checked': settings.activity['type']['posts'] == 'false'
 						}],
-						'activity.type.posts'
+						'activity.type.posts',
+						null, null, {'mbsThinCol': 1}
 					) }}
 					
 					{{ options.radioRow(translate('Photos'),
@@ -366,7 +393,8 @@
 							'value': 'false',
 							'checked': settings.activity['type']['photos'] == 'false'
 						}],
-						'activity.type.photos'
+						'activity.type.photos',
+						null, null, {'mbsThinCol': 1}
 					) }}
 					
 					{{ options.radioRow(translate('Shares'),
@@ -382,8 +410,41 @@
 							'value': 'false',
 							'checked': settings.activity['type']['shares'] == 'false'
 						}],
-						'activity.type.shares'
+						'activity.type.shares',
+						null, null, {'mbsThinCol': 1}
 					) }}
+
+					{% set shareFriendPostOnCheckItem = {
+						'name': 'activity[type][friendPostOn]',
+						'value': 1,
+					} %}
+					{% if settings.activity['type']['friendPostOn'] == 1 %}
+						{% set shareFriendPostOnCheckItem = shareFriendPostOnCheckItem | merge({'checked': 'checked'}) %}
+					{% endif %}
+					{{ options.checkboxSettingRow(translate('Share to Friends Activity'),
+						[shareFriendPostOnCheckItem],
+						'activityTypesFriendPostOn',
+						null,
+						null,
+						null,
+						{'mbsThinCol' : 1,}
+					)}}
+
+					{% set shareFrontendPostOnCheckItem = {
+						'name': 'activity[type][friendPostOnShowInFrontend]',
+						'value': 1,
+					} %}
+					{% if settings.activity['type']['friendPostOnShowInFrontend'] == 1 %}
+						{% set shareFrontendPostOnCheckItem = shareFrontendPostOnCheckItem | merge({'checked': 'checked'}) %}
+					{% endif %}
+					{{ options.checkboxSettingRow(translate('Add this option to frontend'),
+						[shareFrontendPostOnCheckItem],
+						'activityTypesFriendPostInFrontendOn',
+						null,
+						null,
+						null,
+						{'mbsThinCol' : 1,}
+					)}}
 					
 					{{ options.radioRow(translate('Likes'),
 						[{
@@ -398,7 +459,8 @@
 							'value': 'false',
 							'checked': settings.activity['type']['likes'] == 'false'
 						}],
-						'activity.type.likes'
+						'activity.type.likes',
+						null, null, {'mbsThinCol': 1}
 					) }}
 					
 					{{ options.radioRow(translate('Comments'),
@@ -414,7 +476,8 @@
 							'value': 'false',
 							'checked': settings.activity['type']['comments'] == 'false'
 						}],
-						'activity.type.comments'
+						'activity.type.comments',
+						null, null, {'mbsThinCol': 1}
 					) }}
 					
 					{{ options.radioRow(translate('Groups'),
@@ -430,7 +493,8 @@
 							'value': 'false',
 							'checked': settings.activity['type']['groups'] == 'false'
 						}],
-						'activity.type.groups'
+						'activity.type.groups',
+						null, null, {'mbsThinCol': 1}
 					) }}
 					
 					{{ options.radioRow(translate('Social'),
@@ -446,7 +510,8 @@
 							'value': 'false',
 							'checked': settings.activity['type']['social'] == 'false'
 						}],
-						'activity.type.social'
+						'activity.type.social',
+						null, null, {'mbsThinCol': 1}
 					) }}
 					
 					{{ options.radioRow(translate('Forum'),
@@ -462,7 +527,8 @@
 							'value': 'false',
 							'checked': settings.activity['type']['forum'] == 'false'
 						}],
-						'activity.type.forum'
+						'activity.type.forum',
+						null, null, {'mbsThinCol': 1}
 					) }}
 					
 				</div>
@@ -478,13 +544,15 @@
 					{{ options.inputRow(translate('Profile Container Max Width'),
 						'profile[container-max-width]',
 						settings.profile['container-max-width'],
-						'container-max-width'
+						'container-max-width',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.colorRow(translate('Profile Header Background Color'),
 						'profile[header-background-color]',
 						settings.profile['header-background-color'],
-						'header-background-color'
+						'header-background-color',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 
@@ -501,7 +569,8 @@
 							'value': 'false',
 							'checked': settings.profile['show-display-name'] == 'false'
 						}],
-						'show-display-name'
+						'show-display-name',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 
@@ -521,15 +590,24 @@
 					{{ options.inputRow(translate('Registration Primary Button Text'),
 						'auth[registration-primary-button-text]',
 						settings.auth['registration-primary-button-text'],
-						'registration-primary-button-text'
+						'registration-primary-button-text',
+						null, null, {'mbsThinCol': 1}
 					) }}
+
+                    {{ options.colorRow(translate('Asterisk color'),
+                        'general[asterisk-color]',
+                        settings.general['asterisk-color'] | default('rgb(255, 0, 0)'),
+                        'asterisk-color',
+                        null, null, {'mbsThinCol': 1}
+                    ) }}
 					
 					<h3>{{ translate('Login') }}</h3>
 					
 					{{ options.inputRow(translate('Login Primary Button Text'),
 						'auth[login-primary-button-text]',
 						settings.auth['login-primary-button-text'],
-						'login-primary-button-text'
+						'login-primary-button-text',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.radioRow(translate('Login Secondary Button'), 
@@ -545,19 +623,22 @@
 							'value': 'false',
 							'checked': settings.auth['login-secondary-button'] == 'false'
 						}], 
-						'login-secondary-button'
+						'login-secondary-button',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(translate('Login Secondary Button Text'),
 						'auth[login-secondary-button-text]',
 						settings.auth['login-secondary-button-text'],
-						'login-secondary-button-text'
+						'login-secondary-button-text',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(translate('Login Secondary Button URL'),
 						'auth[login-secondary-button-url]',
 						settings.auth['login-secondary-button-url'],
-						'login-secondary-button-url'
+						'login-secondary-button-url',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.radioRow(translate('Show Remember Me'), 
@@ -573,7 +654,8 @@
 							'value': 'false',
 							'checked': settings.auth['login-show-remember-me'] == 'false'
 						}], 
-						'login-show-remember-me'
+						'login-show-remember-me',
+						null, null, {'mbsThinCol': 1}
 					) }}
 					
 					
@@ -590,7 +672,8 @@
 							'value': 'false',
 							'checked': settings.auth['login-google-recaptcha-enable'] == 'false'
 						}],
-						'login-google-recaptcha-enable'
+						'login-google-recaptcha-enable',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.radioRow(translate('Login after success Registration'),
@@ -606,7 +689,8 @@
 							'value': 0,
 							'checked': settings.auth['login-after-register-enable'] is defined and settings.auth['login-after-register-enable'] == 0
 						}],
-						'login-after-register-enable'
+						'login-after-register-enable',
+						null, null, {'mbsThinCol': 1}
 					) }}
 					
 					<div class="login-google-recaptcha-settings" style="display: none">
@@ -614,14 +698,16 @@
 					{{ options.inputRow(translate('Google ReCaptcha Site Key'),
 						'auth[login-google-recaptcha-site-key]',
 						settings.auth['login-google-recaptcha-site-key'],
-						'login-google-recaptcha-site-key'
+						'login-google-recaptcha-site-key',
+						null, null, {'mbsThinCol': 1}
 					) }}
 					
 					
 					{{ options.inputRow(translate('Google ReCaptcha Secret Key'),
 						'auth[login-google-recaptcha-secret-key]',
 						settings.auth['login-google-recaptcha-secret-key'],
-						'login-google-recaptcha-secret-key'
+						'login-google-recaptcha-secret-key',
+						null, null, {'mbsThinCol': 1}
 					) }}
 					
 					{{ options.selectRow(translate('Google ReCaptcha Theme'),
@@ -636,7 +722,8 @@
 							'selected': settings.auth['login-google-recaptcha-theme'] == 'dark'
 						}],
 						'auth[login-google-recaptcha-theme]',
-						'google-re-captcha-theme'
+						'google-re-captcha-theme',
+						 null, {'mbsThinCol': 1}
 					) }}
 					
 					{{ options.selectRow(translate('Google ReCaptcha Type'),
@@ -651,7 +738,8 @@
 							'selected': settings.auth['login-google-recaptcha-type'] == 'audio'
 						}],
 						'auth[login-google-recaptcha-type]',
-						'google-re-captcha-type'
+						'google-re-captcha-type',
+						null, {'mbsThinCol': 1}
 					) }}
 					
 					
@@ -667,7 +755,8 @@
 							'selected': settings.auth['login-google-recaptcha-size'] == 'compact'
 						}],
 						'auth[login-google-recaptcha-size]',
-						'google-re-captcha-size'
+						'google-re-captcha-size',
+						null, {'mbsThinCol': 1}
 					) }}
 					
 					</div>
@@ -701,7 +790,8 @@
 					{{ options.multipleSelectRow(translate('User Roles to Display'), 
 						_roles,
 						'members[roles-to-display]',
-						'roles-to-display'
+						'roles-to-display',
+						null, null, null, null, null, {'mbsThinCol': 1}
 					) }}
 
 					<!-- Only show members who have uploaded a profile photo -->
@@ -718,7 +808,8 @@
 							'value': 'false',
 							'checked': settings.members['show-only-with-avatar'] == 'false'
 						}], 
-						'show-only-with-avatar'
+						'show-only-with-avatar',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					<!-- Only show members who have uploaded a cover photo -->
@@ -735,41 +826,62 @@
 							'value': 'false',
 							'checked': settings.members['show-only-with-cover'] == 'false'
 						}], 
-						'show-only-with-cover'
+						'show-only-with-cover',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					<!-- Show load more button on members page -->
 					{{ options.radioRow(translate('Show Load More Button'),
-					[{
-						'label': translate('Yes'),
-						'name': 'members[show-load-more-button]',
-						'value': 'true',
-						'checked': settings.members['show-load-more-button'] == 'true'
-					},
-					{
-						'label': translate('No'),
-						'name': 'members[show-load-more-button]',
-						'value': 'false',
-						'checked': settings.members['show-load-more-button'] == 'false'
-					}],
-					'show-load-more-button'
+						[{
+							'label': translate('Yes'),
+							'name': 'members[show-load-more-button]',
+							'value': 'true',
+							'checked': settings.members['show-load-more-button'] == 'true'
+						},
+						{
+							'label': translate('No'),
+							'name': 'members[show-load-more-button]',
+							'value': 'false',
+							'checked': settings.members['show-load-more-button'] == 'false'
+						}],
+						'show-load-more-button',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					<!-- Show pages on members page -->
 					{{ options.radioRow(translate('Show Pages'),
+						[{
+							'label': translate('Yes'),
+							'name': 'members[show-pages]',
+							'value': 'true',
+							'checked': settings.members['show-pages'] == 'true'
+						},
+						{
+							'label': translate('No'),
+							'name': 'members[show-pages]',
+							'value': 'false',
+							'checked': settings.members['show-pages'] == 'false'
+						}],
+						'show-pages',
+						null, null, {'mbsThinCol': 1}
+					) }}
+
+					<!-- Show tabs (friend, followers) for login user on members page -->
+					{{ options.radioRow(translate('Show tabs'),
 					[{
 						'label': translate('Yes'),
-						'name': 'members[show-pages]',
+						'name': 'members[show-tabs]',
 						'value': 'true',
-						'checked': settings.members['show-pages'] == 'true'
+						'checked': settings.members['show-tabs'] == 'true'
 					},
 					{
 						'label': translate('No'),
-						'name': 'members[show-pages]',
+						'name': 'members[show-tabs]',
 						'value': 'false',
-						'checked': settings.members['show-pages'] == 'false'
+						'checked': settings.members['show-tabs'] == 'false'
 					}],
-					'show-pages'
+					'show-tabs',
+					null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.selectRow(translate('Default Sort Users By'), 
@@ -799,26 +911,28 @@
 							'selected': settings.members['sort-users-by'] == 'random',
 						}],
 						'members[sort-users-by]',
-						'sort-users-by'
+						'sort-users-by',
+						null, {'mbsThinCol': 1}
 					) }}
 
 
 					<h3>User Card</h3>
 
                     {{ options.radioRow(translate('Show Friends and Followers'),
-                    [{
-                        'label': translate('Yes'),
-                        'name': 'members[show-friends-and-followers]',
-                        'value': 'true',
-                        'checked': settings.members['show-friends-and-followers'] == 'true'
-                    },
-                    {
-                        'label': translate('No'),
-                        'name': 'members[show-friends-and-followers]',
-                        'value': 'false',
-                        'checked': settings.members['show-friends-and-followers'] == 'false'
-                    }],
-                    'show-display-name'
+						[{
+							'label': translate('Yes'),
+							'name': 'members[show-friends-and-followers]',
+							'value': 'true',
+							'checked': settings.members['show-friends-and-followers'] == 'true'
+						},
+						{
+							'label': translate('No'),
+							'name': 'members[show-friends-and-followers]',
+							'value': 'false',
+							'checked': settings.members['show-friends-and-followers'] == 'false'
+						}],
+						'show-display-name',
+						null, null, {'mbsThinCol': 1}
                     ) }}
 
                     <!--
@@ -835,7 +949,8 @@
 							'value': 'false',
 							'checked': settings.members['enable-profile-photo'] == 'false'
 						}], 
-						'enable-profile-cards'
+						'enable-profile-cards',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.radioRow(translate('Enable Cover Photo'), 
@@ -851,7 +966,8 @@
 							'value': 'false',
 							'checked': settings.members['enable-cover-photo'] == 'false'
 						}], 
-						'enable-cover-photo'
+						'enable-cover-photo',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.radioRow(translate('Show Display Name'), 
@@ -867,7 +983,8 @@
 							'value': 'false',
 							'checked': settings.members['show-display-name'] == 'false'
 						}], 
-						'show-display-name'
+						'show-display-name',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.radioRow(translate('Show tagline below profile name'), 
@@ -883,7 +1000,8 @@
 							'value': 'false',
 							'checked': settings.members['show-tagline'] == 'false'
 						}], 
-						'show-tagline'
+						'show-tagline',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.radioRow(translate('Show extra user information below tagline?'), 
@@ -899,7 +1017,8 @@
 							'value': 'false',
 							'checked': settings.members['show-extra-user-information'] == 'false'
 						}], 
-						'show-extra-user-information'
+						'show-extra-user-information',
+						null, null, {'mbsThinCol': 1}
 					) }}
  -->
 <!-- 					<h3>Search Option</h3>
@@ -917,7 +1036,8 @@
 							'value': 'false',
 							'checked': settings.members['enable-search-options'] == 'false'
 						}], 
-						'enable-search-options'
+						'enable-search-options',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.radioRow(translate('Show results only after search'), 
@@ -933,7 +1053,8 @@
 							'value': 'false',
 							'checked': settings.members['show-search-result-after-search'] == 'false'
 						}], 
-						'show-search-result-after-search'
+						'show-search-result-after-search',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.selectRow(translate('User Roles that can use search'), 
@@ -944,7 +1065,8 @@
 							'disabled': true
 						}],
 						'members[user-role-that-can-use-search]',
-						'user-role-that-can-use-search'
+						'user-role-that-can-use-search',
+						null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.selectRow(translate('Choose field(s) to enable in search'), 
@@ -955,7 +1077,8 @@
 							'disabled': true
 						}],
 						'members[user-role-that-can-use-search]',
-						'user-role-that-can-use-search'
+						'user-role-that-can-use-search',
+						null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.radioRow(translate('Show results only after search'), 
@@ -971,7 +1094,8 @@
 							'value': 'false',
 							'checked': settings.members['show-search-result-after-search'] == 'false'
 						}], 
-						'show-search-result-after-search'
+						'show-search-result-after-search',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 
@@ -988,7 +1112,8 @@
 							'value': 'false',
 							'checked': settings.members['search-results-text'] == 'false'
 						}], 
-						'search-results-text'
+						'search-results-text',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.radioRow(translate('Single Result Text'), 
@@ -1004,7 +1129,8 @@
 							'value': 'false',
 							'checked': settings.members['single-search-results-text'] == 'false'
 						}], 
-						'single-search-results-text'
+						'single-search-results-text',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.radioRow(translate('Custom text if no users were found'), 
@@ -1020,7 +1146,8 @@
 							'value': 'false',
 							'checked': settings.members['custeom-text-if-no-users-found'] == 'false'
 						}], 
-						'custeom-text-if-no-users-found'
+						'custeom-text-if-no-users-found',
+						null, null, {'mbsThinCol': 1}
 					) }}
 					 -->
 <!-- 					<h3>Result and Pagination</h3>
@@ -1028,19 +1155,22 @@
 					{{ options.inputRow(translate('Number of profiles per page'),
 						'auth[search-profiles-per-page]',
 						settings.auth['search-profiles-per-page'],
-						'search-profiles-per-page'
+						'search-profiles-per-page',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(translate('Number of profiles per page (for Mobiles & Tablets)'),
 						'auth[search-profiles-per-page-mobile]',
 						settings.auth['search-profiles-per-page-mobile'],
-						'search-profiles-per-page-mobile'
+						'search-profiles-per-page-mobile',
+						null, null, {'mbsThinCol': 1}
 					) }}
 
 					{{ options.inputRow(translate('Maximum number of profiles'),
 						'auth[maximum-profiles-number]',
 						settings.auth['maximum-profiles-number'],
-						'maximum-profiles-number'
+						'maximum-profiles-number',
+						null, null, {'mbsThinCol': 1}
 					) }} -->
 
 				</div>
@@ -1237,6 +1367,311 @@
 		</div>
 	</div>
 
+	<div class="sc-tab-content mbsGroupTabMenu" data-tab="groups">
+		{% if baseSettings['main']['groups'] == 'true' %}
+			<link rel="stylesheet" type="text/css" href="{{ assets('base', 'lib/cropper/cropper.min.css') }}">
+			<script async type="text/javascript" src="{{ assets('base', 'lib/cropper/cropper.min.js') }}"></script>
+			<div class="mp-options">
+				<div class="row">
+					<div class="col-md-12">
+
+						<div class="mp-option" id="logo-size">
+							<div class="row">
+								<div class="col-md-4 mbsThinCol">
+									{{ options.label(translate('Group Logo Size')) }}
+								</div>
+								<div class="col-md-8">
+									<div class="mp-option-sizes-input">
+										<div class="mp-option-input">
+											<input class="sc-input" value="{{ groupsSettings['logo-size'].width }}" name="groups[logo-size][width]">
+										</div>
+										<span>x</span>
+										<div class="mp-option-input">
+											<input class="sc-input" value="{{ groupsSettings['logo-size'].height }}" name="groups[logo-size][height]">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="mp-option" id="logo-large-size">
+							<div class="row">
+								<div class="col-md-4 mbsThinCol">
+									{{ options.label(translate('Logo Thumbnail Large Size')) }}
+								</div>
+								<div class="col-md-8">
+									<div class="mp-option-sizes-input">
+										<div class="mp-option-input">
+											<input class="sc-input" value="{{ groupsSettings['logo-large-size'].width }}" name="groups[logo-large-size][width]">
+										</div>
+										<span>x</span>
+										<div class="mp-option-input">
+											<input class="sc-input" value="{{ groupsSettings['logo-large-size'].height }}" name="groups[logo-large-size][height]">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="mp-option" id="logo-medium-size">
+							<div class="row">
+								<div class="col-md-4 mbsThinCol">
+									{{ options.label(translate('Logo Thumbnail Medium Size')) }}
+								</div>
+								<div class="col-md-8">
+									<div class="mp-option-sizes-input">
+										<div class="mp-option-input">
+											<input class="sc-input" value="{{ groupsSettings['logo-medium-size'].width }}" name="groups[logo-medium-size][width]">
+										</div>
+										<span>x</span>
+										<div class="mp-option-input">
+											<input class="sc-input" value="{{ groupsSettings['logo-medium-size'].height }}" name="groups[logo-medium-size][height]">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="mp-option" id="logo-small-size">
+							<div class="row">
+								<div class="col-md-4 mbsThinCol">
+									{{ options.label(translate('Logo Thumbnail Small Size')) }}
+								</div>
+								<div class="col-md-8">
+									<div class="mp-option-sizes-input">
+										<div class="mp-option-input">
+											<input class="sc-input" value="{{ groupsSettings['logo-small-size'].width }}" name="groups[logo-small-size][width]">
+										</div>
+										<span>x</span>
+										<div class="mp-option-input">
+											<input class="sc-input" value="{{ groupsSettings['logo-small-size'].height }}" name="groups[logo-small-size][height]">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						{% set defaultLogo = assets('groups', 'images/group.jpg', false) %}
+
+						<div class="mp-option" id="default-logo">
+							<div class="row">
+								<div class="col-md-4 mbsThinCol">
+									{{ options.label(translate('Default Logo Image')) }}
+								</div>
+								<div class="col-md-8">
+									<div class="mp-default-image">
+										<img style="max-width:50px;max-height: 50px;"
+											 src="{{ groupsSettings['default-logo'] }}"
+										>
+										<button class="mp-option-button sc-button primary mp-change">Change</button>
+										<button class="mp-option-button sc-button primary mp-set-to-default"
+												{% if defaultLogo == groupsSettings['default-logo'] or defaultLogo == setting['default-logo-source'] %}
+													style="display: none"
+												{% endif %}
+										>Set to default</button>
+										<input
+												type="hidden"
+												name="groups[default-logo]"
+												value="{{ groupsSettings['default-logo'] }}"
+										>
+										<input
+												type="hidden"
+												name="groups[default-logo-large]"
+												value="{{ groupsSettings['default-logo-large'] }}"
+										>
+										<input
+												type="hidden"
+												name="groups[default-logo-medium]"
+												value="{{ groupsSettings['default-logo-medium'] }}"
+										>
+										<input
+												type="hidden"
+												name="groups[default-logo-small]"
+												value="{{ groupsSettings['default-logo-small'] }}"
+										>
+										<input
+												type="hidden"
+												name="groups[default-logo-source]"
+												data-default-width-input-name="groups[logo-size][width]"
+												data-default-height-input-name="groups[logo-size][height]"
+												data-default-crop-input-name="groups[default-logo-crop-data]"
+												data-default-image="{{ defaultLogo }}"
+												value="{{ groupsSettings['default-logo-source'] }}"
+										>
+										<input
+												type="hidden"
+												name="groups[default-logo-crop-data]"
+												value="{{ groupsSettings['default-logo-crop-data'] }}"
+										>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="mp-option" id="cover-size">
+							<div class="row">
+								<div class="col-md-4 mbsThinCol">
+									{{ options.label(translate('Group Cover Size')) }}
+								</div>
+								<div class="col-md-8">
+									<div class="mp-option-sizes-input">
+										<div class="mp-option-input">
+											<input class="sc-input" value="{{ groupsSettings['cover-size'].width }}" name="groups[cover-size][width]">
+										</div>
+										<span>x</span>
+										<div class="mp-option-input">
+											<input class="sc-input" value="{{ groupsSettings['cover-size'].height }}" name="groups[cover-size][height]">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="mp-option" id="cover-medium-size">
+							<div class="row">
+								<div class="col-md-4 mbsThinCol">
+									{{ options.label(translate('Cover Thumbnail Medium Size')) }}
+								</div>
+								<div class="col-md-8">
+									<div class="mp-option-sizes-input">
+										<div class="mp-option-input">
+											<input class="sc-input" value="{{ groupsSettings['cover-medium-size'].width }}" name="groups[cover-medium-size][width]">
+										</div>
+										<span>x</span>
+										<div class="mp-option-input">
+											<input class="sc-input" value="{{ groupsSettings['cover-medium-size'].height }}" name="groups[cover-medium-size][height]">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="mp-option" id="cover-small-size">
+							<div class="row">
+								<div class="col-md-4 mbsThinCol">
+									{{ options.label(translate('Cover Thumbnail Small Size')) }}
+								</div>
+								<div class="col-md-8">
+									<div class="mp-option-sizes-input">
+										<div class="mp-option-input">
+											<input class="sc-input" value="{{ groupsSettings['cover-small-size'].width }}" name="groups[cover-small-size][width]">
+										</div>
+										<span>x</span>
+										<div class="mp-option-input">
+											<input class="sc-input" value="{{ groupsSettings['cover-small-size'].height }}" name="groups[cover-small-size][height]">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						{% set defaultCover = assets('groups', 'images/group-cover.jpg', false) %}
+
+						<div class="mp-option" id="default-cover">
+							<div class="row">
+								<div class="col-md-4 mbsThinCol">
+									{{ options.label(translate('Default Cover Image')) }}
+								</div>
+								<div class="col-md-8">
+									<div class="mp-default-image">
+										<img style="max-width:50px;max-height: 50px;"
+											 src="{{ groupsSettings['default-cover'] }}"
+										>
+										<button class="mp-option-button sc-button primary mp-change">Change</button>
+										<button class="mp-option-button sc-button primary mp-set-to-default"
+												{% if defaultCover == groupsSettings['default-cover'] or defaultCover == groupsSettings['default-cover-source'] %}
+													style="display: none"
+												{% endif %}
+										>Set to default</button>
+										<input
+												type="hidden"
+												name="groups[default-cover]"
+												value="{{ groupsSettings['default-cover'] }}"
+										>
+										<input
+												type="hidden"
+												name="groups[default-cover-medium]"
+												value="{{ groupsSettings['default-cover-medium'] }}"
+										>
+										<input
+												type="hidden"
+												name="groups[default-cover-small]"
+												value="{{ groupsSettings['default-cover-small'] }}"
+										>
+										<input
+												type="hidden"
+												name="groups[default-cover-source]"
+												data-default-image="{{ defaultCover }}"
+												data-default-width-input-name="cover-size[width]"
+												data-default-height-input-name="cover-size[height]"
+												data-default-crop-input-name="default-cover-crop-data"
+												value="{{ groupsSettings['default-cover-source'] }}"
+										>
+										<input
+												type="hidden"
+												name="groups[default-cover-crop-data]"
+												value="{{ groupsSettings['default-cover-crop-data'] }}"
+										>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						{% set permalinks = [
+							{
+								'value': 'groupalias',
+								'title': translate('Group alias'),
+								'selected': groupsSettings['permalink-base'] == 'groupalias'
+							},
+							{
+								'value': 'id',
+								'title': translate('Group ID'),
+								'selected': groupsSettings['permalink-base'] == 'id'
+							},
+						] %}
+
+						{{ options.selectRow(
+							translate('Group Permalink Base'),
+							permalinks,
+							'groups[permalink-base]',
+							'permalink-base',
+							null, {'mbsThinCol': 1}
+						) }}
+
+						{% set _roles = [] %}
+
+						{% for value, role in roles %}
+							{% set _roles = _roles|merge([{
+								'title': role.name,
+								'value': value,
+								'selected': groupsSettings['roles-to-invite'] == value,
+							}]) %}
+						{% endfor %}
+
+						{% set _types = [{
+							'label': translate('All'),
+							'name': 'groups[inviting-type]',
+							'value': 'all',
+							'checked': groupsSettings['inviting-type'] == 'all'
+						},
+						{
+							'label': translate('Specific roles'),
+							'name': 'groups[inviting-type]',
+							'value': 'specific_roles',
+							'checked': groupsSettings['inviting-type'] == 'specific_roles'
+						}] %}
+					</div>
+				</div>
+			</div>
+		{% else %}
+			<div>
+				<span>{{ translate('Groups option is Turn Off, you can turn it On on the Main settings tab or click <a href="%s">here</a>.')|format(mainSettingsLink)|raw }}</span>
+			</div>
+		{% endif %}
+	</div>
+
+
+
 {% endblock %}
 
 {% macro getCheckBoxFontSizeSelector(buttonName, itemCode, settProp1, settProp2, settings, fontsSizeUnits, defaultFontSize, defaultUnit) %}
@@ -1263,7 +1698,8 @@
 				'class': 'mbs-selector-unit-width sc-input',
 				'name': settProp1 ~ '[' ~ settProp2 ~ '][' ~ itemCode ~ '-text-font-unit-select]',
 			}
-		)
+		),
+		null, null, null, {'mbsThinCol': 1}
 	)  }}
 {% endmacro %}
 
@@ -1286,7 +1722,8 @@
 				'name': settProp1 ~ '[' ~ settProp2 ~ '][' ~ itemCode ~ '-text-font-family-select]',
 			},
 			1
-		)
+		),
+		null, null, null, {'mbsThinCol': 1}
 	) }}
 {% endmacro %}
 
@@ -1305,6 +1742,7 @@
 			'class': 'mbs-cwib-selector-width sc-input',
 			'name': settProp1 ~ '[' ~ settProp2 ~ '][' ~ itemCode ~ '-text-color-input]',
 			'value': settings[settProp1][settProp2][itemCode ~ '-text-color-input'] | default(defaultColor) | default('rgba(0, 0, 0, 1)'),
-		})
+		}),
+		null, null, null, {'mbsThinCol': 1}
 	) }}
 {% endmacro %}
